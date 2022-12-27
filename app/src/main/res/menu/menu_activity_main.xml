@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_filter_main"
+        android:icon="@drawable/ic_baseline_filter_list_24"
+        app:showAsAction="ifRoom"
+        android:title="Filtrer les réunions">
+        <menu>
+            <item
+                android:id="@+id/sortbydate_menu"
+                android:title="Filtrer par date"
+                />
+            <item
+                android:id="@+id/sortbyroom_menu"
+                android:title="Filtrer par salle"
+                />
+        </menu>
+    </item>
+</menu>

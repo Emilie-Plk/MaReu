@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.detail.DetailFragment">
+
+
+            <TextView
+                android:id="@+id/meeting_title_detail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:gravity="center"
+                android:textAllCaps="true"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Réunion de débrief hebdomadaire" />
+
+    <TextView
+        android:id="@+id/date_hour_title_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:drawablePadding="8dp"
+        android:text="@string/date_and_time_detail_title"
+        android:textStyle="bold"
+        app:drawableStartCompat="@drawable/ic_baseline_access_time_filled_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/meeting_title_detail" />
+
+    <TextView
+        android:id="@+id/day_time_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/date_hour_title_detail"
+        app:layout_constraintStart_toEndOf="@id/date_hour_title_detail"
+        app:layout_constraintTop_toTopOf="@id/date_hour_title_detail"
+        tools:text="15/12/2022 - 15h-15h30" />
+
+    <TextView
+        android:id="@+id/room_title_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:drawablePadding="8dp"
+        android:text="@string/room_title_detail"
+        android:textStyle="bold"
+        app:drawableStartCompat="@drawable/ic_baseline_place_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date_hour_title_detail" />
+
+            <TextView
+                android:id="@+id/room_name_detail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:background="@drawable/room"
+                android:gravity="center"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/room_title_detail"
+                app:layout_constraintStart_toEndOf="@+id/room_title_detail"
+                app:layout_constraintTop_toTopOf="@+id/room_title_detail"
+                tools:text="Salle 1" />
+
+    <TextView
+        android:id="@+id/meeting_description_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:drawablePadding="8dp"
+        android:text="@string/meeting_object_title_detail"
+        android:textStyle="bold"
+        app:drawableStartCompat="@drawable/ic_baseline_assignment_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/room_title_detail" />
+
+    <TextView
+        android:id="@+id/meeting_object_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="end"
+        android:maxLines="4"
+        android:minLines="1"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/meeting_description_detail"
+        tools:text="Avancées sur le projet MaRéu - point avec l'équipe dev + design - nouvelles features et retours utilisateurs de la beta version" />
+
+    <TextView
+        android:id="@+id/participants_title_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:drawablePadding="8dp"
+        android:text="@string/participants_meeting_detail"
+        android:textStyle="bold"
+        app:drawableStartCompat="@drawable/ic_baseline_people_alt_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/meeting_object_tv" />
+
+    <TextView
+        android:id="@+id/participants_list_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:minLines="1"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/participants_title_detail"
+        tools:text="alain@lamzone.com, alexia@lamzone.com, robert@dev.fr, marie@lamzone.fr" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

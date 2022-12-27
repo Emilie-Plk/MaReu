@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">MaReuTraining</string>
+    <string name="title_appbar_main">Réunions</string>
+    <string name="add_new_meeting_fab_descr">ajouter une nouvelle réunion</string>
+    <string name="room_color_circle_descr">couleur de la salle</string>
+
+    <string name="room_title_detail">Lieu</string>
+    <string name="date_and_time_detail_title">Date et heure</string>
+    <string name="meeting_object_title_detail">Objet de la réunion</string>
+    <string name="participants_meeting_detail">Participant·e·s</string>
+
+    <string name="new_meeting">Nouvelle réunion</string>
+
+    <string name="time_start_btn_create">Heure de début</string>
+    <string name="time_end_btn_create">Heure de fin</string>
+    <string name="description_txtinput_create">Description</string>
+    <string name="create_btn">Créer la réunion</string>
+    <string name="create_btn_descr">Créer la réunion</string>
+    <string name="email_hint_textinput">E-mail (participant·e)</string>
+    <string name="add_fab_descr">ajouter un participant avec son email</string>
+    <string name="date_picker_btn">Date</string>
+    <string name="participants_err_msg">"Merci d'ajouter au moins deux participitant·e·s"</string>
+
+</resources>
