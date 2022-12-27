@@ -1,5 +1,7 @@
 package com.emplk.mareutraining.models;
 
+import androidx.annotation.NonNull;
+
 import com.emplk.mareutraining.R;
 
 public enum Room {
@@ -32,6 +34,7 @@ public enum Room {
         return name;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return name;

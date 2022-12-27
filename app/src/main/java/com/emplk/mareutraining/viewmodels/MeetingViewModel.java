@@ -6,7 +6,9 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.mareutraining.models.Meeting;
+import com.emplk.mareutraining.models.Room;
 import com.emplk.mareutraining.repositories.MeetingsRepository;
+import com.emplk.mareutraining.repositories.RoomRepository;
 import com.emplk.mareutraining.ui.list.MeetingsViewStateItem;
 
 import java.time.LocalDate;
@@ -21,8 +23,12 @@ public class MeetingViewModel extends ViewModel {
     @NonNull
     private final MeetingsRepository repository;
 
-    public MeetingViewModel(@NonNull MeetingsRepository repository) {
+    @NonNull
+    private final RoomRepository roomRepository;
+
+    public MeetingViewModel(@NonNull MeetingsRepository repository, RoomRepository roomRepository) {
         this.repository = repository;
+        this.roomRepository = roomRepository;
     }
 
     public LiveData<List<MeetingsViewStateItem>> getMeetingViewStateItemsLiveData() {
@@ -68,6 +74,10 @@ public class MeetingViewModel extends ViewModel {
 
     public void onDeleteMeetingClicked(long meetingId) {
         repository.deleteMeeting(meetingId);
+    }
+
+    public LiveData<List<Room>> getRooms() {
+        return roomRepository.getRooms();
     }
 
 

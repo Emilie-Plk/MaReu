@@ -8,12 +8,19 @@
         android:title="Filtrer les réunions">
         <menu>
             <item
+                android:icon="@drawable/ic_baseline_calendar_month_24"
                 android:id="@+id/sortbydate_menu"
                 android:title="Filtrer par date"
                 />
             <item
+                android:icon="@drawable/ic_baseline_place_24"
                 android:id="@+id/sortbyroom_menu"
                 android:title="Filtrer par salle"
+                />
+            <item
+                android:icon="@drawable/ic_baseline_cancel_24"
+                android:id="@+id/sortdelete_menu"
+                android:title="Supprimer les filtres"
                 />
         </menu>
     </item>

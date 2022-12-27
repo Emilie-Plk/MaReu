@@ -20,5 +20,6 @@
     <string name="add_fab_descr">ajouter un participant avec son email</string>
     <string name="date_picker_btn">Date</string>
     <string name="participants_err_msg">"Merci d'ajouter au moins deux participitant·e·s"</string>
+    <string name="pick_room_menu">Choisissez une salle</string>
 
 </resources>
