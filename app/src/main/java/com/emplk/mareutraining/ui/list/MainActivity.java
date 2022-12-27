@@ -17,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,10 +48,4 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
- /*   @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_filter_main:
-        }
-    }*/
 }
