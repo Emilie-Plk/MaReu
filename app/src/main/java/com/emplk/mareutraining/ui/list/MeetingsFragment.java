@@ -66,7 +66,7 @@ public class MeetingsFragment extends Fragment {
         viewModel.getMeetingViewStateItemsLiveData().observe(getViewLifecycleOwner(),
                 meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
 
-
+// TODO: add the other viewStates + implements interfaces onMeetingRoomListener + onMeetingDateListener
     }
 
 }

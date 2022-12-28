@@ -10,11 +10,10 @@ import com.emplk.mareutraining.repositories.RoomRepository;
 import com.emplk.mareutraining.viewmodels.CreateMeetingViewModel;
 import com.emplk.mareutraining.viewmodels.DetailMeetingViewModel;
 import com.emplk.mareutraining.viewmodels.MeetingViewModel;
+import com.emplk.mareutraining.viewmodels.RoomFilterDialogFragmentViewModel;
 
 public class ViewModelFactory implements ViewModelProvider.Factory {
 
-
-    private static ViewModelFactory factory;
 
     @NonNull
     private final MeetingsRepository meetingRepository;
@@ -28,19 +27,16 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     }
 
 
+    private static final class FactoryHolder {
+        static final ViewModelFactory factory = new ViewModelFactory(
+                new MeetingsRepository(
+                        new BuildConfigResolver()
+                ),
+                new RoomRepository());
+    }
+
     public static ViewModelFactory getInstance() {
-        if (factory == null) {
-            synchronized (ViewModelFactory.class) {
-                if (factory == null) {
-                    factory = new ViewModelFactory(
-                            new MeetingsRepository(
-                                    new BuildConfigResolver()
-                            ),
-                            new RoomRepository());
-                }
-            }
-        }
-        return factory;
+        return FactoryHolder.factory;
     }
 
     @SuppressWarnings("unchecked")
@@ -55,6 +51,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         }
         else if (modelClass.isAssignableFrom(CreateMeetingViewModel.class)) {
             return (T) new CreateMeetingViewModel(meetingRepository);
+        }
+        else if (modelClass.isAssignableFrom(RoomFilterDialogFragmentViewModel.class)) {
+            return (T) new RoomFilterDialogFragmentViewModel(roomRepository);
         }
         throw new IllegalArgumentException("Unknown model class!");
     }
