@@ -27,6 +27,10 @@ import com.emplk.mareutraining.viewmodels.MeetingViewModel;
  */
 public class MeetingsFragment extends Fragment {
 
+    private MeetingViewModel viewModel;
+
+    private MeetingListRVAdapter adapter;
+
     public static Fragment newInstance() {
         return new MeetingsFragment();
     }
@@ -43,16 +47,27 @@ public class MeetingsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
-        MeetingViewModel viewModel = new ViewModelProvider(this,
+         viewModel = new ViewModelProvider(this,
                 ViewModelFactory.getInstance())
                 .get(MeetingViewModel.class);
 
+         // configure and init recyclerview
         RecyclerView recyclerView = view.findViewById(R.id.meetings_rv);
+        initRecyclerView();
+        recyclerView.setAdapter(adapter);
+        getMeetingList();
 
-        MeetingListRVAdapter adapter = new MeetingListRVAdapter(new OnMeetingClickedListener() {
+
+
+
+// TODO: add the other viewStates + implements interfaces onMeetingRoomListener + onMeetingDateListener
+    }
+
+    private void initRecyclerView() {
+        adapter = new MeetingListRVAdapter(new OnMeetingClickedListener() {
             @Override
             public void onMeetingClicked(long meetingId) {
-              startActivity(DetailActivity.navigate(requireContext(), meetingId));
+                startActivity(DetailActivity.navigate(requireContext(), meetingId));
             }
 
             @Override
@@ -60,13 +75,11 @@ public class MeetingsFragment extends Fragment {
                 viewModel.onDeleteMeetingClicked(meetingId);
             }
         });
+    }
 
-        recyclerView.setAdapter(adapter);
-
+    private void getMeetingList() {
         viewModel.getMeetingViewStateItemsLiveData().observe(getViewLifecycleOwner(),
                 meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
-
-// TODO: add the other viewStates + implements interfaces onMeetingRoomListener + onMeetingDateListener
     }
 
 }

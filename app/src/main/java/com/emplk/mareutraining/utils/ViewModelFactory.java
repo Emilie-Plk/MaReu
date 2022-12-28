@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.emplk.mareutraining.config.BuildConfigResolver;
 import com.emplk.mareutraining.repositories.MeetingsRepository;
-import com.emplk.mareutraining.repositories.RoomRepository;
 import com.emplk.mareutraining.viewmodels.CreateMeetingViewModel;
 import com.emplk.mareutraining.viewmodels.DetailMeetingViewModel;
 import com.emplk.mareutraining.viewmodels.MeetingViewModel;
@@ -18,12 +17,10 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     @NonNull
     private final MeetingsRepository meetingRepository;
 
-    @NonNull
-    private final RoomRepository roomRepository;
 
-    private ViewModelFactory(@NonNull MeetingsRepository meetingsRepository, @NonNull RoomRepository roomRepository) {
+
+    private ViewModelFactory(@NonNull MeetingsRepository meetingsRepository) {
         this.meetingRepository = meetingsRepository;
-        this.roomRepository = roomRepository;
     }
 
 
@@ -31,8 +28,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         static final ViewModelFactory factory = new ViewModelFactory(
                 new MeetingsRepository(
                         new BuildConfigResolver()
-                ),
-                new RoomRepository());
+                ));
     }
 
     public static ViewModelFactory getInstance() {
@@ -44,8 +40,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(MeetingViewModel.class)) {
-            return (T) new MeetingViewModel(
-                    meetingRepository, roomRepository);
+            return (T) new MeetingViewModel(meetingRepository);
         } else if (modelClass.isAssignableFrom(DetailMeetingViewModel.class)) {
             return (T) new DetailMeetingViewModel(meetingRepository);
         }
@@ -53,7 +48,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new CreateMeetingViewModel(meetingRepository);
         }
         else if (modelClass.isAssignableFrom(RoomFilterDialogFragmentViewModel.class)) {
-            return (T) new RoomFilterDialogFragmentViewModel(roomRepository);
+            return (T) new RoomFilterDialogFragmentViewModel(meetingRepository);
         }
         throw new IllegalArgumentException("Unknown model class!");
     }

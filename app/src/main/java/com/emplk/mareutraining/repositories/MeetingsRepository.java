@@ -91,6 +91,19 @@ public class MeetingsRepository {
         meetingsLiveData.setValue(meetings);
     }
 
+    public LiveData<List<Meeting>> getMeetingsFilteredByRoom(String roomName) {
+        List<Meeting> meetings = meetingsLiveData.getValue();
+        List<Meeting> meetingsFilteredByRoom = new ArrayList<>();
+        assert meetings != null;
+        for (Meeting meeting : meetings) {
+            if (meeting.getRoom().getRoomName().equals(roomName)) {
+                meetingsFilteredByRoom.add(meeting);
+            }
+        }
+        meetingsLiveData.setValue(meetingsFilteredByRoom);
+        return meetingsLiveData;
+    }
+
 
     private void generateRandomMeetings() {
         addMeeting(
@@ -104,7 +117,6 @@ public class MeetingsRepository {
                         "charlotte@lamzone.fr",
                         "patrice@lamzone.fr"),
                 "blablablabla blablablabla blablablabla");
-
         addMeeting(
                 "Réunion d'info",
                 Room.ROOM_ONE,

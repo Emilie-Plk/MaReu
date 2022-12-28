@@ -36,6 +36,10 @@ public class MainActivity extends AppCompatActivity {
                     .commit();
         }
 
+        addMeeting();
+    }
+
+    private void addMeeting() {
         binding.addFab.setOnClickListener(v -> startActivity(CreateNewMeetingActivity.navigate(this)));
     }
 

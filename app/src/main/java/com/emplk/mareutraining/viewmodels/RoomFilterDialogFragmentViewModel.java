@@ -3,16 +3,24 @@ package com.emplk.mareutraining.viewmodels;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 
+import com.emplk.mareutraining.models.Meeting;
 import com.emplk.mareutraining.models.Room;
-import com.emplk.mareutraining.repositories.RoomRepository;
+import com.emplk.mareutraining.repositories.MeetingsRepository;
 
 public class RoomFilterDialogFragmentViewModel extends ViewModel {
 
     @NonNull
-    private final RoomRepository repository;
+    private final MeetingsRepository repository;
 
-    public RoomFilterDialogFragmentViewModel(@NonNull RoomRepository repository) {
+    public RoomFilterDialogFragmentViewModel(@NonNull MeetingsRepository repository) {
         this.repository = repository;
+    }
+
+    private void onRoomFilterClicked(
+            @NonNull String room,
+            @NonNull Meeting meeting
+            ) {
+getSelectedRoom(room);
     }
 
     public Room getSelectedRoom(String roomName) {
@@ -24,7 +32,7 @@ public class RoomFilterDialogFragmentViewModel extends ViewModel {
                 break;
             }
         }
-        // TODO: int for color or String ? + est-ce que je récup vraiment une enum constant ? à priori oui
         return selectedRoom;
     }
+
 }
