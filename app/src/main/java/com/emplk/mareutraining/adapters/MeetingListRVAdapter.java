@@ -2,10 +2,9 @@ package com.emplk.mareutraining.adapters;
 
 
 import android.content.res.Resources;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.ShapeDrawable;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,16 +12,22 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat;
 
 import com.emplk.mareutraining.R;
 import com.emplk.mareutraining.databinding.MeetingItemBinding;
+import com.emplk.mareutraining.models.Meeting;
 import com.emplk.mareutraining.ui.list.MeetingsViewStateItem;
 import com.emplk.mareutraining.ui.list.OnMeetingClickedListener;
+
+import java.util.List;
+import java.util.Objects;
 
 
 public class MeetingListRVAdapter extends ListAdapter<MeetingsViewStateItem, MeetingListRVAdapter.MeetingsViewHolder> {
@@ -50,13 +55,13 @@ public class MeetingListRVAdapter extends ListAdapter<MeetingsViewStateItem, Mee
     public static class MeetingsViewHolder extends RecyclerView.ViewHolder {
 
         private final ImageView deleteMeeting;
-        private final TextView roomName, meetingTitle, meetindDate, startingHour, participants;
+        private final TextView roomName, meetingTitle, meetingDate, startingHour, participants;
 
         public MeetingsViewHolder(@NonNull MeetingItemBinding binding) {
             super(binding.getRoot());
             roomName = binding.roomNumber;
             meetingTitle = binding.meetingTitleTv;
-            meetindDate = binding.meetingDateTv;
+            meetingDate = binding.meetingDateTv;
             startingHour = binding.meetingHourTv;
             participants = binding.meetingParticipantsTv;
             deleteMeeting = binding.deleteMeeting;
@@ -64,14 +69,14 @@ public class MeetingListRVAdapter extends ListAdapter<MeetingsViewStateItem, Mee
 
         public void bind(MeetingsViewStateItem item, OnMeetingClickedListener listener) {
             itemView.setOnClickListener(v -> listener.onMeetingClicked(item.getMeetingId()));
-            Resources res = roomName.getContext().getResources();
-            roomName.setBackgroundColor(res.getColor(item.getRoomColor()));
-           // roomName.setBackgroundResource(item.getRoomColor());
+           Resources res = roomName.getContext().getResources();
+           roomName.setBackgroundColor(res.getColor(item.getRoomColor()));
+        //   roomName.setBackgroundResource(item.getRoomColor());
            // roomCircle.setImageResource(item.getRoomColor());
             roomName.setContentDescription(item.getRoomName()); // for accessibility
             roomName.setText(item.getRoomName());
             meetingTitle.setText(item.getMeetingTitle());
-            meetindDate.setText(item.getDate());
+            meetingDate.setText(item.getDate());
             startingHour.setText(item.getTimeStart());
             participants.setText(item.getParticipants());
             deleteMeeting.setOnClickListener(view -> listener.onDeleteMeetingClicked(item.getMeetingId()));

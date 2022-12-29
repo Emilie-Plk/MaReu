@@ -20,19 +20,20 @@ public class RoomFilterDialogFragmentViewModel extends ViewModel {
             @NonNull String room,
             @NonNull Meeting meeting
             ) {
-getSelectedRoom(room);
+            selectedRoom(room);
     }
 
-    public Room getSelectedRoom(String roomName) {
+    public Room selectedRoom(String roomName) {
         Room selectedRoom = Room.ROOM_ONE;
         Room[] rooms = Room.values();
         for (Room room : rooms) {
-            if (roomName.equals(room.getRoomName())) {
+            if (room.getRoomName().equals(roomName)) {
                 selectedRoom = room;
                 break;
             }
         }
         return selectedRoom;
     }
+
 
 }

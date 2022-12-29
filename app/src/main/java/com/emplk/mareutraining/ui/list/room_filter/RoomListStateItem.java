@@ -8,6 +8,8 @@ import java.util.Objects;
 
 public class RoomListStateItem {
 
+    // TODO: not sure I need this...
+
     @NonNull
     private final Room room;
     private final boolean isSelected;
@@ -17,11 +19,11 @@ public class RoomListStateItem {
         this.isSelected = isSelected;
     }
 
-    @NonNull
+   /* @NonNull
     public Room getRoom() {
         return room;
     }
-
+*/
     public boolean isSelected() {
         return isSelected;
     }

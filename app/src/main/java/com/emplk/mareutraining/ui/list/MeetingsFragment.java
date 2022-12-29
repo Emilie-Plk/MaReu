@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.emplk.mareutraining.R;
 import com.emplk.mareutraining.adapters.MeetingListRVAdapter;
 import com.emplk.mareutraining.databinding.FragmentMeetingsBinding;
+import com.emplk.mareutraining.databinding.FragmentRoomFilterBinding;
 import com.emplk.mareutraining.ui.detail.DetailActivity;
 import com.emplk.mareutraining.ui.detail.DetailFragment;
 import com.emplk.mareutraining.utils.ViewModelFactory;
@@ -30,6 +31,7 @@ public class MeetingsFragment extends Fragment {
     private MeetingViewModel viewModel;
 
     private MeetingListRVAdapter adapter;
+
 
     public static Fragment newInstance() {
         return new MeetingsFragment();
@@ -56,11 +58,6 @@ public class MeetingsFragment extends Fragment {
         initRecyclerView();
         recyclerView.setAdapter(adapter);
         getMeetingList();
-
-
-
-
-// TODO: add the other viewStates + implements interfaces onMeetingRoomListener + onMeetingDateListener
     }
 
     private void initRecyclerView() {
@@ -79,6 +76,11 @@ public class MeetingsFragment extends Fragment {
 
     private void getMeetingList() {
         viewModel.getMeetingViewStateItemsLiveData().observe(getViewLifecycleOwner(),
+                meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
+    }
+
+    private void getMeetingListFilteredByRoom() {
+        viewModel.getMeetingFilteredByRoomViewStateItemsLiveData("Salle 5").observe(getViewLifecycleOwner(),
                 meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
     }
 

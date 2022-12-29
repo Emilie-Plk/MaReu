@@ -2,6 +2,7 @@ package com.emplk.mareutraining.viewmodels;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 public class MeetingViewModel extends ViewModel {
     @NonNull
     private final MeetingsRepository repository;
+
 
 
     public MeetingViewModel(@NonNull MeetingsRepository repository) {
@@ -45,6 +47,18 @@ public class MeetingViewModel extends ViewModel {
                     return meetingsViewStateItems;
                 }
         );
+    }
+
+    public Room selectedRoom(String roomName) {
+        Room selectedRoom = Room.ROOM_ONE;
+        Room[] rooms = Room.values();
+        for (Room room : rooms) {
+            if (roomName.equals(room.getRoomName())) {
+                selectedRoom = room;
+                break;
+            }
+        }
+        return selectedRoom;
     }
 
     public static String formatParticipantList(List<String> participantList) {
@@ -72,6 +86,25 @@ public class MeetingViewModel extends ViewModel {
         repository.deleteMeeting(meetingId);
     }
 
-
+    public LiveData<List<MeetingsViewStateItem>> getMeetingFilteredByRoomViewStateItemsLiveData(String roomName) {
+        return Transformations.map(repository.getMeetingsLiveData(), meetings -> {
+                    List<MeetingsViewStateItem> meetingsViewStateItems = new ArrayList<>();
+                    for (Meeting meeting : meetings) {
+                        if (meeting.getRoom().getRoomName().equals(roomName))
+                        meetingsViewStateItems.add(
+                                new MeetingsViewStateItem(
+                                        meeting.getMeetingTitle(),
+                                        meeting.getRoom().getRoomName(),
+                                        formatDate(meeting.getDate()),
+                                        formatTimeStart(meeting.getTimeStart()),
+                                        formatParticipantList(meeting.getParticipants()),
+                                        meeting.getRoom().getRoomColor(),
+                                        meeting.getId())
+                        );
+                    }
+                    return meetingsViewStateItems;
+                }
+        );
+    }
 
 }

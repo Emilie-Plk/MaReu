@@ -1,0 +1,402 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": false,
+    "cutInterfaceStructures": false,
+    "cutDataStructures": false,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 6,
+    "backwardDepth": 6,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.emplk.mareutraining.ui.list.MainActivity",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_96633927 { 
+   	label=emplk
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_1526619135 { 
+   	label=mareutraining
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   CreateMeetingFragment1631556668[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)CreateMeetingFragment</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   binding: FragmentCreateMeetingBinding [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   participantsEmails: ArrayList&lt;String&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   selectedRoom: String [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- bindAddMeeting(viewModel: CreateMeetingViewModel, meetingTitle: TextInputEditText, date: TextView, timeStart: TextView, timeEnd: TextView, meetingObject: TextInputEditText)</TD></TR>
+<TR><TD ALIGN="LEFT" >- configureTimePickerEnd()</TD></TR>
+<TR><TD ALIGN="LEFT" >- configureTimePickerStart()</TD></TR>
+<TR><TD ALIGN="LEFT" >- generateParticipantChip(textInputEditText: TextInputEditText)</TD></TR>
+<TR><TD ALIGN="LEFT" >- getDatePicker()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ newInstance(): CreateMeetingFragment</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onCreate(savedInstanceState: Bundle)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onViewCreated(view: View, savedInstanceState: Bundle)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+CreateMeetingViewModel643792745[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)CreateMeetingViewModel</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   repository: MeetingsRepository [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- formatDate(date: String): LocalDate</TD></TR>
+<TR><TD ALIGN="LEFT" >- formatTimeEnd(startingTime: String): LocalTime</TD></TR>
+<TR><TD ALIGN="LEFT" >- formatTimeStart(startingTime: String): LocalTime</TD></TR>
+<TR><TD ALIGN="LEFT" >- getSelectedRoom(roomName: String): Room</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onCreateMeetingClicked(meetingTitle: String, room: String, date: String, timeStart: String, timeEnd: String, participants: List&lt;String&gt;, meetingObject: String)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+CreateNewMeetingActivity1631556668[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)CreateNewMeetingActivity</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ navigate(context: Context): Intent</TD></TR>
+<TR><TD ALIGN="LEFT" ># onCreate(savedInstanceState: Bundle)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+DetailActivity1648626577[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)DetailActivity</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ navigate(context: Context, meetingId: long): Intent</TD></TR>
+<TR><TD ALIGN="LEFT" ># onCreate(savedInstanceState: Bundle)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+DetailFragment1648626577[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)DetailFragment</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   binding: FragmentDetailBinding [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   meetingId: long [1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ newInstance(): Fragment</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onCreate(savedInstanceState: Bundle)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onViewCreated(view: View, savedInstanceState: Bundle)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+DetailMeetingViewModel643792745[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)DetailMeetingViewModel</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   repository: MeetingsRepository [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- formatDate(date: LocalDate): String</TD></TR>
+<TR><TD ALIGN="LEFT" >- formatParticipantList(participantsList: List&lt;String&gt;): String</TD></TR>
+<TR><TD ALIGN="LEFT" >- formatTimeEnd(endingTime: LocalTime): String</TD></TR>
+<TR><TD ALIGN="LEFT" >- formatTimeStart(startingTime: LocalTime): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getDetailViewStateLiveData(meetingId: long): LiveData&lt;DetailViewState&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MainActivity1248883678[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MainActivity</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   binding: ActivityMainBinding [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >#   roomFilterViewModel: RoomFilterDialogFragmentViewModel [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- addMeeting()</TD></TR>
+<TR><TD ALIGN="LEFT" >- configureToolbar()</TD></TR>
+<TR><TD ALIGN="LEFT" >- deleteSortingFilter()</TD></TR>
+<TR><TD ALIGN="LEFT" ># onCreate(savedInstanceState: Bundle)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onCreateOptionsMenu(menu: Menu): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onOptionsItemSelected(item: MenuItem): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >- openDateFilterCalendar()</TD></TR>
+<TR><TD ALIGN="LEFT" >- openRoomFilterList()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Meeting735792764[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Meeting</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   date: LocalDate [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   id: long [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   meetingObject: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   meetingTitle: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   participants: List&lt;String&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   room: Room [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   timeEnd: LocalTime [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   timeStart: LocalTime [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MeetingListRVAdapter885763998[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MeetingListRVAdapter</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   listener: OnMeetingClickedListener [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ onBindViewHolder(holder: MeetingsViewHolder, position: int)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onCreateViewHolder(parent: ViewGroup, viewType: int): MeetingsViewHolder</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MeetingViewModel643792745[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MeetingViewModel</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   repository: MeetingsRepository [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- formatDate(date: LocalDate): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ formatParticipantList(participantList: List&lt;String&gt;): String</TD></TR>
+<TR><TD ALIGN="LEFT" >- formatTimeStart(startingTime: LocalTime): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getMeetingFilteredByRoomViewStateItemsLiveData(roomName: String): LiveData&lt;List&lt;MeetingsViewStateItem&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onDeleteMeetingClicked(meetingId: long)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ selectedRoom(roomName: String): Room</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MeetingsFragment1248883678[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MeetingsFragment</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   adapter: MeetingListRVAdapter [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   viewModel: MeetingViewModel [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- getMeetingList()</TD></TR>
+<TR><TD ALIGN="LEFT" >- getMeetingListFilteredByRoom()</TD></TR>
+<TR><TD ALIGN="LEFT" >- initRecyclerView()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ newInstance(): Fragment</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onViewCreated(view: View, savedInstanceState: Bundle)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MeetingsRepository991490814[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MeetingsRepository</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   maxId: int [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   meetingsLiveData: MutableLiveData&lt;List&lt;Meeting&gt;&gt; [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ addMeeting(meetingTitle: String, room: Room, date: LocalDate, timeStart: LocalTime, timeEnd: LocalTime, participants: List&lt;String&gt;, meetingObject: String)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ deleteMeeting(meetingId: long)</TD></TR>
+<TR><TD ALIGN="LEFT" >- generateRandomMeetings()</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getMeetingsFilteredByRoom(roomName: String): LiveData&lt;List&lt;Meeting&gt;&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ getSingleMeetingLiveData(meetingId: long): LiveData&lt;Meeting&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+MeetingsViewHolder177353854[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)MeetingsViewHolder</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   deleteMeeting: ImageView [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   meetingDate: TextView [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   meetingTitle: TextView [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   participants: TextView [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   roomName: TextView [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   startingHour: TextView [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ bind(item: MeetingsViewStateItem, listener: OnMeetingClickedListener)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+RoomFilterDialogFragment1234958668[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)RoomFilterDialogFragment</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   binding: FragmentRoomFilterBinding [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   meetingViewModel: MeetingViewModel [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   viewModel: RoomFilterDialogFragmentViewModel [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ newInstance(): RoomFilterDialogFragment</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View</TD></TR>
+<TR><TD ALIGN="LEFT" >+ onViewCreated(view: View, savedInstanceState: Bundle)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+RoomFilterDialogFragmentViewModel643792745[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)RoomFilterDialogFragmentViewModel</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   repository: MeetingsRepository [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- onRoomFilterClicked(room: String, meeting: Meeting)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ selectedRoom(roomName: String): Room</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+CreateMeetingFragment1631556668 -> CreateMeetingViewModel643792745[label="bindAddMeeting() -> onCreateMeetingClicked()"];
+CreateMeetingViewModel643792745 -> MeetingsRepository991490814[label="repository
+[0..1]"];
+CreateNewMeetingActivity1631556668 -> CreateMeetingFragment1631556668[label="onCreate() -> newInstance()"];
+DetailActivity1648626577 -> DetailFragment1648626577[label="onCreate() -> newInstance()"];
+DetailFragment1648626577 -> DetailMeetingViewModel643792745[label="onViewCreated() -> getDetailViewStateLiveData()"];
+DetailMeetingViewModel643792745 -> MeetingsRepository991490814[label="repository
+[0..1]"];
+MainActivity1248883678 -> CreateNewMeetingActivity1631556668[label="addMeeting() -> navigate()"];
+MainActivity1248883678 -> MeetingsFragment1248883678[label="onCreate() -> newInstance()"];
+MainActivity1248883678 -> RoomFilterDialogFragment1234958668[label="openRoomFilterList() -> newInstance()"];
+MainActivity1248883678 -> RoomFilterDialogFragmentViewModel643792745[label="roomFilterViewModel
+[0..1]"];
+MeetingListRVAdapter885763998 -> MeetingsViewHolder177353854[label="onBindViewHolder() -> bind()"];
+MeetingViewModel643792745 -> MeetingsRepository991490814[label="repository
+[0..1]"];
+MeetingsFragment1248883678 -> DetailActivity1648626577[label="initRecyclerView() -> navigate()"];
+MeetingsFragment1248883678 -> MeetingListRVAdapter885763998[label="adapter
+[0..1]"];
+MeetingsFragment1248883678 -> MeetingViewModel643792745[label="viewModel
+[0..1]"];
+MeetingsRepository991490814 -> Meeting735792764[label="meetingsLiveData
+[0..1]"];
+RoomFilterDialogFragment1234958668 -> MeetingViewModel643792745[label="meetingViewModel
+[0..1]"];
+RoomFilterDialogFragment1234958668 -> RoomFilterDialogFragmentViewModel643792745[label="viewModel
+[0..1]"];
+RoomFilterDialogFragmentViewModel643792745 -> MeetingsRepository991490814[label="repository
+[0..1]"];
+    
+}
+@enduml

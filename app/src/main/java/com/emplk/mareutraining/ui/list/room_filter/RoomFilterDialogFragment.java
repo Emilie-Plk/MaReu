@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,20 +20,18 @@ import com.emplk.mareutraining.viewmodels.MeetingViewModel;
 import com.emplk.mareutraining.viewmodels.RoomFilterDialogFragmentViewModel;
 
 
-public class RoomFilterDialogFragment extends DialogFragment implements OnRoomClickedListener {
+public class RoomFilterDialogFragment extends DialogFragment {
+
 
     private FragmentRoomFilterBinding binding;
     private RoomFilterDialogFragmentViewModel viewModel;
+    private MeetingViewModel meetingViewModel; // TODO: do I need to use meetingVM or RoomFilterVM ?
 
     @NonNull
     public static RoomFilterDialogFragment newInstance() {
         return new RoomFilterDialogFragment();
     }
 
-    @Override
-    public void onRoomSelected(Room room) {
-
-    }
 
     @Nullable
     @Override
@@ -54,12 +51,16 @@ public class RoomFilterDialogFragment extends DialogFragment implements OnRoomCl
         super.onViewCreated(view, savedInstanceState);
 
         viewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(RoomFilterDialogFragmentViewModel.class);
+
+        meetingViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(MeetingViewModel.class);
+
         binding.roomListviewMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                String selectedRoom = binding.roomListviewMenu.getItemAtPosition(position).toString();
-                viewModel.getSelectedRoom(selectedRoom);
+                String selectedRoomString = binding.roomListviewMenu.getItemAtPosition(position).toString();
+                viewModel.selectedRoom(selectedRoomString);
             }
         });
     }
 }
+
