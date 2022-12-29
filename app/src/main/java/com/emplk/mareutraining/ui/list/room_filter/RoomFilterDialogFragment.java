@@ -1,6 +1,8 @@
 package com.emplk.mareutraining.ui.list.room_filter;
 
 import android.app.AlertDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +37,12 @@ public class RoomFilterDialogFragment extends DialogFragment {
         return new RoomFilterDialogFragment();
     }
 
+    public static final String KEY_MEETING_ROOM = "KEY_MEETING_ROOM";
 
+    /*public static Intent getRoomNameFilter(Context context, String room) {
+
+    }
+*/
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -57,7 +64,10 @@ public class RoomFilterDialogFragment extends DialogFragment {
 
         binding.roomListviewMenu.setOnItemClickListener((adapterView, view1, position, id) -> {
             String selectedRoomString = binding.roomListviewMenu.getItemAtPosition(position).toString();
-            viewModel.selectedRoom(selectedRoomString);
+           // viewModel.selectedRoom(selectedRoomString);
+            Intent intent = new Intent(getContext(), MainActivity.class);
+            intent.putExtra(KEY_MEETING_ROOM, selectedRoomString);
+            startActivity(intent);
         });
     }
 }

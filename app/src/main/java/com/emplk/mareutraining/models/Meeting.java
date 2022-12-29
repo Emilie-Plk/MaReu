@@ -102,6 +102,7 @@ public class Meeting {
         return Objects.hash(meetingTitle, date, room, timeStart, timeEnd, participants);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Meeting{" +

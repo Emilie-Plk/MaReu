@@ -1,6 +1,8 @@
 package com.emplk.mareutraining.ui.list;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
     private MeetingListRVAdapter adapter;
 
     MeetingViewModel viewModel;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +132,5 @@ public class MainActivity extends AppCompatActivity {
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH))
                 .show();
-
     }
 }
