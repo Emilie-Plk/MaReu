@@ -4,5 +4,5 @@ import com.emplk.mareutraining.models.Room;
 
 public interface OnRoomClickedListener {
 
-    void onRoomSelected(Room room);
+    void onRoomSelected(String room);
 }

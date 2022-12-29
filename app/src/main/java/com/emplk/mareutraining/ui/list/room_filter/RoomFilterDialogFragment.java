@@ -13,8 +13,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.emplk.mareutraining.adapters.MeetingListRVAdapter;
 import com.emplk.mareutraining.databinding.FragmentRoomFilterBinding;
 import com.emplk.mareutraining.models.Room;
+import com.emplk.mareutraining.ui.list.MainActivity;
 import com.emplk.mareutraining.utils.ViewModelFactory;
 import com.emplk.mareutraining.viewmodels.MeetingViewModel;
 import com.emplk.mareutraining.viewmodels.RoomFilterDialogFragmentViewModel;
@@ -24,8 +26,9 @@ public class RoomFilterDialogFragment extends DialogFragment {
 
 
     private FragmentRoomFilterBinding binding;
-    private RoomFilterDialogFragmentViewModel viewModel;
-    private MeetingViewModel meetingViewModel; // TODO: do I need to use meetingVM or RoomFilterVM ?
+    private MeetingViewModel viewModel;
+    private MeetingListRVAdapter meetingListRVAdapter;
+     // TODO: do I need to use meetingVM or RoomFilterVM ?
 
     @NonNull
     public static RoomFilterDialogFragment newInstance() {
@@ -50,16 +53,11 @@ public class RoomFilterDialogFragment extends DialogFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        viewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(RoomFilterDialogFragmentViewModel.class);
+        viewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(MeetingViewModel.class);
 
-        meetingViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(MeetingViewModel.class);
-
-        binding.roomListviewMenu.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                String selectedRoomString = binding.roomListviewMenu.getItemAtPosition(position).toString();
-                viewModel.selectedRoom(selectedRoomString);
-            }
+        binding.roomListviewMenu.setOnItemClickListener((adapterView, view1, position, id) -> {
+            String selectedRoomString = binding.roomListviewMenu.getItemAtPosition(position).toString();
+            viewModel.selectedRoom(selectedRoomString);
         });
     }
 }

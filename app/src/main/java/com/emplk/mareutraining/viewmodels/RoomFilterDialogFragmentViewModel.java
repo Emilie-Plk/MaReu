@@ -8,7 +8,7 @@ import com.emplk.mareutraining.models.Room;
 import com.emplk.mareutraining.repositories.MeetingsRepository;
 
 public class RoomFilterDialogFragmentViewModel extends ViewModel {
-
+// TODO: no need ?
     @NonNull
     private final MeetingsRepository repository;
 

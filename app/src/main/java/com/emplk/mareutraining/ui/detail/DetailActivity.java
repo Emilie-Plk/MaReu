@@ -10,7 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.emplk.mareutraining.R;
 import com.emplk.mareutraining.databinding.ActivityDetailBinding;
-import com.emplk.mareutraining.ui.list.MeetingsFragment;
+
 
 import java.util.Objects;
 
