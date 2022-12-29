@@ -28,13 +28,12 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private MeetingListRVAdapter adapter;
-    RoomFilterDialogFragmentViewModel roomFilterViewModel;
+
     MeetingViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        roomFilterViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(RoomFilterDialogFragmentViewModel.class);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);

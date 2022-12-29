@@ -7,10 +7,11 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 
-import com.emplk.mareutraining.R;
 import com.emplk.mareutraining.databinding.ActivityDetailBinding;
-
+import com.emplk.mareutraining.utils.ViewModelFactory;
+import com.emplk.mareutraining.viewmodels.DetailMeetingViewModel;
 
 import java.util.Objects;
 
@@ -31,16 +32,30 @@ public class DetailActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
+
+        DetailMeetingViewModel viewModel = new ViewModelProvider(this,
+                ViewModelFactory.getInstance())
+                .get(DetailMeetingViewModel.class);
+
         Toolbar myToolbar = binding.toolbarDetail;
         setSupportActionBar(myToolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container_detail, DetailFragment.newInstance(), "DetailFragment")
-                    .setReorderingAllowed(true)
-                    .commit();
-        }
+        long meetingId = getIntent().getLongExtra(KEY_MEETING_ID, -1);
+
+        viewModel.getDetailViewStateLiveData(meetingId).observe(DetailActivity.this, detailViewState -> {
+            binding.meetingTitleDetail.setText(detailViewState.getMeetingTitle());
+                   /* GradientDrawable backgroundDrawable = (GradientDrawable) binding.roomNameDetail.getBackground();
+                   backgroundDrawable.setColor(Color.parseColor(Integer.toString(detailViewState.getRoomColor())));
+                   binding.roomNameDetail.setBackground(backgroundDrawable);*/
+            binding.dayTimeTv.append(detailViewState.getDate() + " | " + detailViewState.getTimeStart() + " -" + detailViewState.getTimeEnd());
+            binding.roomNameDetail.setBackgroundResource(detailViewState.getRoomColor());
+            binding.roomNameDetail.setText(detailViewState.getRoomName());
+            binding.participantsListDetail.setText(detailViewState.getParticipants());
+            binding.meetingObjectTv.setText(detailViewState.getMeetingObject());
+        });
+
     }
+
 }
