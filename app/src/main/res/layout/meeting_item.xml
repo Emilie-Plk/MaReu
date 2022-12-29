@@ -13,12 +13,12 @@
         android:id="@+id/room_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:background="@drawable/ic_baseline_circle_24"
         android:gravity="center"
         android:textAllCaps="true"
         android:textColor="@color/black"
         android:textSize="11sp"
         android:textStyle="bold"
+        app:background="@drawable/ic_baseline_circle_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/guideline_circle_right"
         app:layout_constraintStart_toStartOf="@+id/guideline_circle_left"
@@ -27,30 +27,32 @@
 
     <TextView
         android:id="@+id/meeting_participants_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_weight="1"
         android:ellipsize="end"
-        android:lines="1"
+        android:maxLines="1"
+        app:layout_constraintEnd_toStartOf="@+id/delete_meeting"
         app:layout_constraintStart_toEndOf="@+id/room_number"
         app:layout_constraintTop_toBottomOf="@+id/meeting_hour_tv"
         tool:text="maxime, alex, pascaline" />
 
     <TextView
         android:id="@+id/meeting_date_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/room_number"
         app:layout_constraintTop_toBottomOf="@+id/meeting_title_tv"
-        tool:text="22/12/2022"/>
+        tool:text="22/12/2022" />
 
     <TextView
         android:id="@+id/meeting_hour_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-       android:layout_marginStart="8dp"
+        android:layout_marginStart="8dp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/meeting_date_tv"
         app:layout_constraintTop_toBottomOf="@+id/meeting_title_tv"
@@ -59,12 +61,14 @@
 
     <TextView
         android:id="@+id/meeting_title_tv"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:ellipsize="end"
+        android:maxLines="1"
         android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/delete_meeting"
         app:layout_constraintStart_toEndOf="@+id/room_number"
         app:layout_constraintTop_toTopOf="parent"
         tool:text="Présentation nouveau design" />
@@ -78,7 +82,8 @@
         android:src="@drawable/ic_baseline_delete_24"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/delete_meeting_descr" />
 
 
     <androidx.constraintlayout.widget.Guideline

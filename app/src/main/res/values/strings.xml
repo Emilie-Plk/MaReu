@@ -21,5 +21,7 @@
     <string name="date_picker_btn">Date</string>
     <string name="participants_err_msg">"Merci d'ajouter au moins deux participitant·e·s"</string>
     <string name="pick_room_menu">Choisissez une salle</string>
+    <string name="room_actv_hint">Salle</string>
+    <string name="delete_meeting_descr">Supprimer la réunion</string>
 
 </resources>
