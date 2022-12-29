@@ -63,11 +63,8 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
         bindAddMeeting(viewModel, binding.titleTextinput, binding.selectedDayTv,
                 binding.selectedHourStartTv, binding.selectedHourEndTv, binding.meetingObjectInput);
 
-        binding.addParticipantFab.setOnClickListener(view1 -> {
-            generateParticipantChip(binding.participantsInput);
-            binding.participantsInput.setText("");
-            binding.participantsInput.onEditorAction(EditorInfo.IME_ACTION_DONE);
-        });
+        // Add participants (chips)
+        addParticipants();
 
         // Set Time pickers
         binding.datePickerBtnCreate.setOnClickListener(v -> getDatePicker());
@@ -79,10 +76,15 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
         // Fetch selected room (string)
         binding.roomsActv.setOnItemClickListener((adapterView, v, position, id) ->
                 selectedRoom = adapterView.getItemAtPosition(position).toString());
-
-
     }
 
+    private void addParticipants() {
+        binding.addParticipantFab.setOnClickListener(view1 -> {
+            generateParticipantChip(binding.participantsInput);
+            binding.participantsInput.setText("");
+            binding.participantsInput.onEditorAction(EditorInfo.IME_ACTION_DONE);
+        });
+    }
 
     private void getDatePicker() {
         Calendar calendar = Calendar.getInstance();
