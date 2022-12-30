@@ -52,9 +52,7 @@ public class DetailActivity extends AppCompatActivity {
 
         viewModel.getDetailViewStateLiveData(meetingId).observe(DetailActivity.this, detailViewState -> {
             binding.meetingTitleDetail.setText(detailViewState.getMeetingTitle());
-            Drawable backgroundDrawable = (Drawable) binding.roomNameDetail.getBackground();
-            backgroundDrawable.setTint(detailViewState.getRoomColor());
-            binding.roomNameDetail.setBackground(backgroundDrawable);
+            binding.roomNameDetail.setBackgroundResource(detailViewState.getRoomColor());
             binding.dayTimeTv.append(detailViewState.getDate() + " | " + detailViewState.getTimeStart() + " -" + detailViewState.getTimeEnd());
             binding.roomNameDetail.setText(detailViewState.getRoomName());
             binding.participantsListDetail.setText(detailViewState.getParticipants());

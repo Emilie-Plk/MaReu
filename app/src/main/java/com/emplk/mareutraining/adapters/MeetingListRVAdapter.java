@@ -1,35 +1,19 @@
 package com.emplk.mareutraining.adapters;
 
 
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.ShapeDrawable;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-
-import androidx.appcompat.content.res.AppCompatResources;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.emplk.mareutraining.R;
 import com.emplk.mareutraining.databinding.MeetingItemBinding;
-import com.emplk.mareutraining.models.Meeting;
 import com.emplk.mareutraining.ui.list.MeetingsViewStateItem;
 import com.emplk.mareutraining.ui.list.OnMeetingClickedListener;
-
-import java.util.List;
-import java.util.Objects;
 
 
 public class MeetingListRVAdapter extends ListAdapter<MeetingsViewStateItem, MeetingListRVAdapter.MeetingsViewHolder> {
@@ -51,7 +35,7 @@ public class MeetingListRVAdapter extends ListAdapter<MeetingsViewStateItem, Mee
 
     @Override
     public void onBindViewHolder(@NonNull MeetingsViewHolder holder, int position) {
-     holder.bind(getItem(position), listener);
+        holder.bind(getItem(position), listener);
     }
 
     public static class MeetingsViewHolder extends RecyclerView.ViewHolder {
@@ -71,12 +55,7 @@ public class MeetingListRVAdapter extends ListAdapter<MeetingsViewStateItem, Mee
 
         public void bind(MeetingsViewStateItem item, OnMeetingClickedListener listener) {
             itemView.setOnClickListener(v -> listener.onMeetingClicked(item.getMeetingId()));
-           Resources res = itemView.getContext().getResources();
-           roomName.setBackgroundColor(res.getColor(item.getRoomColor()));
-           // roomName.getBackground().setTint(Color.parseColor(Integer.toHexString(item.getRoomColor())));
-           // roomName.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), item.getRoomColor()));
-           // roomName.setBackgroundResource(item.getRoomColor());
-           // roomCircle.setImageResource(item.getRoomColor());
+            roomName.setBackgroundResource(item.getRoomColor());
             roomName.setContentDescription(item.getRoomName()); // for accessibility
             roomName.setText(item.getRoomName());
             meetingTitle.setText(item.getMeetingTitle());

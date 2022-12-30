@@ -92,6 +92,7 @@
         android:background="@drawable/room"
         android:gravity="center"
         android:textStyle="bold"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="@+id/room_title_detail"
         app:layout_constraintStart_toEndOf="@+id/room_title_detail"
         app:layout_constraintTop_toTopOf="@+id/room_title_detail"

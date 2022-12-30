@@ -8,13 +8,12 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp">
 
-
     <TextView
         android:id="@+id/room_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-       android:layout_margin="16dp"
-        android:background="@drawable/ic_baseline_circle_24"
+        android:layout_margin="16dp"
+        android:background="@drawable/room"
         android:gravity="center"
         android:textAllCaps="true"
         android:textColor="@color/black"
@@ -22,7 +21,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="parent"
         tool:text="Salle 1" />
 
@@ -30,8 +29,7 @@
         android:id="@+id/meeting_participants_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="1"
@@ -44,7 +42,7 @@
         android:id="@+id/meeting_date_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="16dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toBottomOf="@+id/meeting_title_tv"
@@ -65,7 +63,8 @@
         android:id="@+id/meeting_title_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-       android:layout_margin="8dp"
+       android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:textStyle="bold"
@@ -92,6 +91,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_begin="65dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="16dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
