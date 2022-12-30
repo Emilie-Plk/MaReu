@@ -13,16 +13,16 @@
         android:id="@+id/room_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+       android:layout_margin="16dp"
+        android:background="@drawable/ic_baseline_circle_24"
         android:gravity="center"
         android:textAllCaps="true"
         android:textColor="@color/black"
         android:textSize="11sp"
         android:textStyle="bold"
-        android:background="@drawable/ic_baseline_circle_24"
-        android:layout_marginStart="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-       app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/meeting_title_tv"
+        app:layout_constraintEnd_toStartOf="@+id/guideline3"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tool:text="Salle 1" />
 
@@ -30,12 +30,13 @@
         android:id="@+id/meeting_participants_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_weight="1"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="1"
         app:layout_constraintEnd_toStartOf="@+id/delete_meeting"
-        app:layout_constraintStart_toEndOf="@+id/room_number"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toBottomOf="@+id/meeting_hour_tv"
         tool:text="maxime, alex, pascaline" />
 
@@ -43,9 +44,9 @@
         android:id="@+id/meeting_date_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/room_number"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toBottomOf="@+id/meeting_title_tv"
         tool:text="22/12/2022" />
 
@@ -64,13 +65,13 @@
         android:id="@+id/meeting_title_tv"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+       android:layout_margin="8dp
+"
         android:ellipsize="end"
         android:maxLines="1"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/delete_meeting"
-        app:layout_constraintStart_toEndOf="@+id/room_number"
+        app:layout_constraintStart_toStartOf="@+id/guideline3"
         app:layout_constraintTop_toTopOf="parent"
         tool:text="Présentation nouveau design" />
 
@@ -85,6 +86,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:contentDescription="@string/delete_meeting_descr" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="65dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
