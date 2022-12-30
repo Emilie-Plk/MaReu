@@ -17,8 +17,6 @@ public class CreateMeetingViewModel extends ViewModel {
     @NonNull
     private final MeetingsRepository repository;
 
-    private boolean isFilled;
-
     public CreateMeetingViewModel(@NonNull MeetingsRepository repository) {
         this.repository = repository;
     }

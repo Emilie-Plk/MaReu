@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +29,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -89,27 +89,29 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
     }
 
     private void getDatePicker() {
-        Calendar calendar = Calendar.getInstance();
-         DatePickerDialog.OnDateSetListener dateSetListener = (datePicker, year, month, dayOfMonth) -> {
-            calendar.set(Calendar.YEAR, year);
-            calendar.set(Calendar.MONTH, month);
-            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            datePicker.setMinDate(calendar.getTimeInMillis());
-            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
-            if(calendar.before(Calendar.getInstance())) {
-                Toast.makeText(this, "Merci de choisir une date ultérieure à ce jour", Toast.LENGTH_SHORT).show();
-            } else {
-                binding.selectedDayTv.setText(formatter.format(calendar.getTime()));
-            }
+        Locale.setDefault(Locale.FRANCE);
 
-        };
-        new DatePickerDialog(
-                this,
-                dateSetListener,
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH))
-                .show();
+        final Calendar now = Calendar.getInstance();
+        int mYear = now.get(Calendar.YEAR);
+        int mMonth = now.get(Calendar.MONTH);
+        int mDay = now.get(Calendar.DAY_OF_MONTH);
+
+        now.set(Calendar.DAY_OF_MONTH, mDay);
+        DatePickerDialog dpd = new DatePickerDialog(this,
+                (view, year, monthOfYear, dayOfMonth) -> {
+                    Calendar cal = Calendar.getInstance();
+                    cal.set(Calendar.MONTH, monthOfYear);
+                    cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    cal.set(Calendar.YEAR, year);
+
+                    StringBuilder date = new StringBuilder();
+                    date.append((dayOfMonth<10?"0":"")).append(dayOfMonth)
+                            .append("-").append((monthOfYear + 1) < 10 ? "0" : "")
+                            .append((monthOfYear+1)).append("-").append(year);
+                    binding.selectedDayTv.setText(date);
+                }, mYear, mMonth, mDay);
+        dpd.getDatePicker().setMinDate(now.getTimeInMillis());
+        dpd.show();
     }
 
     private void configureTimePickerStart() {

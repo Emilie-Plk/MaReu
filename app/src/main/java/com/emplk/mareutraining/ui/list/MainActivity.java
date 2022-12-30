@@ -25,6 +25,7 @@ import com.emplk.mareutraining.viewmodels.MeetingViewModel;
 import com.emplk.mareutraining.viewmodels.RoomFilterDialogFragmentViewModel;
 
 import java.util.Calendar;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -116,19 +117,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openDateFilterCalendar() {
-        Calendar calendar = Calendar.getInstance();
-        DatePickerDialog.OnDateSetListener dateSetListener = (datePicker, year, month, dayOfMonth) -> {
-            calendar.set(Calendar.YEAR, year);
-            calendar.set(Calendar.MONTH, month);
-            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        };
+        Locale.setDefault(Locale.FRANCE);
 
-        new DatePickerDialog(
-                this,
-                dateSetListener,
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH))
-                .show();
+        final Calendar now = Calendar.getInstance();
+        int mYear = now.get(Calendar.YEAR);
+        int mMonth = now.get(Calendar.MONTH);
+        int mDay = now.get(Calendar.DAY_OF_MONTH);
+
+            now.set(Calendar.DAY_OF_MONTH, mDay);
+            DatePickerDialog dpd = new DatePickerDialog(this,
+                    (view, year, monthOfYear, dayOfMonth) -> {
+                        Calendar cal = Calendar.getInstance();
+                        cal.set(Calendar.MONTH, monthOfYear);
+                        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                        cal.set(Calendar.YEAR, year);
+                        // TODO: logic to get the date and filter (viewModel)
+                    }, mYear, mMonth, mDay);
+            dpd.show();
     }
 }
