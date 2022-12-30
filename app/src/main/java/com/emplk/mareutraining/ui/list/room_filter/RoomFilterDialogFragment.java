@@ -26,23 +26,14 @@ import com.emplk.mareutraining.viewmodels.RoomFilterDialogFragmentViewModel;
 
 public class RoomFilterDialogFragment extends DialogFragment {
 
-
     private FragmentRoomFilterBinding binding;
     private MeetingViewModel viewModel;
-    private MeetingListRVAdapter meetingListRVAdapter;
-     // TODO: do I need to use meetingVM or RoomFilterVM ?
 
     @NonNull
     public static RoomFilterDialogFragment newInstance() {
         return new RoomFilterDialogFragment();
     }
 
-    public static final String KEY_MEETING_ROOM = "KEY_MEETING_ROOM";
-
-    /*public static Intent getRoomNameFilter(Context context, String room) {
-
-    }
-*/
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -64,9 +55,9 @@ public class RoomFilterDialogFragment extends DialogFragment {
 
         binding.roomListviewMenu.setOnItemClickListener((adapterView, view1, position, id) -> {
             String selectedRoomString = binding.roomListviewMenu.getItemAtPosition(position).toString();
-           // viewModel.selectedRoom(selectedRoomString);
+            viewModel.getMeetingFilteredByRoomViewStateItemsLiveData(selectedRoomString);
+            // .observe(MainActivity.class, + appeler l'adapter de MainActivity)
             Intent intent = new Intent(getContext(), MainActivity.class);
-            intent.putExtra(KEY_MEETING_ROOM, selectedRoomString);
             startActivity(intent);
         });
     }

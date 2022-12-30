@@ -21,6 +21,8 @@ public class MeetingsRepository {
 
     private final MutableLiveData<List<Meeting>> meetingsLiveData = new MutableLiveData<>(new ArrayList<>());
 
+    private final MutableLiveData<List<Meeting>> meetingsFilteredByRoomLiveData = new MutableLiveData<>(new ArrayList<>());
+
     private int maxId = 0;
 
     public MeetingsRepository(BuildConfigResolver buildConfigResolver) {
@@ -100,8 +102,8 @@ public class MeetingsRepository {
                 meetingsFilteredByRoom.add(meeting);
             }
         }
-        meetingsLiveData.setValue(meetingsFilteredByRoom);
-        return meetingsLiveData;
+        meetingsFilteredByRoomLiveData.setValue(meetingsFilteredByRoom);
+        return meetingsFilteredByRoomLiveData;
     }
 
 

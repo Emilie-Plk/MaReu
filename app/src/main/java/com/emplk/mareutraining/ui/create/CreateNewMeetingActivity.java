@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.app.ActionBar;
+
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.emplk.mareutraining.R;
 import com.emplk.mareutraining.databinding.ActivityCreateNewMeetingBinding;
 import com.emplk.mareutraining.models.Room;
+import com.emplk.mareutraining.ui.list.MainActivity;
 import com.emplk.mareutraining.utils.ViewModelFactory;
 import com.emplk.mareutraining.viewmodels.CreateMeetingViewModel;
 import com.google.android.material.chip.Chip;
@@ -28,6 +29,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -76,6 +78,7 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
         // Fetch selected room (string)
         binding.roomsActv.setOnItemClickListener((adapterView, v, position, id) ->
                 selectedRoom = adapterView.getItemAtPosition(position).toString());
+
     }
 
     private void addParticipants() {
@@ -88,16 +91,14 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
 
     private void getDatePicker() {
         Calendar calendar = Calendar.getInstance();
-
-        DatePickerDialog.OnDateSetListener dateSetListener = (datePicker, year, month, dayOfMonth) -> {
+         DatePickerDialog.OnDateSetListener dateSetListener = (datePicker, year, month, dayOfMonth) -> {
             calendar.set(Calendar.YEAR, year);
             calendar.set(Calendar.MONTH, month);
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
+            datePicker.setMinDate(calendar.getTimeInMillis());
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
             binding.selectedDayTv.setText(formatter.format(calendar.getTime()));
         };
-
         new DatePickerDialog(
                 this,
                 dateSetListener,
@@ -105,7 +106,6 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH))
                 .show();
-
     }
 
     private void configureTimePickerStart() {

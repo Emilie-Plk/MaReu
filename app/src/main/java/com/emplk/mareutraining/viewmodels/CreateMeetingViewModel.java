@@ -1,11 +1,9 @@
 package com.emplk.mareutraining.viewmodels;
 
+
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
-import com.emplk.mareutraining.models.Meeting;
 import com.emplk.mareutraining.models.Room;
 import com.emplk.mareutraining.repositories.MeetingsRepository;
 
@@ -19,8 +17,7 @@ public class CreateMeetingViewModel extends ViewModel {
     @NonNull
     private final MeetingsRepository repository;
 
-   // private final MutableLiveData<Boolean> isCreateButtonEnabledMutableLiveData = new MutableLiveData<>(false);
-
+    private boolean isFilled;
 
     public CreateMeetingViewModel(@NonNull MeetingsRepository repository) {
         this.repository = repository;
@@ -72,13 +69,5 @@ public class CreateMeetingViewModel extends ViewModel {
         // TODO: int for color or String ? + est-ce que je récup vraiment une enum constant ? à priori oui
         return selectedRoom;
     }
-/*
-    private LiveData<List<Room>> getAvailableRoomsLiveData() {
-return Transformations.map(repository.getMeetingsLiveData(), availableRooms -> {
-    List<Meeting>
-        }
-// TODO: getAvailableRoomsLiveData() + peut-être un CreateMeetingViewState ?
-        )
-    }*/
 
 }

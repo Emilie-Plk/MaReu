@@ -44,12 +44,9 @@ public class MainActivity extends AppCompatActivity {
         setViewModel();
         configureToolbar();
         addMeeting();
-        getMeetingListFilteredByRoom();
-
         // configure and init recyclerview
-        RecyclerView recyclerView = view.findViewById(R.id.meetings_rv);
         initRecyclerView();
-        recyclerView.setAdapter(adapter);
+        getMeetingList();
 
     }
 
@@ -74,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
                 viewModel.onDeleteMeetingClicked(meetingId);
             }
         });
+        RecyclerView recyclerView = binding.meetingsRv;
+        recyclerView.setAdapter(adapter);
     }
 
     private void setViewModel() {
@@ -88,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getMeetingListFilteredByRoom() {
-        viewModel.getMeetingFilteredByRoomViewStateItemsLiveData("Salle 1").observe(this,
+        viewModel.getMeetingFilteredByRoomViewStateItemsLiveData("Salle 10").observe(this,
                 meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
     }
 
@@ -122,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
             calendar.set(Calendar.YEAR, year);
             calendar.set(Calendar.MONTH, month);
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-// TODO: getMeetingsFilteredByDate
         };
 
         new DatePickerDialog(

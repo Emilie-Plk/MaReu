@@ -16,6 +16,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MeetingViewModel extends ViewModel {
@@ -47,19 +48,7 @@ public class MeetingViewModel extends ViewModel {
         );
     }
 
-    public Room selectedRoom(String roomName) {
-        Room selectedRoom = Room.ROOM_ONE;
-        Room[] rooms = Room.values();
-        for (Room room : rooms) {
-            if (roomName.equals(room.getRoomName())) {
-                selectedRoom = room;
-                break;
-            }
-        }
-        return selectedRoom;
-    }
-
-    public static String formatParticipantList(List<String> participantList) {
+    private static String formatParticipantList(List<String> participantList) {
         String stringList = participantList.toString()
                 .replace("[", "")
                 .replace("]", "")
@@ -85,11 +74,11 @@ public class MeetingViewModel extends ViewModel {
     }
 
     public LiveData<List<MeetingsViewStateItem>> getMeetingFilteredByRoomViewStateItemsLiveData(String roomName) {
-        return Transformations.map(repository.getMeetingsLiveData(), meetings -> {
-                    List<MeetingsViewStateItem> meetingsViewStateItems = new ArrayList<>();
+        return Transformations.map(repository.getMeetingsFilteredByRoom(roomName), meetings -> {
+                    List<MeetingsViewStateItem> meetingsFilteredByRoomViewStateItems = new ArrayList<>();
                     for (Meeting meeting : meetings) {
-                        if (roomName.equals(meeting.getRoom().getRoomName()))
-                            meetingsViewStateItems.add(
+                        if (roomName.equals(meeting.getRoom().getRoomName())) {
+                            meetingsFilteredByRoomViewStateItems.add(
                                     new MeetingsViewStateItem(
                                             meeting.getMeetingTitle(),
                                             meeting.getRoom().getRoomName(),
@@ -99,8 +88,9 @@ public class MeetingViewModel extends ViewModel {
                                             meeting.getRoom().getRoomColor(),
                                             meeting.getId())
                             );
+                        }
                     }
-                    return meetingsViewStateItems;
+            return meetingsFilteredByRoomViewStateItems;
                 }
         );
     }

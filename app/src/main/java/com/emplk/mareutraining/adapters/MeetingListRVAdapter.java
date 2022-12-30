@@ -2,6 +2,7 @@ package com.emplk.mareutraining.adapters;
 
 
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.ShapeDrawable;
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import androidx.appcompat.content.res.AppCompatResources;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -69,9 +71,11 @@ public class MeetingListRVAdapter extends ListAdapter<MeetingsViewStateItem, Mee
 
         public void bind(MeetingsViewStateItem item, OnMeetingClickedListener listener) {
             itemView.setOnClickListener(v -> listener.onMeetingClicked(item.getMeetingId()));
-           Resources res = roomName.getContext().getResources();
+           Resources res = itemView.getContext().getResources();
            roomName.setBackgroundColor(res.getColor(item.getRoomColor()));
-        //   roomName.setBackgroundResource(item.getRoomColor());
+           // roomName.getBackground().setTint(Color.parseColor(Integer.toHexString(item.getRoomColor())));
+           // roomName.setBackgroundColor(ContextCompat.getColor(itemView.getContext(), item.getRoomColor()));
+           // roomName.setBackgroundResource(item.getRoomColor());
            // roomCircle.setImageResource(item.getRoomColor());
             roomName.setContentDescription(item.getRoomName()); // for accessibility
             roomName.setText(item.getRoomName());

@@ -2,13 +2,19 @@ package com.emplk.mareutraining.ui.detail;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
+import androidx.core.view.ViewCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.emplk.mareutraining.R;
 import com.emplk.mareutraining.databinding.ActivityDetailBinding;
 import com.emplk.mareutraining.utils.ViewModelFactory;
 import com.emplk.mareutraining.viewmodels.DetailMeetingViewModel;
@@ -46,11 +52,10 @@ public class DetailActivity extends AppCompatActivity {
 
         viewModel.getDetailViewStateLiveData(meetingId).observe(DetailActivity.this, detailViewState -> {
             binding.meetingTitleDetail.setText(detailViewState.getMeetingTitle());
-                   /* GradientDrawable backgroundDrawable = (GradientDrawable) binding.roomNameDetail.getBackground();
-                   backgroundDrawable.setColor(Color.parseColor(Integer.toString(detailViewState.getRoomColor())));
-                   binding.roomNameDetail.setBackground(backgroundDrawable);*/
+            Drawable backgroundDrawable = (Drawable) binding.roomNameDetail.getBackground();
+            backgroundDrawable.setTint(detailViewState.getRoomColor());
+            binding.roomNameDetail.setBackground(backgroundDrawable);
             binding.dayTimeTv.append(detailViewState.getDate() + " | " + detailViewState.getTimeStart() + " -" + detailViewState.getTimeEnd());
-            binding.roomNameDetail.setBackgroundResource(detailViewState.getRoomColor());
             binding.roomNameDetail.setText(detailViewState.getRoomName());
             binding.participantsListDetail.setText(detailViewState.getParticipants());
             binding.meetingObjectTv.setText(detailViewState.getMeetingObject());
