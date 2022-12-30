@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.emplk.mareutraining.R;
 import com.emplk.mareutraining.databinding.ActivityCreateNewMeetingBinding;
@@ -97,7 +98,12 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             datePicker.setMinDate(calendar.getTimeInMillis());
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy", Locale.FRANCE);
-            binding.selectedDayTv.setText(formatter.format(calendar.getTime()));
+            if(calendar.before(Calendar.getInstance())) {
+                Toast.makeText(this, "Merci de choisir une date ultérieure à ce jour", Toast.LENGTH_SHORT).show();
+            } else {
+                binding.selectedDayTv.setText(formatter.format(calendar.getTime()));
+            }
+
         };
         new DatePickerDialog(
                 this,
