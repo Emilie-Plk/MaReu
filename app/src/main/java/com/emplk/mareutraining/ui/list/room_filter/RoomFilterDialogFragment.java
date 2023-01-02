@@ -1,13 +1,11 @@
 package com.emplk.mareutraining.ui.list.room_filter;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
@@ -15,13 +13,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.emplk.mareutraining.adapters.MeetingListRVAdapter;
 import com.emplk.mareutraining.databinding.FragmentRoomFilterBinding;
 import com.emplk.mareutraining.models.Room;
 import com.emplk.mareutraining.ui.list.MainActivity;
 import com.emplk.mareutraining.utils.ViewModelFactory;
 import com.emplk.mareutraining.viewmodels.MeetingViewModel;
-import com.emplk.mareutraining.viewmodels.RoomFilterDialogFragmentViewModel;
 
 
 public class RoomFilterDialogFragment extends DialogFragment {
@@ -55,8 +51,9 @@ public class RoomFilterDialogFragment extends DialogFragment {
 
         binding.roomListviewMenu.setOnItemClickListener((adapterView, view1, position, id) -> {
             String selectedRoomString = binding.roomListviewMenu.getItemAtPosition(position).toString();
-            viewModel.getMeetingFilteredByRoomViewStateItemsLiveData(selectedRoomString);
+            viewModel.fetchMeetingFilteredByRoomViewStateItemsLiveData(selectedRoomString);
             // .observe(MainActivity.class, + appeler l'adapter de MainActivity)
+            // callback avec une interface par exemple OnSelectedRoomFilter
             Intent intent = new Intent(getContext(), MainActivity.class);
             startActivity(intent);
         });

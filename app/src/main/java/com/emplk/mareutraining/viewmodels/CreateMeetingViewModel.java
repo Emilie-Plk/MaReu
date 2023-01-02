@@ -10,6 +10,7 @@ import com.emplk.mareutraining.repositories.MeetingsRepository;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CreateMeetingViewModel extends ViewModel {
@@ -39,6 +40,13 @@ public class CreateMeetingViewModel extends ViewModel {
                 participants,
                 meetingObject);
     }
+
+/*    public boolean checkEveryFieldFilled(String date, String startTime, String endTime, String room, List<String> participants) {
+if (date != null || startTime != null || endTime != null || room != null || !participants.isEmpty()) {
+
+}
+return true;
+    }*/
 
     private LocalDate formatDate(String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");

@@ -1,8 +1,6 @@
 package com.emplk.mareutraining.ui.list;
 
 import android.app.DatePickerDialog;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,7 +20,6 @@ import com.emplk.mareutraining.ui.detail.DetailActivity;
 import com.emplk.mareutraining.ui.list.room_filter.RoomFilterDialogFragment;
 import com.emplk.mareutraining.utils.ViewModelFactory;
 import com.emplk.mareutraining.viewmodels.MeetingViewModel;
-import com.emplk.mareutraining.viewmodels.RoomFilterDialogFragmentViewModel;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -44,14 +41,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(view);
         setViewModel();
         configureToolbar();
-        addMeeting();
+        createMeeting();
         // configure and init recyclerview
         initRecyclerView();
-        getMeetingList();
-
+        getMeetingListFilteredByRoom();
     }
 
-    private void addMeeting() {
+    private void createMeeting() {
         binding.addFab.setOnClickListener(v -> startActivity(CreateNewMeetingActivity.navigate(this)));
     }
 
@@ -83,12 +79,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getMeetingList() {
-        viewModel.getMeetingViewStateItemsLiveData().observe(this,
+        viewModel.fetchMeetingViewStateItemsLiveData().observe(this,
                 meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
     }
 
     private void getMeetingListFilteredByRoom() {
-        viewModel.getMeetingFilteredByRoomViewStateItemsLiveData("Salle 10").observe(this,
+        viewModel.fetchMeetingFilteredByRoomViewStateItemsLiveData("Salle 10").observe(this,
                 meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
     }
 
@@ -112,8 +108,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void openRoomFilterList() {
-        RoomFilterDialogFragment.newInstance().show(getSupportFragmentManager(), "ROOM DIALOG");
+    private void openRoomFilterList() { RoomFilterDialogFragment.newInstance().show(getSupportFragmentManager(), "ROOM DIALOG");
     }
 
     private void openDateFilterCalendar() {

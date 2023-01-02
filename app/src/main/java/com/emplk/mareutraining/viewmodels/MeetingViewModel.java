@@ -6,7 +6,6 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.mareutraining.models.Meeting;
-import com.emplk.mareutraining.models.Room;
 import com.emplk.mareutraining.repositories.MeetingsRepository;
 import com.emplk.mareutraining.ui.list.MeetingsViewStateItem;
 
@@ -16,7 +15,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MeetingViewModel extends ViewModel {
@@ -28,7 +26,7 @@ public class MeetingViewModel extends ViewModel {
         this.repository = repository;
     }
 
-    public LiveData<List<MeetingsViewStateItem>> getMeetingViewStateItemsLiveData() {
+    public LiveData<List<MeetingsViewStateItem>> fetchMeetingViewStateItemsLiveData() {
         return Transformations.map(repository.getMeetingsLiveData(), meetings -> {
                     List<MeetingsViewStateItem> meetingsViewStateItems = new ArrayList<>();
                     for (Meeting meeting : meetings) {
@@ -73,7 +71,7 @@ public class MeetingViewModel extends ViewModel {
         repository.deleteMeeting(meetingId);
     }
 
-    public LiveData<List<MeetingsViewStateItem>> getMeetingFilteredByRoomViewStateItemsLiveData(String roomName) {
+    public LiveData<List<MeetingsViewStateItem>> fetchMeetingFilteredByRoomViewStateItemsLiveData(String roomName) {
         return Transformations.map(repository.getMeetingsFilteredByRoom(roomName), meetings -> {
                     List<MeetingsViewStateItem> meetingsFilteredByRoomViewStateItems = new ArrayList<>();
                     for (Meeting meeting : meetings) {
