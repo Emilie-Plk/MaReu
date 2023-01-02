@@ -52,7 +52,7 @@ public class RoomFilterDialogFragment extends DialogFragment {
         binding.roomListviewMenu.setOnItemClickListener((adapterView, view1, position, id) -> {
             String selectedRoomString = binding.roomListviewMenu.getItemAtPosition(position).toString();
             viewModel.onMeetingClicked(selectedRoomString);
-          //  viewModel.fetchMeetingFilteredByRoomViewStateItemsLiveData(selectedRoomString);
+           viewModel.fetchMeetingFilteredByRoomViewStateItemsLiveData(selectedRoomString);
             // .observe(MainActivity.class, + appeler l'adapter de MainActivity)
             // callback avec une interface par exemple OnSelectedRoomFilter
             Intent intent = new Intent(getContext(), MainActivity.class);

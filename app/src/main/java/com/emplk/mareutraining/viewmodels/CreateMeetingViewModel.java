@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.emplk.mareutraining.models.Room;
 import com.emplk.mareutraining.repositories.MeetingsRepository;
+import com.emplk.mareutraining.utils.SingleLiveEvent;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -17,6 +18,8 @@ public class CreateMeetingViewModel extends ViewModel {
 
     @NonNull
     private final MeetingsRepository repository;
+
+    private final SingleLiveEvent<Void> closeActivitySingleLiveEvent = new SingleLiveEvent<>();
 
     public CreateMeetingViewModel(@NonNull MeetingsRepository repository) {
         this.repository = repository;
@@ -39,14 +42,21 @@ public class CreateMeetingViewModel extends ViewModel {
                 formatTimeEnd(timeEnd),
                 participants,
                 meetingObject);
+
+        // close the activity afterwards
+        closeActivitySingleLiveEvent.call();
     }
 
-/*    public boolean checkEveryFieldFilled(String date, String startTime, String endTime, String room, List<String> participants) {
+  /*  public boolean checkEveryFieldFilled(String date, String startTime, String endTime, String room, List<String> participants) {
 if (date != null || startTime != null || endTime != null || room != null || !participants.isEmpty()) {
-
+    return true;
 }
-return true;
+return false;
     }*/
+
+    public SingleLiveEvent<Void> getCloseActivitySingleLiveEvent() {
+        return closeActivitySingleLiveEvent;
+    }
 
     private LocalDate formatDate(String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");

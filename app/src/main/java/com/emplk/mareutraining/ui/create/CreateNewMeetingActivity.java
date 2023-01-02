@@ -78,6 +78,11 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
         binding.roomsActv.setOnItemClickListener((adapterView, v, position, id) ->
                 selectedRoom = adapterView.getItemAtPosition(position).toString());
 
+        /*viewModel.checkEveryFieldFilled(binding.selectedDayTv.getText().toString(),
+                binding.selectedHourStartTv.getText().toString(),
+                binding.selectedHourEndTv.getText().toString(),
+                selectedRoom, participantsEmails);*/
+        viewModel.getCloseActivitySingleLiveEvent().observe(this, closeActivitySingleLiveEvent -> finish());
     }
 
     private void addParticipants() {
