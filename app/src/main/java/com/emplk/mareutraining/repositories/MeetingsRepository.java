@@ -102,8 +102,11 @@ public class MeetingsRepository {
                 meetingsFilteredByRoom.add(meeting);
             }
         }
+        if (!meetingsFilteredByRoom.isEmpty()) {
+            return meetingsFilteredByRoomLiveData;
+        }
         meetingsFilteredByRoomLiveData.setValue(meetingsFilteredByRoom);
-        return meetingsFilteredByRoomLiveData;
+        return null;
     }
 
 

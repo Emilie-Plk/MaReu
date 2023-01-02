@@ -9,7 +9,6 @@ import com.emplk.mareutraining.repositories.MeetingsRepository;
 import com.emplk.mareutraining.viewmodels.CreateMeetingViewModel;
 import com.emplk.mareutraining.viewmodels.DetailMeetingViewModel;
 import com.emplk.mareutraining.viewmodels.MeetingViewModel;
-import com.emplk.mareutraining.viewmodels.RoomFilterDialogFragmentViewModel;
 
 public class ViewModelFactory implements ViewModelProvider.Factory {
 
@@ -46,9 +45,6 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         }
         else if (modelClass.isAssignableFrom(CreateMeetingViewModel.class)) {
             return (T) new CreateMeetingViewModel(meetingRepository);
-        }
-        else if (modelClass.isAssignableFrom(RoomFilterDialogFragmentViewModel.class)) {
-            return (T) new RoomFilterDialogFragmentViewModel(meetingRepository);
         }
         throw new IllegalArgumentException("Unknown model class!");
     }

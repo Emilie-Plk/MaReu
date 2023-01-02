@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         createMeeting();
         // configure and init recyclerview
         initRecyclerView();
-        getMeetingListFilteredByRoom();
+        getMeetingList();
     }
 
     private void createMeeting() {
