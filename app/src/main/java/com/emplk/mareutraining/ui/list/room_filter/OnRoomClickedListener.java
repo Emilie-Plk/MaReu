@@ -1,8 +1,6 @@
 package com.emplk.mareutraining.ui.list.room_filter;
 
-import com.emplk.mareutraining.models.Room;
-
 public interface OnRoomClickedListener {
 
-    void onRoomSelected(String room);
+    String onRoomSelected(String room);
 }

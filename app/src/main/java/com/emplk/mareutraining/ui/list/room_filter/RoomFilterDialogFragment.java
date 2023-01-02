@@ -25,9 +25,17 @@ public class RoomFilterDialogFragment extends DialogFragment {
     private FragmentRoomFilterBinding binding;
     private MeetingViewModel viewModel;
 
+    String selectedRoomString;
+
+    private final OnRoomClickedListener listener;
+
+    public RoomFilterDialogFragment(OnRoomClickedListener listener) {
+        this.listener = listener;
+    }
+
     @NonNull
     public static RoomFilterDialogFragment newInstance() {
-        return new RoomFilterDialogFragment();
+        return new RoomFilterDialogFragment(room -> newInstance().selectedRoomString);
     }
 
     @Nullable
@@ -50,9 +58,9 @@ public class RoomFilterDialogFragment extends DialogFragment {
         viewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(MeetingViewModel.class);
 
         binding.roomListviewMenu.setOnItemClickListener((adapterView, view1, position, id) -> {
-            String selectedRoomString = binding.roomListviewMenu.getItemAtPosition(position).toString();
+            selectedRoomString = binding.roomListviewMenu.getItemAtPosition(position).toString();
             viewModel.onMeetingClicked(selectedRoomString);
-           viewModel.fetchMeetingFilteredByRoomViewStateItemsLiveData(selectedRoomString);
+            viewModel.fetchMeetingFilteredByRoomViewStateItemsLiveData(selectedRoomString);
             // .observe(MainActivity.class, + appeler l'adapter de MainActivity)
             // callback avec une interface par exemple OnSelectedRoomFilter
             Intent intent = new Intent(getContext(), MainActivity.class);

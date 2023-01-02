@@ -28,7 +28,7 @@ public class MeetingsRepository {
     public MeetingsRepository(BuildConfigResolver buildConfigResolver) {
         // At startup, when creating repo, if we're in debug mode, add random Neighbours
         if (buildConfigResolver.isDebug()) {
-            generateRandomMeetings();
+          generateRandomMeetings();
         }
     }
 

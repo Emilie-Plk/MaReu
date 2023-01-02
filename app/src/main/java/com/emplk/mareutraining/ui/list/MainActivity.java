@@ -17,6 +17,7 @@ import com.emplk.mareutraining.adapters.MeetingListRVAdapter;
 import com.emplk.mareutraining.databinding.ActivityMainBinding;
 import com.emplk.mareutraining.ui.create.CreateNewMeetingActivity;
 import com.emplk.mareutraining.ui.detail.DetailActivity;
+import com.emplk.mareutraining.ui.list.room_filter.OnRoomClickedListener;
 import com.emplk.mareutraining.ui.list.room_filter.RoomFilterDialogFragment;
 import com.emplk.mareutraining.utils.ViewModelFactory;
 import com.emplk.mareutraining.viewmodels.MeetingViewModel;
@@ -108,7 +109,8 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void openRoomFilterList() { RoomFilterDialogFragment.newInstance().show(getSupportFragmentManager(), "ROOM DIALOG");
+    private void openRoomFilterList() {
+        RoomFilterDialogFragment.newInstance().show(getSupportFragmentManager(), "ROOM DIALOG");
     }
 
     private void openDateFilterCalendar() {
@@ -130,4 +132,5 @@ public class MainActivity extends AppCompatActivity {
                     }, mYear, mMonth, mDay);
             dpd.show();
     }
+
 }
