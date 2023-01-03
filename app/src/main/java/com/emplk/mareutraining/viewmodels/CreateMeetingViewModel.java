@@ -25,7 +25,6 @@ public class CreateMeetingViewModel extends ViewModel {
         this.repository = repository;
     }
 
-
     public void onCreateMeetingClicked(
             @NonNull String meetingTitle,
             @NonNull String room,

@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.emplk.mareutraining.models.Meeting;
 import com.emplk.mareutraining.repositories.MeetingsRepository;
+import com.emplk.mareutraining.ui.MainActivity;
 import com.emplk.mareutraining.ui.list.MeetingsViewStateItem;
 
 import java.time.LocalDate;
@@ -72,30 +73,25 @@ public class MeetingViewModel extends ViewModel {
     }
 
     public void onMeetingClicked(String roomName) {
-        repository.getMeetingsFilteredByRoom(roomName);
+        repository.setFilterMeetingsByRoom(roomName);
     }
 
-    public LiveData<List<MeetingsViewStateItem>> fetchMeetingFilteredByRoomViewStateItemsLiveData(String roomName) {
-        return Transformations.map(repository.getMeetingsFilteredByRoom(roomName), meetings -> {
-                    List<MeetingsViewStateItem> meetingsFilteredByRoomViewStateItems = new ArrayList<>();
-                    for (Meeting meeting : meetings) {
-                        if (roomName.equals(meeting.getRoom().getRoomName())) {
-                            meetingsFilteredByRoomViewStateItems.add(
-                                    new MeetingsViewStateItem(
-                                            meeting.getMeetingTitle(),
-                                            meeting.getRoom().getRoomName(),
-                                            formatDate(meeting.getDate()),
-                                            formatTimeStart(meeting.getTimeStart()),
-                                            formatParticipantList(meeting.getParticipants()),
-                                            meeting.getRoom().getRoomColor(),
-                                            meeting.getId())
-                            );
-                        }
-                    }
+    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByRoom() {
+        return Transformations.map(repository.getMeetingsFilteredByRoom(), meetings -> {
+            List<MeetingsViewStateItem> meetingsFilteredByRoomViewStateItems = new ArrayList<>();
+            for (Meeting meeting : meetings) {
+                meetingsFilteredByRoomViewStateItems.add(
+                        new MeetingsViewStateItem(
+                                meeting.getMeetingTitle(),
+                                meeting.getRoom().getRoomName(),
+                                formatDate(meeting.getDate()),
+                                formatTimeStart(meeting.getTimeStart()),
+                                formatParticipantList(meeting.getParticipants()),
+                                meeting.getRoom().getRoomColor(),
+                                meeting.getId())
+                );
+            }
             return meetingsFilteredByRoomViewStateItems;
-                }
-        );
+        });
     }
-
-
 }

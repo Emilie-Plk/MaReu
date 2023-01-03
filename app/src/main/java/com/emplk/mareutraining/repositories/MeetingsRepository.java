@@ -26,7 +26,7 @@ public class MeetingsRepository {
     private int maxId = 0;
 
     public MeetingsRepository(BuildConfigResolver buildConfigResolver) {
-        // At startup, when creating repo, if we're in debug mode, add random Neighbours
+        // At startup, when creating repo, if we're in debug mode, add dummy meetings
         if (buildConfigResolver.isDebug()) {
           generateRandomMeetings();
         }
@@ -93,7 +93,7 @@ public class MeetingsRepository {
         meetingsLiveData.setValue(meetings);
     }
 
-    public LiveData<List<Meeting>> getMeetingsFilteredByRoom(String roomName) {
+    public void setFilterMeetingsByRoom(String roomName) {
         List<Meeting> meetings = meetingsLiveData.getValue();
         List<Meeting> meetingsFilteredByRoom = new ArrayList<>();
         assert meetings != null;
@@ -102,11 +102,11 @@ public class MeetingsRepository {
                 meetingsFilteredByRoom.add(meeting);
             }
         }
-        if (!meetingsFilteredByRoom.isEmpty()) {
-            return meetingsFilteredByRoomLiveData;
-        }
         meetingsFilteredByRoomLiveData.setValue(meetingsFilteredByRoom);
-        return null;
+    }
+
+    public LiveData<List<Meeting>> getMeetingsFilteredByRoom() {
+        return meetingsFilteredByRoomLiveData;
     }
 
 
@@ -146,7 +146,7 @@ public class MeetingsRepository {
                 "blabla blabllablabla blablabla");
         addMeeting(
                 "Projet secret",
-                Room.ROOM_EIGHT,
+                Room.ROOM_FOUR,
                 LocalDate.of(2022, 12, 9),
                 LocalTime.of(14, 30),
                 LocalTime.of(14, 50),

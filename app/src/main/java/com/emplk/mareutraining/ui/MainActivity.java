@@ -1,4 +1,4 @@
-package com.emplk.mareutraining.ui.list;
+package com.emplk.mareutraining.ui;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -17,7 +17,7 @@ import com.emplk.mareutraining.adapters.MeetingListRVAdapter;
 import com.emplk.mareutraining.databinding.ActivityMainBinding;
 import com.emplk.mareutraining.ui.create.CreateNewMeetingActivity;
 import com.emplk.mareutraining.ui.detail.DetailActivity;
-import com.emplk.mareutraining.ui.list.room_filter.OnRoomClickedListener;
+import com.emplk.mareutraining.ui.list.OnMeetingClickedListener;
 import com.emplk.mareutraining.ui.list.room_filter.RoomFilterDialogFragment;
 import com.emplk.mareutraining.utils.ViewModelFactory;
 import com.emplk.mareutraining.viewmodels.MeetingViewModel;
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getMeetingListFilteredByRoom() {
-        viewModel.fetchMeetingFilteredByRoomViewStateItemsLiveData("Salle 10").observe(this,
+        viewModel.getMeetingsFilteredByRoom().observe(this,
                 meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
     }
 
@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (item.getItemId() == R.id.sortbyroom_menu) {
             openRoomFilterList();
+            getMeetingListFilteredByRoom();
         }
         if (item.getItemId() == R.id.sortdelete_menu) {
             getMeetingList();
@@ -111,6 +112,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void openRoomFilterList() {
         RoomFilterDialogFragment.newInstance().show(getSupportFragmentManager(), "ROOM DIALOG");
+ /*       viewModel.fetchMeetingFilteredByRoomViewStateItemsLiveData("Salle 10").observe(this, meetingsViewStateItems ->
+                adapter.submitList(meetingsViewStateItems));*/
     }
 
     private void openDateFilterCalendar() {
