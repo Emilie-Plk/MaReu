@@ -23,6 +23,8 @@ public class MeetingsRepository {
 
     private final MutableLiveData<List<Meeting>> meetingsFilteredByRoom = new MutableLiveData<>(new ArrayList<>());
 
+    private final MutableLiveData<List<Meeting>> meetingsFilteredByDate = new MutableLiveData<>(new ArrayList<>());
+
     private int maxId = 0;
 
     public MeetingsRepository(BuildConfigResolver buildConfigResolver) {
@@ -109,6 +111,23 @@ public class MeetingsRepository {
     public LiveData<List<Meeting>> getMeetingsFilteredByRoom() {
         return meetingsFilteredByRoom;
     }
+
+    public void setFilterMeetingsByDate(LocalDate date) {
+        List<Meeting> meetings = this.meetings.getValue();
+        List<Meeting> meetingsFilteredByDate = new ArrayList<>();
+        assert meetings != null;
+        for (Meeting meeting : meetings) {
+            if (meeting.getDate().equals(date)) {
+                meetingsFilteredByDate.add(meeting);
+            }
+        }
+        this.meetingsFilteredByDate.setValue(meetingsFilteredByDate);
+    }
+
+    public LiveData<List<Meeting>> getMeetingsFilteredByDate() {
+        return meetingsFilteredByDate;
+    }
+
 /*
     public void clearRoomFilterSelection() {
         meetingsFilteredByRoom.setValue(null);

@@ -22,6 +22,8 @@ import com.emplk.mareutraining.ui.list.room_filter.RoomFilterDialogFragment;
 import com.emplk.mareutraining.utils.ViewModelFactory;
 import com.emplk.mareutraining.viewmodels.MeetingViewModel;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -110,8 +112,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void openRoomFilterList() {
         RoomFilterDialogFragment.newInstance().show(getSupportFragmentManager(), "ROOM DIALOG");
- /*       viewModel.fetchMeetingFilteredByRoomViewStateItemsLiveData("Salle 10").observe(this, meetingsViewStateItems ->
-                adapter.submitList(meetingsViewStateItems));*/
     }
 
     private void openDateFilterCalendar() {
@@ -129,10 +129,11 @@ public class MainActivity extends AppCompatActivity {
                         cal.set(Calendar.MONTH, monthOfYear);
                         cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                         cal.set(Calendar.YEAR, year);
-                        // TODO: logic to get the date and filter (viewModel)
                     }, mYear, mMonth, mDay);
-
             dpd.show();
+
+        LocalDate selectedDate = LocalDate.of(dpd.getDatePicker().getYear(), dpd.getDatePicker().getMonth()+1, dpd.getDatePicker().getDayOfMonth());
+        Log.i("Emilie", selectedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     }
 
 }
