@@ -62,7 +62,7 @@
                 tools:text="21/12/2022" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/starting_hour_btn"
+                android:id="@+id/starting_time_btn"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -72,33 +72,33 @@
                 app:layout_constraintTop_toBottomOf="@+id/date_picker_btn_create" />
 
             <TextView
-                android:id="@+id/selected_hour_start_tv"
+                android:id="@+id/selected_time_start_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/starting_hour_btn"
-                app:layout_constraintStart_toEndOf="@+id/starting_hour_btn"
+                app:layout_constraintBottom_toBottomOf="@+id/starting_time_btn"
+                app:layout_constraintStart_toEndOf="@+id/starting_time_btn"
                 app:layout_constraintStart_toStartOf="@+id/selected_day_tv"
-                app:layout_constraintTop_toTopOf="@+id/starting_hour_btn"
+                app:layout_constraintTop_toTopOf="@+id/starting_time_btn"
                 tools:text="16h00" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/ending_hour_btn"
+                android:id="@+id/ending_time_btn"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:text="@string/time_end_btn_create"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/starting_hour_btn" />
+                app:layout_constraintTop_toBottomOf="@+id/starting_time_btn" />
 
             <TextView
-                android:id="@+id/selected_hour_end_tv"
+                android:id="@+id/selected_time_end_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/ending_hour_btn"
-                app:layout_constraintStart_toEndOf="@+id/ending_hour_btn"
-                app:layout_constraintStart_toStartOf="@+id/selected_hour_start_tv"
-                app:layout_constraintTop_toTopOf="@+id/ending_hour_btn"
+                app:layout_constraintBottom_toBottomOf="@+id/ending_time_btn"
+                app:layout_constraintStart_toEndOf="@+id/ending_time_btn"
+                app:layout_constraintStart_toStartOf="@+id/selected_time_start_tv"
+                app:layout_constraintTop_toTopOf="@+id/ending_time_btn"
                 tools:text="16h00" />
 
             <!-- Meeting room AutocompleteTextView -->
@@ -112,7 +112,7 @@
                 android:hint="Salle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ending_hour_btn">
+                app:layout_constraintTop_toBottomOf="@+id/ending_time_btn">
 
                 <AutoCompleteTextView
                     android:id="@+id/rooms_actv"

@@ -109,7 +109,10 @@ public class MeetingsRepository {
     public LiveData<List<Meeting>> getMeetingsFilteredByRoom() {
         return meetingsFilteredByRoom;
     }
-
+/*
+    public void clearRoomFilterSelection() {
+        meetingsFilteredByRoom.setValue(null);
+    }*/
 
     private void generateRandomMeetings() {
         addMeeting(

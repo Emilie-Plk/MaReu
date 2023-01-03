@@ -11,12 +11,12 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.emplk.mareutraining.R;
 import com.emplk.mareutraining.databinding.ActivityCreateNewMeetingBinding;
@@ -26,7 +26,7 @@ import com.emplk.mareutraining.viewmodels.CreateMeetingViewModel;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.text.SimpleDateFormat;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
@@ -62,7 +62,8 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         bindAddMeeting(viewModel, binding.titleTextinput, binding.selectedDayTv,
-                binding.selectedHourStartTv, binding.selectedHourEndTv, binding.meetingObjectInput);
+                binding.selectedTimeStartTv, binding.selectedTimeEndTv, binding.meetingObjectInput);
+
 
         // Add participants (chips)
         addParticipants();
@@ -74,15 +75,12 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
 
         // Set ACTV spinner adapter
         setSpinnerAdapter();
+
         // Fetch selected room (string)
         binding.roomsActv.setOnItemClickListener((adapterView, v, position, id) ->
                 selectedRoom = adapterView.getItemAtPosition(position).toString());
 
-        /*viewModel.checkEveryFieldFilled(binding.selectedDayTv.getText().toString(),
-                binding.selectedHourStartTv.getText().toString(),
-                binding.selectedHourEndTv.getText().toString(),
-                selectedRoom, participantsEmails);*/
-        viewModel.getCloseActivitySingleLiveEvent().observe(this, closeActivitySingleLiveEvent -> finish());
+        viewModel.getCloseActivity().observe(this, closeActivitySingleLiveEvent -> finish());
     }
 
     private void addParticipants() {
@@ -120,36 +118,34 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
     }
 
     private void configureTimePickerStart() {
-        binding.startingHourBtn.setOnClickListener(view -> {
+        binding.startingTimeBtn.setOnClickListener(view -> {
             Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.HOUR_OF_DAY, 1);
             int hour = cal.get(Calendar.HOUR_OF_DAY);
             int minute = cal.get(Calendar.MINUTE);
 
             TimePickerDialog timePickerDialog = new TimePickerDialog(view.getContext(),
                     (timePicker, hourOfDay, mMinute) ->
-                            binding.selectedHourStartTv.setText(String.format(Locale.FRANCE, "%02d:%02d", hourOfDay, mMinute)), hour, minute, true);
+                            binding.selectedTimeStartTv.setText(String.format(Locale.FRANCE, "%02d:%02d", hourOfDay, mMinute)), hour, minute, true);
             timePickerDialog.show();
         });
     }
 
     private void configureTimePickerEnd() {
-        binding.endingHourBtn.setOnClickListener(view -> {
+        binding.endingTimeBtn.setOnClickListener(view -> {
             Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.HOUR_OF_DAY, 1);
             int hour = cal.get(Calendar.HOUR_OF_DAY);
             int minute = cal.get(Calendar.MINUTE);
 
             TimePickerDialog timePickerDialog = new TimePickerDialog(view.getContext(),
                     (timePicker, hourOfDay, mMinute) ->
-                            binding.selectedHourEndTv.setText(String.format(Locale.FRANCE, "%02d:%02d", hourOfDay, mMinute)), hour, minute, true);
+                            binding.selectedTimeEndTv.setText(String.format(Locale.FRANCE, "%02d:%02d", hourOfDay, mMinute)), hour, minute, true);
             timePickerDialog.show();
         });
     }
 
     private void generateParticipantChip(@NonNull TextInputEditText textInputEditText) {
         Chip participantChip = new Chip(this);
-        participantChip.setText(textInputEditText.getText().toString());
+        participantChip.setText(Objects.requireNonNull(textInputEditText.getText()).toString());
         participantChip.setChipIconResource(R.drawable.ic_baseline_person_24);
         participantChip.setCloseIconVisible(true);
         participantChip.setOnCloseIconClickListener(v -> {
@@ -174,6 +170,13 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
             TextView timeEnd,
             TextInputEditText meetingObject
     ) {
+   /*     viewModel.checkEveryFieldFilled(binding.selectedDayTv.getText().toString(),
+                binding.selectedTimeStartTv.getText().toString(),
+                binding.selectedTimeEndTv.getText().toString(),
+                selectedRoom, participantsEmails);*/
+
+      //  viewModel.getIsCreateButtonEnabled().observe(this, aBoolean -> binding.createMeetingBtn.setEnabled(aBoolean));
+
         binding.createMeetingBtn.setOnClickListener(v -> viewModel.onCreateMeetingClicked(
                 Objects.requireNonNull(meetingTitle.getText()).toString(),
                 selectedRoom,
@@ -183,5 +186,7 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
                 participantsEmails,
                 Objects.requireNonNull(meetingObject.getText()).toString()
         ));
+
+
     }
 }

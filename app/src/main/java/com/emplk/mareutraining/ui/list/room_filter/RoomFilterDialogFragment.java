@@ -23,17 +23,11 @@ public class RoomFilterDialogFragment extends DialogFragment {
     private FragmentRoomFilterBinding binding;
     private MeetingViewModel viewModel;
 
-    String selectedRoomString;
-
-    private final OnRoomClickedListener listener;
-
-    public RoomFilterDialogFragment(OnRoomClickedListener listener) {
-        this.listener = listener;
-    }
+    private String selectedRoomString;
 
     @NonNull
     public static RoomFilterDialogFragment newInstance() {
-        return new RoomFilterDialogFragment(room -> newInstance().selectedRoomString);
+        return new RoomFilterDialogFragment();
     }
 
     @Nullable

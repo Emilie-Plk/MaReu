@@ -1,7 +1,8 @@
-package com.emplk.mareutraining.ui;
+package com.emplk.mareutraining.ui.list;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,7 +18,6 @@ import com.emplk.mareutraining.adapters.MeetingListRVAdapter;
 import com.emplk.mareutraining.databinding.ActivityMainBinding;
 import com.emplk.mareutraining.ui.create.CreateNewMeetingActivity;
 import com.emplk.mareutraining.ui.detail.DetailActivity;
-import com.emplk.mareutraining.ui.list.OnMeetingClickedListener;
 import com.emplk.mareutraining.ui.list.room_filter.RoomFilterDialogFragment;
 import com.emplk.mareutraining.utils.ViewModelFactory;
 import com.emplk.mareutraining.viewmodels.MeetingViewModel;
@@ -32,18 +32,16 @@ public class MainActivity extends AppCompatActivity {
 
     MeetingViewModel viewModel;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
+
         setViewModel();
         configureToolbar();
         createMeeting();
-        // configure and init recyclerview
         initRecyclerView();
         getMeetingList();
     }
@@ -133,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
                         cal.set(Calendar.YEAR, year);
                         // TODO: logic to get the date and filter (viewModel)
                     }, mYear, mMonth, mDay);
+
             dpd.show();
     }
 

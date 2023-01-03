@@ -39,7 +39,6 @@ public class DetailMeetingViewModel extends ViewModel {
                 ));
     }
 
-
     private String formatParticipantList(List<String> participantsList) {
         return participantsList.toString()
                    .replace("[", "")
