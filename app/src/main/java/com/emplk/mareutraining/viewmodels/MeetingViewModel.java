@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.emplk.mareutraining.models.Meeting;
 import com.emplk.mareutraining.repositories.MeetingsRepository;
-import com.emplk.mareutraining.ui.MainActivity;
 import com.emplk.mareutraining.ui.list.MeetingsViewStateItem;
 
 import java.time.LocalDate;
@@ -28,7 +27,7 @@ public class MeetingViewModel extends ViewModel {
     }
 
     public LiveData<List<MeetingsViewStateItem>> fetchMeetingViewStateItemsLiveData() {
-        return Transformations.map(repository.getMeetingsLiveData(), meetings -> {
+        return Transformations.map(repository.getMeetings(), meetings -> {
                     List<MeetingsViewStateItem> meetingsViewStateItems = new ArrayList<>();
                     for (Meeting meeting : meetings) {
                         meetingsViewStateItems.add(

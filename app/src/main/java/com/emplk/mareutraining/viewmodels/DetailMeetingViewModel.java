@@ -25,7 +25,7 @@ public class DetailMeetingViewModel extends ViewModel {
 
   public LiveData<DetailViewState> getDetailViewStateLiveData(long meetingId) {
         return Transformations.map(
-                repository.getSingleMeetingLiveData(meetingId),
+                repository.getSingleMeeting(meetingId),
                 meeting -> new DetailViewState(
                         meeting.getMeetingTitle(),
                         meeting.getRoom().getRoomName(),

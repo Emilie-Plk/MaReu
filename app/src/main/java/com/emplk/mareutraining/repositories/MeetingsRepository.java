@@ -19,9 +19,9 @@ import java.util.List;
 public class MeetingsRepository {
 
 
-    private final MutableLiveData<List<Meeting>> meetingsLiveData = new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<List<Meeting>> meetings = new MutableLiveData<>(new ArrayList<>());
 
-    private final MutableLiveData<List<Meeting>> meetingsFilteredByRoomLiveData = new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<List<Meeting>> meetingsFilteredByRoom = new MutableLiveData<>(new ArrayList<>());
 
     private int maxId = 0;
 
@@ -41,7 +41,7 @@ public class MeetingsRepository {
             @NonNull List<String> participants,
             @NonNull String meetingObject
     ) {
-        List<Meeting> meetings = meetingsLiveData.getValue();
+        List<Meeting> meetings = this.meetings.getValue();
 
         if (meetings == null) return;
 
@@ -58,15 +58,15 @@ public class MeetingsRepository {
                 )
         );
 
-        meetingsLiveData.setValue(meetings);
+        this.meetings.setValue(meetings);
     }
 
-    public LiveData<List<Meeting>> getMeetingsLiveData() {
-        return meetingsLiveData;
+    public LiveData<List<Meeting>> getMeetings() {
+        return meetings;
     }
 
-    public LiveData<Meeting> getSingleMeetingLiveData(long meetingId) {
-        return Transformations.map(meetingsLiveData, meetings -> {
+    public LiveData<Meeting> getSingleMeeting(long meetingId) {
+        return Transformations.map(meetings, meetings -> {
             for (Meeting meeting : meetings) {
                 if (meeting.getId() == meetingId) {
                     return meeting;
@@ -77,7 +77,7 @@ public class MeetingsRepository {
     }
 
     public void deleteMeeting(long meetingId) {
-        List<Meeting> meetings = meetingsLiveData.getValue();
+        List<Meeting> meetings = this.meetings.getValue();
 
         if (meetings == null) return;
 
@@ -90,11 +90,12 @@ public class MeetingsRepository {
                 break;
             }
         }
-        meetingsLiveData.setValue(meetings);
+        this.meetings.setValue(meetings);
     }
 
     public void setFilterMeetingsByRoom(String roomName) {
-        List<Meeting> meetings = meetingsLiveData.getValue();
+        // TODO: I want to clear my meetingsFilteredByRoomLiveData
+        List<Meeting> meetings = this.meetings.getValue();
         List<Meeting> meetingsFilteredByRoom = new ArrayList<>();
         assert meetings != null;
         for (Meeting meeting : meetings) {
@@ -102,11 +103,11 @@ public class MeetingsRepository {
                 meetingsFilteredByRoom.add(meeting);
             }
         }
-        meetingsFilteredByRoomLiveData.setValue(meetingsFilteredByRoom);
+            this.meetingsFilteredByRoom.setValue(meetingsFilteredByRoom);
     }
 
     public LiveData<List<Meeting>> getMeetingsFilteredByRoom() {
-        return meetingsFilteredByRoomLiveData;
+        return meetingsFilteredByRoom;
     }
 
 
