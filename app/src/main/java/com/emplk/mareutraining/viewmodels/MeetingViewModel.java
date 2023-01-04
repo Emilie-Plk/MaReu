@@ -1,5 +1,8 @@
 package com.emplk.mareutraining.viewmodels;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
@@ -7,6 +10,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.emplk.mareutraining.models.Meeting;
 import com.emplk.mareutraining.repositories.MeetingsRepository;
+import com.emplk.mareutraining.ui.list.MainActivity;
 import com.emplk.mareutraining.ui.list.MeetingsViewStateItem;
 
 import java.time.LocalDate;
@@ -71,18 +75,18 @@ public class MeetingViewModel extends ViewModel {
         repository.deleteMeeting(meetingId);
     }
 
-    public void onMeetingClicked(String roomName) {
-        repository.setFilterMeetingsByRoom(roomName);
-    }
-
     /**
      * Clears all filters
      * **/
-    public void onClearRoomFilter() {
-        repository.clearRoomFilterSelection();
+    public void onClearFilters() {
+        repository.clearAllFilters();
     }
 
-    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByRoom() {
+    public void onRoomClicked(String roomName) {
+        repository.setFilterMeetingsByRoom(roomName);
+    }
+
+    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByRoom(Context context, String message) {
         // TODO : maybe add my filter here ?
         return Transformations.map(repository.getMeetingsFilteredByRoom(), meetings -> {
             List<MeetingsViewStateItem> meetingsFilteredByRoomViewStateItems = new ArrayList<>();
@@ -98,9 +102,42 @@ public class MeetingViewModel extends ViewModel {
                                 meeting.getId())
                 );
             }
+            if (meetingsFilteredByRoomViewStateItems.isEmpty()) {
+                setToast(context, message);
+            }
             return meetingsFilteredByRoomViewStateItems;
         });
     }
 
-    // TODO: getMeetingsFilteredByDate()
+    public void onDateClicked(LocalDate selectedDate) {
+        repository.setFilterMeetingsByDate(selectedDate);
+    }
+
+    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByDate(Context context, String message) {
+        // TODO : maybe add my filter here ?
+        return Transformations.map(repository.getMeetingsFilteredByDate(), meetings -> {
+            List<MeetingsViewStateItem> meetingsFilteredByDateViewStateItems = new ArrayList<>();
+            for (Meeting meeting : meetings) {
+                meetingsFilteredByDateViewStateItems.add(
+                        new MeetingsViewStateItem(
+                                meeting.getMeetingTitle(),
+                                meeting.getRoom().getRoomName(),
+                                formatDate(meeting.getDate()),
+                                formatTimeStart(meeting.getTimeStart()),
+                                formatParticipantList(meeting.getParticipants()),
+                                meeting.getRoom().getRoomColor(),
+                                meeting.getId())
+                );
+            }
+            if(meetingsFilteredByDateViewStateItems.isEmpty()) {
+               setToast(context, message);
+            }
+            return meetingsFilteredByDateViewStateItems;
+        });
+    }
+
+    public void setToast(Context context, String message) {
+        Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+        toast.show();
+    }
 }

@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDeleteMeetingClicked(long meetingId) {
                 viewModel.onDeleteMeetingClicked(meetingId);
+                viewModel.setToast(MainActivity.this, "Réunion supprimée");
             }
         });
         RecyclerView recyclerView = binding.meetingsRv;
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getMeetingListFilteredByRoom() {
-        viewModel.getMeetingsFilteredByRoom().observe(this,
+        viewModel.getMeetingsFilteredByRoom(MainActivity.this, "Aucune réunion dans cette salle").observe(this,
                 meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
     }
 
@@ -97,15 +98,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.sortbydate_menu) {
+        int id = item.getItemId();
+
+        if (id == R.id.sortbydate_menu) {
             openDateFilterCalendar();
+            return true;
         }
-        if (item.getItemId() == R.id.sortbyroom_menu) {
+        if (id == R.id.sortbyroom_menu) {
             openRoomFilterList();
             getMeetingListFilteredByRoom();
+            return true;
         }
-        if (item.getItemId() == R.id.sortdelete_menu) {
-            viewModel.onClearRoomFilter();
+        if (id == R.id.sortdelete_menu) {
+            viewModel.onClearFilters();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -122,18 +128,21 @@ public class MainActivity extends AppCompatActivity {
         int mMonth = now.get(Calendar.MONTH);
         int mDay = now.get(Calendar.DAY_OF_MONTH);
 
-            now.set(Calendar.DAY_OF_MONTH, mDay);
             DatePickerDialog dpd = new DatePickerDialog(this,
                     (view, year, monthOfYear, dayOfMonth) -> {
                         Calendar cal = Calendar.getInstance();
                         cal.set(Calendar.MONTH, monthOfYear);
                         cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                         cal.set(Calendar.YEAR, year);
+                        LocalDate selectedDate = LocalDate.of(year, monthOfYear+1, dayOfMonth);
+                        viewModel.onDateClicked(selectedDate);
+                        viewModel.getMeetingsFilteredByDate(MainActivity.this, "Aucune réunion à cette date").observe(this,
+                                meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
+
                     }, mYear, mMonth, mDay);
             dpd.show();
 
-        LocalDate selectedDate = LocalDate.of(dpd.getDatePicker().getYear(), dpd.getDatePicker().getMonth()+1, dpd.getDatePicker().getDayOfMonth());
-        Log.i("Emilie", selectedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
     }
+
 
 }

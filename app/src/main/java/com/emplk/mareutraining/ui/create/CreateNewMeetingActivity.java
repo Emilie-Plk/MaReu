@@ -99,7 +99,6 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
         int mMonth = now.get(Calendar.MONTH);
         int mDay = now.get(Calendar.DAY_OF_MONTH);
 
-        now.set(Calendar.DAY_OF_MONTH, mDay);
         DatePickerDialog dpd = new DatePickerDialog(this,
                 (view, year, monthOfYear, dayOfMonth) -> {
                     Calendar cal = Calendar.getInstance();

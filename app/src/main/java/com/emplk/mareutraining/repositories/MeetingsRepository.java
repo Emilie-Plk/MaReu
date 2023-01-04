@@ -31,7 +31,7 @@ public class MeetingsRepository {
     public MeetingsRepository(BuildConfigResolver buildConfigResolver) {
         // At startup, when creating repo, if we're in debug mode, add dummy meetings
         if (buildConfigResolver.isDebug()) {
-          generateRandomMeetings();
+            generateRandomMeetings();
         }
     }
 
@@ -107,7 +107,7 @@ public class MeetingsRepository {
                 meetingsFilteredByRoom.add(meeting);
             }
         }
-            this.meetingsFilteredByRoom.setValue(meetingsFilteredByRoom);
+        this.meetingsFilteredByRoom.setValue(meetingsFilteredByRoom);
     }
 
     public LiveData<List<Meeting>> getMeetingsFilteredByRoom() {
@@ -132,9 +132,18 @@ public class MeetingsRepository {
 
     /**
      * Clears room filter by resetting values to the full meeting list
-     * **/
+     **/
     public void clearRoomFilterSelection() {
         meetingsFilteredByRoom.setValue(meetings.getValue());
+    }
+
+    public void clearDateFilterSelection() {
+        meetingsFilteredByDate.setValue(meetings.getValue());
+    }
+
+    public void clearAllFilters() {
+        clearRoomFilterSelection();
+        clearDateFilterSelection();
     }
 
     private void generateRandomMeetings() {

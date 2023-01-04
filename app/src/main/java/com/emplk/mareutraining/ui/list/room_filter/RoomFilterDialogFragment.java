@@ -51,7 +51,7 @@ public class RoomFilterDialogFragment extends DialogFragment {
 
         binding.roomListviewMenu.setOnItemClickListener((adapterView, view1, position, id) -> {
             selectedRoomString = binding.roomListviewMenu.getItemAtPosition(position).toString();
-            viewModel.onMeetingClicked(selectedRoomString);
+            viewModel.onRoomClicked(selectedRoomString);
             dismiss();
         });
     }
