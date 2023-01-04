@@ -30,7 +30,7 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-    private MeetingListRVAdapter adapter;
+    public static MeetingListRVAdapter adapter;
 
     MeetingViewModel viewModel;
 
@@ -86,8 +86,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getMeetingListFilteredByRoom() {
-        viewModel.getMeetingsFilteredByRoom(MainActivity.this, "Aucune réunion dans cette salle").observe(this,
-                meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
+
     }
 
     @Override
@@ -136,9 +135,8 @@ public class MainActivity extends AppCompatActivity {
                         cal.set(Calendar.YEAR, year);
                         LocalDate selectedDate = LocalDate.of(year, monthOfYear+1, dayOfMonth);
                         viewModel.onDateClicked(selectedDate);
-                        viewModel.getMeetingsFilteredByDate(MainActivity.this, "Aucune réunion à cette date").observe(this,
+                        viewModel.getMeetingsFilteredByDate(MainActivity.this, getString(R.string.no_meeting_room_toast)).observe(this,
                                 meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
-
                     }, mYear, mMonth, mDay);
             dpd.show();
 

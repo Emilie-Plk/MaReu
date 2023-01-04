@@ -23,5 +23,8 @@
     <string name="pick_room_menu">Choisissez une salle</string>
     <string name="room_actv_hint">Salle</string>
     <string name="delete_meeting_descr">Supprimer la réunion</string>
+    <string name="no_meeting_room_toast">"Aucune réunion à cette date"</string>
+    <string name="no_meeting_date_toast">"Aucune réunion dans cette salle"</string>
+
 
 </resources>

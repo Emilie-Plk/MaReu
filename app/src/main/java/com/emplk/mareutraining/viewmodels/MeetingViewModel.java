@@ -82,26 +82,26 @@ public class MeetingViewModel extends ViewModel {
         repository.clearAllFilters();
     }
 
-    public void onRoomClicked(String roomName) {
-        repository.setFilterMeetingsByRoom(roomName);
-    }
 
-    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByRoom(Context context, String message) {
+    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByRoom(String selectedRoom, Context context, String message) {
         // TODO : maybe add my filter here ?
-        return Transformations.map(repository.getMeetingsFilteredByRoom(), meetings -> {
+        return Transformations.map(repository.getMeetings(), meetings -> {
             List<MeetingsViewStateItem> meetingsFilteredByRoomViewStateItems = new ArrayList<>();
             for (Meeting meeting : meetings) {
-                meetingsFilteredByRoomViewStateItems.add(
-                        new MeetingsViewStateItem(
-                                meeting.getMeetingTitle(),
-                                meeting.getRoom().getRoomName(),
-                                formatDate(meeting.getDate()),
-                                formatTimeStart(meeting.getTimeStart()),
-                                formatParticipantList(meeting.getParticipants()),
-                                meeting.getRoom().getRoomColor(),
-                                meeting.getId())
-                );
-            }
+                if((meeting.getRoom().getRoomName()).equals(selectedRoom)) {
+                    meetingsFilteredByRoomViewStateItems.add(
+                            new MeetingsViewStateItem(
+                                    meeting.getMeetingTitle(),
+                                    meeting.getRoom().getRoomName(),
+                                    formatDate(meeting.getDate()),
+                                    formatTimeStart(meeting.getTimeStart()),
+                                    formatParticipantList(meeting.getParticipants()),
+                                    meeting.getRoom().getRoomColor(),
+                                    meeting.getId())
+                    );
+                }
+                }
+
             if (meetingsFilteredByRoomViewStateItems.isEmpty()) {
                 setToast(context, message);
             }

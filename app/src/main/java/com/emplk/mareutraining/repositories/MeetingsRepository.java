@@ -110,9 +110,6 @@ public class MeetingsRepository {
         this.meetingsFilteredByRoom.setValue(meetingsFilteredByRoom);
     }
 
-    public LiveData<List<Meeting>> getMeetingsFilteredByRoom() {
-        return meetingsFilteredByRoom;
-    }
 
     public void setFilterMeetingsByDate(LocalDate date) {
         List<Meeting> meetings = this.meetings.getValue();
