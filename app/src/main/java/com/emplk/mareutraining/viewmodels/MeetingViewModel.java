@@ -75,16 +75,7 @@ public class MeetingViewModel extends ViewModel {
         repository.deleteMeeting(meetingId);
     }
 
-    /**
-     * Clears all filters
-     * **/
-    public void onClearFilters() {
-        repository.clearAllFilters();
-    }
-
-
     public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByRoom(String selectedRoom, Context context, String message) {
-        // TODO : maybe add my filter here ?
         return Transformations.map(repository.getMeetings(), meetings -> {
             List<MeetingsViewStateItem> meetingsFilteredByRoomViewStateItems = new ArrayList<>();
             for (Meeting meeting : meetings) {
@@ -103,7 +94,7 @@ public class MeetingViewModel extends ViewModel {
                 }
 
             if (meetingsFilteredByRoomViewStateItems.isEmpty()) {
-                setToast(context, message);
+                setToast(context, message + selectedRoom);
             }
             return meetingsFilteredByRoomViewStateItems;
         });

@@ -19,6 +19,7 @@ import com.emplk.mareutraining.databinding.ActivityMainBinding;
 import com.emplk.mareutraining.ui.create.CreateNewMeetingActivity;
 import com.emplk.mareutraining.ui.detail.DetailActivity;
 import com.emplk.mareutraining.ui.list.room_filter.RoomFilterDialogFragment;
+import com.emplk.mareutraining.ui.list.room_filter.onRoomSelectedListener;
 import com.emplk.mareutraining.utils.ViewModelFactory;
 import com.emplk.mareutraining.viewmodels.MeetingViewModel;
 
@@ -27,12 +28,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements onRoomSelectedListener {
 
     private ActivityMainBinding binding;
     public static MeetingListRVAdapter adapter;
 
     MeetingViewModel viewModel;
+
+    private String selectedRoom;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         initRecyclerView();
         getMeetingList();
     }
+
 
     private void createMeeting() {
         binding.addFab.setOnClickListener(v -> startActivity(CreateNewMeetingActivity.navigate(this)));
@@ -85,10 +89,6 @@ public class MainActivity extends AppCompatActivity {
                 meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
     }
 
-    private void getMeetingListFilteredByRoom() {
-
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_activity_main, menu);
@@ -105,11 +105,10 @@ public class MainActivity extends AppCompatActivity {
         }
         if (id == R.id.sortbyroom_menu) {
             openRoomFilterList();
-            getMeetingListFilteredByRoom();
             return true;
         }
         if (id == R.id.sortdelete_menu) {
-            viewModel.onClearFilters();
+           getMeetingList();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -117,6 +116,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void openRoomFilterList() {
         RoomFilterDialogFragment.newInstance().show(getSupportFragmentManager(), "ROOM DIALOG");
+    }
+
+    @Override
+    public void onRoomSelected(String roomName) {
+        selectedRoom = roomName;
+        viewModel.getMeetingsFilteredByRoom(selectedRoom, this, getString(R.string.no_meeting_date_toast)).observe(this,
+                meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
     }
 
     private void openDateFilterCalendar() {
@@ -141,6 +147,5 @@ public class MainActivity extends AppCompatActivity {
             dpd.show();
 
     }
-
 
 }

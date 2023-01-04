@@ -96,21 +96,6 @@ public class MeetingsRepository {
         this.meetings.setValue(meetings);
     }
 
-    public void setFilterMeetingsByRoom(String roomName) {
-        // TODO: plutôt dans le VM
-        // TODO: I want to clear my meetingsFilteredByRoom
-        List<Meeting> meetings = this.meetings.getValue();
-        List<Meeting> meetingsFilteredByRoom = new ArrayList<>();
-        assert meetings != null;
-        for (Meeting meeting : meetings) {
-            if (meeting.getRoom().getRoomName().equals(roomName)) {
-                meetingsFilteredByRoom.add(meeting);
-            }
-        }
-        this.meetingsFilteredByRoom.setValue(meetingsFilteredByRoom);
-    }
-
-
     public void setFilterMeetingsByDate(LocalDate date) {
         List<Meeting> meetings = this.meetings.getValue();
         List<Meeting> meetingsFilteredByDate = new ArrayList<>();
@@ -127,21 +112,6 @@ public class MeetingsRepository {
         return meetingsFilteredByDate;
     }
 
-    /**
-     * Clears room filter by resetting values to the full meeting list
-     **/
-    public void clearRoomFilterSelection() {
-        meetingsFilteredByRoom.setValue(meetings.getValue());
-    }
-
-    public void clearDateFilterSelection() {
-        meetingsFilteredByDate.setValue(meetings.getValue());
-    }
-
-    public void clearAllFilters() {
-        clearRoomFilterSelection();
-        clearDateFilterSelection();
-    }
 
     private void generateRandomMeetings() {
         addMeeting(
