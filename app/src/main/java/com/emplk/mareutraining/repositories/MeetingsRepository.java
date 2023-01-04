@@ -21,6 +21,7 @@ public class MeetingsRepository {
 
     private final MutableLiveData<List<Meeting>> meetings = new MutableLiveData<>(new ArrayList<>());
 
+    // TODO: pas besoin
     private final MutableLiveData<List<Meeting>> meetingsFilteredByRoom = new MutableLiveData<>(new ArrayList<>());
 
     private final MutableLiveData<List<Meeting>> meetingsFilteredByDate = new MutableLiveData<>(new ArrayList<>());
@@ -96,7 +97,8 @@ public class MeetingsRepository {
     }
 
     public void setFilterMeetingsByRoom(String roomName) {
-        // TODO: I want to clear my meetingsFilteredByRoomLiveData
+        // TODO: plutôt dans le VM
+        // TODO: I want to clear my meetingsFilteredByRoom
         List<Meeting> meetings = this.meetings.getValue();
         List<Meeting> meetingsFilteredByRoom = new ArrayList<>();
         assert meetings != null;
@@ -128,10 +130,12 @@ public class MeetingsRepository {
         return meetingsFilteredByDate;
     }
 
-/*
+    /**
+     * Clears room filter by resetting values to the full meeting list
+     * **/
     public void clearRoomFilterSelection() {
-        meetingsFilteredByRoom.setValue(null);
-    }*/
+        meetingsFilteredByRoom.setValue(meetings.getValue());
+    }
 
     private void generateRandomMeetings() {
         addMeeting(

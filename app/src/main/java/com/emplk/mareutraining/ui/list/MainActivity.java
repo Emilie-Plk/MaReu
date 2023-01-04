@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
             getMeetingListFilteredByRoom();
         }
         if (item.getItemId() == R.id.sortdelete_menu) {
-            getMeetingList();
+            viewModel.onClearRoomFilter();
         }
         return super.onOptionsItemSelected(item);
     }

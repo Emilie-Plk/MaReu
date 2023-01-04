@@ -75,11 +75,15 @@ public class MeetingViewModel extends ViewModel {
         repository.setFilterMeetingsByRoom(roomName);
     }
 
-    /*public void onClearRoomFilter() {
+    /**
+     * Clears all filters
+     * **/
+    public void onClearRoomFilter() {
         repository.clearRoomFilterSelection();
-    }*/
+    }
 
     public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByRoom() {
+        // TODO : maybe add my filter here ?
         return Transformations.map(repository.getMeetingsFilteredByRoom(), meetings -> {
             List<MeetingsViewStateItem> meetingsFilteredByRoomViewStateItems = new ArrayList<>();
             for (Meeting meeting : meetings) {
@@ -97,4 +101,6 @@ public class MeetingViewModel extends ViewModel {
             return meetingsFilteredByRoomViewStateItems;
         });
     }
+
+    // TODO: getMeetingsFilteredByDate()
 }
