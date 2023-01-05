@@ -109,7 +109,6 @@ public class CreateMeetingViewModel extends ViewModel {
         if (Patterns.EMAIL_ADDRESS.matcher(target).matches()) {
             return true;
         } else {
-            inputLayout.requestFocus();
             inputLayout.setError(context.getString(R.string.invalid_email_input));
             return false;
         }

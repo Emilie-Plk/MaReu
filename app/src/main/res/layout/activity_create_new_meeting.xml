@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/blueish_white"
+    android:focusableInTouchMode="true"
     tools:context=".ui.create.CreateNewMeetingActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -163,7 +164,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="top|start"
-                    android:inputType="textMultiLine"
+                    android:inputType="textCapSentences|textMultiLine"
                     android:maxLines="4"
                     android:minLines="2"
                     android:textColor="@color/black" />

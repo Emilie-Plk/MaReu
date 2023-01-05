@@ -101,12 +101,10 @@ public class MainActivity extends AppCompatActivity implements onRoomSelectedLis
 
         if (id == R.id.sortbydate_menu) {
             openDateFilterCalendar();
-            binding.roomFilterHelperTv.setText(R.string.room_filter_helper_sort_date);
             return true;
         }
         if (id == R.id.sortbyroom_menu) {
             openRoomFilterList();
-            binding.roomFilterHelperTv.setText(R.string.room_filter_helper_sort_room);
             return true;
         }
         if (id == R.id.sortdelete_menu) {
@@ -123,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements onRoomSelectedLis
 
     @Override
     public void onRoomSelected(String roomName) {
-        viewModel.getMeetingsFilteredByRoom(roomName, this, getString(R.string.no_meeting_date_toast)).observe(this,
+        viewModel.getMeetingsFilteredByRoom(roomName, this, getString(R.string.no_meeting_date_toast), binding.roomFilterHelperTv).observe(this,
                 meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
     }
 
@@ -142,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements onRoomSelectedLis
                     cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                     cal.set(Calendar.YEAR, year);
                     LocalDate selectedDate = LocalDate.of(year, monthOfYear + 1, dayOfMonth);
-                    viewModel.getMeetingsFilteredByDate(selectedDate, MainActivity.this, getString(R.string.no_meeting_room_toast)).observe(this,
+                    viewModel.getMeetingsFilteredByDate(selectedDate, MainActivity.this, getString(R.string.no_meeting_room_toast), binding.roomFilterHelperTv).observe(this,
                             meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
                 }, mYear, mMonth, mDay);
         dpd.show();

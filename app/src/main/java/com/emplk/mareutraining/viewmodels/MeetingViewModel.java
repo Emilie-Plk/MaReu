@@ -1,6 +1,7 @@
 package com.emplk.mareutraining.viewmodels;
 
 import android.content.Context;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -8,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
+import com.emplk.mareutraining.R;
 import com.emplk.mareutraining.models.Meeting;
 import com.emplk.mareutraining.repositories.MeetingsRepository;
 import com.emplk.mareutraining.ui.list.MeetingsViewStateItem;
@@ -76,7 +78,7 @@ public class MeetingViewModel extends ViewModel {
         repository.deleteMeeting(meetingId);
     }
 
-    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByRoom(String selectedRoom, Context context, String message) {
+    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByRoom(String selectedRoom, Context context, String message, TextView roomHelperTV) {
         return Transformations.map(repository.getMeetings(), meetings -> {
             List<MeetingsViewStateItem> meetingsFilteredByRoomViewStateItems = new ArrayList<>();
             for (Meeting meeting : meetings) {
@@ -97,11 +99,13 @@ public class MeetingViewModel extends ViewModel {
             if (meetingsFilteredByRoomViewStateItems.isEmpty()) {
                 setToast(context, message + selectedRoom);
             }
+
+            roomHelperTV.setText(R.string.room_filter_helper_sort_room);
             return meetingsFilteredByRoomViewStateItems;
         });
     }
 
-    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByDate(LocalDate date, Context context, String message) {
+    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByDate(LocalDate date, Context context, String message, TextView dateHelperTV) {
         return Transformations.map(repository.getMeetings(), meetings -> {
             List<MeetingsViewStateItem> meetingsFilteredByDateViewStateItems = new ArrayList<>();
             for (Meeting meeting : meetings) {
@@ -122,6 +126,8 @@ public class MeetingViewModel extends ViewModel {
             if (meetingsFilteredByDateViewStateItems.isEmpty()) {
                 setToast(context, message + formatDate(date));
             }
+
+            dateHelperTV.setText(R.string.room_filter_helper_sort_date);
             return meetingsFilteredByDateViewStateItems;
         });
     }
