@@ -11,8 +11,6 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
@@ -26,7 +24,6 @@ import com.emplk.mareutraining.viewmodels.CreateMeetingViewModel;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
@@ -67,7 +64,7 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
 
 
         // Add participants (chips)
-        addParticipants();
+        addParticipantChip();
 
         // Set Time pickers
         binding.datePickerBtnCreate.setOnClickListener(v -> getDatePicker());
@@ -86,7 +83,7 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
       //  viewModel.getIsCreateButtonEnabled().observe(this, isCreateButtonEnabled -> binding.createMeetingBtn.setEnabled(isCreateButtonEnabled));
     }
 
-    private void addParticipants() {
+    private void addParticipantChip() {
         binding.addParticipantFab.setOnClickListener(view1 -> {
             if (viewModel.isValidEmail(Objects.requireNonNull(binding.participantsInput.getText()).toString(), binding.participantsLayout, this)) {
                 generateParticipantChip(binding.participantsInput);
