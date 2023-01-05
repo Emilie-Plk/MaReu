@@ -9,7 +9,9 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.emplk.mareutraining.R;
@@ -29,11 +31,9 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity implements onRoomSelectedListener {
 
     private ActivityMainBinding binding;
-    public static MeetingListRVAdapter adapter;
+    public MeetingListRVAdapter adapter;
 
-    MeetingViewModel viewModel;
-
-    private String selectedRoom;
+    private MeetingViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity implements onRoomSelectedLis
         initRecyclerView();
         getMeetingList();
     }
-
 
     private void createMeeting() {
         binding.addFab.setOnClickListener(v -> startActivity(CreateNewMeetingActivity.navigate(this)));
@@ -102,14 +101,17 @@ public class MainActivity extends AppCompatActivity implements onRoomSelectedLis
 
         if (id == R.id.sortbydate_menu) {
             openDateFilterCalendar();
+            binding.roomFilterHelperTv.setText(R.string.room_filter_helper_sort_date);
             return true;
         }
         if (id == R.id.sortbyroom_menu) {
             openRoomFilterList();
+            binding.roomFilterHelperTv.setText(R.string.room_filter_helper_sort_room);
             return true;
         }
         if (id == R.id.sortdelete_menu) {
             getMeetingList();
+            binding.roomFilterHelperTv.setText("");
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -121,8 +123,7 @@ public class MainActivity extends AppCompatActivity implements onRoomSelectedLis
 
     @Override
     public void onRoomSelected(String roomName) {
-        selectedRoom = roomName;
-        viewModel.getMeetingsFilteredByRoom(selectedRoom, this, getString(R.string.no_meeting_date_toast)).observe(this,
+        viewModel.getMeetingsFilteredByRoom(roomName, this, getString(R.string.no_meeting_date_toast)).observe(this,
                 meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
     }
 

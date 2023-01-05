@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/blueish_white"
     tools:context=".ui.create.CreateNewMeetingActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -28,6 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
+        android:layout_marginBottom="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -118,7 +120,6 @@
                     android:id="@+id/rooms_actv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/room_actv_hint"
                     android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -206,9 +207,7 @@
                 android:id="@+id/participant_chipgroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                app:layout_constraintBottom_toTopOf="@id/create_meeting_btn"
+                android:layout_margin="8dp"
                 app:layout_constraintTop_toBottomOf="@id/participants_layout" />
 
             <!--Submit button-->

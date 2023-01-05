@@ -15,6 +15,7 @@
     <color name="colorPrimaryVariantTransparency">#234E92DF</color>
     <color name="colorSecondary">#817D7D</color>
     <color name="grey_hue">#32A5C4E6</color>
+    <color name="blueish_white">#F4FAFF</color>
 
 
     <!-- Meetings colors-->

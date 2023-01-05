@@ -24,12 +24,8 @@ import com.emplk.mareutraining.viewmodels.MeetingViewModel;
 public class RoomFilterDialogFragment extends DialogFragment {
 
     private FragmentRoomFilterBinding binding;
-    private ActivityMainBinding mainBinding;
-    private MeetingViewModel viewModel;
 
     private onRoomSelectedListener listener;
-
-    private MeetingListRVAdapter adapter;
 
     private String selectedRoomString;
 
@@ -52,7 +48,6 @@ public class RoomFilterDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentRoomFilterBinding.inflate(LayoutInflater.from(getContext()));
-        mainBinding = ActivityMainBinding.inflate(LayoutInflater.from(getContext()));
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
         builder.setView(binding.getRoot()).create();
 
@@ -66,8 +61,6 @@ public class RoomFilterDialogFragment extends DialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        viewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(MeetingViewModel.class);
 
         binding.roomListviewMenu.setOnItemClickListener((adapterView, view1, position, id) -> {
             selectedRoomString = binding.roomListviewMenu.getItemAtPosition(position).toString();
