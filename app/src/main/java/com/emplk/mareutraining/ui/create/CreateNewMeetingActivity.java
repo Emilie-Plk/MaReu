@@ -38,7 +38,8 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
 
     CreateMeetingViewModel viewModel;
 
-    private String selectedRoom;
+    @NonNull
+    private String selectedRoom = "";
     private final ArrayList<String> participantsEmails = new ArrayList<>();
 
     public static Intent navigate(Context context) {
@@ -81,6 +82,8 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
                 selectedRoom = adapterView.getItemAtPosition(position).toString());
 
         viewModel.getCloseActivity().observe(this, closeActivitySingleLiveEvent -> finish());
+
+      //  viewModel.getIsCreateButtonEnabled().observe(this, isCreateButtonEnabled -> binding.createMeetingBtn.setEnabled(isCreateButtonEnabled));
     }
 
     private void addParticipants() {
@@ -161,6 +164,8 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_dropdown_item, rooms));
     }
 
+
+
     private void bindAddMeeting(
             CreateMeetingViewModel viewModel,
             TextInputEditText meetingTitle,
@@ -169,11 +174,6 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
             TextView timeEnd,
             TextInputEditText meetingObject
     ) {
-   /*     viewModel.checkEveryFieldFilled(binding.selectedDayTv.getText().toString(),
-                binding.selectedTimeStartTv.getText().toString(),
-                binding.selectedTimeEndTv.getText().toString(),
-                selectedRoom, participantsEmails);*/
-
       //  viewModel.getIsCreateButtonEnabled().observe(this, aBoolean -> binding.createMeetingBtn.setEnabled(aBoolean));
 
         binding.createMeetingBtn.setOnClickListener(v -> viewModel.onCreateMeetingClicked(
@@ -183,9 +183,8 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
                 timeStart.getText().toString(),
                 timeEnd.getText().toString(),
                 participantsEmails,
-                Objects.requireNonNull(meetingObject.getText()).toString()
+                Objects.requireNonNull(meetingObject.getText()).toString(),
+                CreateNewMeetingActivity.this
         ));
-
-
     }
 }

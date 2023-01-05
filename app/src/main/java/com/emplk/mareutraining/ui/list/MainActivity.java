@@ -2,7 +2,6 @@ package com.emplk.mareutraining.ui.list;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +23,6 @@ import com.emplk.mareutraining.utils.ViewModelFactory;
 import com.emplk.mareutraining.viewmodels.MeetingViewModel;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -84,8 +82,11 @@ public class MainActivity extends AppCompatActivity implements onRoomSelectedLis
                 .get(MeetingViewModel.class);
     }
 
+    /**
+     * Calls all existing meetings
+     */
     private void getMeetingList() {
-        viewModel.fetchMeetingViewStateItemsLiveData().observe(this,
+        viewModel.getMeetingViewStateItems().observe(this,
                 meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
     }
 
@@ -108,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements onRoomSelectedLis
             return true;
         }
         if (id == R.id.sortdelete_menu) {
-           getMeetingList();
+            getMeetingList();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -133,18 +134,17 @@ public class MainActivity extends AppCompatActivity implements onRoomSelectedLis
         int mMonth = now.get(Calendar.MONTH);
         int mDay = now.get(Calendar.DAY_OF_MONTH);
 
-            DatePickerDialog dpd = new DatePickerDialog(this,
-                    (view, year, monthOfYear, dayOfMonth) -> {
-                        Calendar cal = Calendar.getInstance();
-                        cal.set(Calendar.MONTH, monthOfYear);
-                        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                        cal.set(Calendar.YEAR, year);
-                        LocalDate selectedDate = LocalDate.of(year, monthOfYear+1, dayOfMonth);
-                        viewModel.onDateClicked(selectedDate);
-                        viewModel.getMeetingsFilteredByDate(MainActivity.this, getString(R.string.no_meeting_room_toast)).observe(this,
-                                meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
-                    }, mYear, mMonth, mDay);
-            dpd.show();
+        DatePickerDialog dpd = new DatePickerDialog(this,
+                (view, year, monthOfYear, dayOfMonth) -> {
+                    Calendar cal = Calendar.getInstance();
+                    cal.set(Calendar.MONTH, monthOfYear);
+                    cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    cal.set(Calendar.YEAR, year);
+                    LocalDate selectedDate = LocalDate.of(year, monthOfYear + 1, dayOfMonth);
+                    viewModel.getMeetingsFilteredByDate(selectedDate, MainActivity.this, getString(R.string.no_meeting_room_toast)).observe(this,
+                            meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
+                }, mYear, mMonth, mDay);
+        dpd.show();
 
     }
 

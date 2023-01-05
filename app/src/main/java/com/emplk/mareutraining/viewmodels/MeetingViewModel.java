@@ -10,7 +10,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.emplk.mareutraining.models.Meeting;
 import com.emplk.mareutraining.repositories.MeetingsRepository;
-import com.emplk.mareutraining.ui.list.MainActivity;
 import com.emplk.mareutraining.ui.list.MeetingsViewStateItem;
 
 import java.time.LocalDate;
@@ -30,7 +29,7 @@ public class MeetingViewModel extends ViewModel {
         this.repository = repository;
     }
 
-    public LiveData<List<MeetingsViewStateItem>> fetchMeetingViewStateItemsLiveData() {
+    public LiveData<List<MeetingsViewStateItem>> getMeetingViewStateItems() {
         return Transformations.map(repository.getMeetings(), meetings -> {
                     List<MeetingsViewStateItem> meetingsViewStateItems = new ArrayList<>();
                     for (Meeting meeting : meetings) {
@@ -53,11 +52,11 @@ public class MeetingViewModel extends ViewModel {
     private static String formatParticipantList(List<String> participantList) {
         String stringList = participantList.toString()
                 .replace("[", "")
-                .replace("]", "")
-                .replace("@lamzone.fr", "");
+                .replace("]", "");
 
         return Arrays.stream(stringList.split(" "))
                 .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())
+                .map(word -> word.substring(0, word.indexOf('@')))
                 .collect(Collectors.joining(" "));
     }
 
@@ -79,7 +78,7 @@ public class MeetingViewModel extends ViewModel {
         return Transformations.map(repository.getMeetings(), meetings -> {
             List<MeetingsViewStateItem> meetingsFilteredByRoomViewStateItems = new ArrayList<>();
             for (Meeting meeting : meetings) {
-                if((meeting.getRoom().getRoomName()).equals(selectedRoom)) {
+                if ((meeting.getRoom().getRoomName()).equals(selectedRoom)) {
                     meetingsFilteredByRoomViewStateItems.add(
                             new MeetingsViewStateItem(
                                     meeting.getMeetingTitle(),
@@ -91,8 +90,8 @@ public class MeetingViewModel extends ViewModel {
                                     meeting.getId())
                     );
                 }
-                }
-
+            }
+            // If no meeting(s) found for this given room, display a Toast
             if (meetingsFilteredByRoomViewStateItems.isEmpty()) {
                 setToast(context, message + selectedRoom);
             }
@@ -100,28 +99,26 @@ public class MeetingViewModel extends ViewModel {
         });
     }
 
-    public void onDateClicked(LocalDate selectedDate) {
-        repository.setFilterMeetingsByDate(selectedDate);
-    }
-
-    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByDate(Context context, String message) {
-        // TODO : maybe add my filter here ?
-        return Transformations.map(repository.getMeetingsFilteredByDate(), meetings -> {
+    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByDate(LocalDate date, Context context, String message) {
+        return Transformations.map(repository.getMeetings(), meetings -> {
             List<MeetingsViewStateItem> meetingsFilteredByDateViewStateItems = new ArrayList<>();
             for (Meeting meeting : meetings) {
-                meetingsFilteredByDateViewStateItems.add(
-                        new MeetingsViewStateItem(
-                                meeting.getMeetingTitle(),
-                                meeting.getRoom().getRoomName(),
-                                formatDate(meeting.getDate()),
-                                formatTimeStart(meeting.getTimeStart()),
-                                formatParticipantList(meeting.getParticipants()),
-                                meeting.getRoom().getRoomColor(),
-                                meeting.getId())
-                );
+                if ((meeting.getDate()).equals(date)) {
+                    meetingsFilteredByDateViewStateItems.add(
+                            new MeetingsViewStateItem(
+                                    meeting.getMeetingTitle(),
+                                    meeting.getRoom().getRoomName(),
+                                    formatDate(meeting.getDate()),
+                                    formatTimeStart(meeting.getTimeStart()),
+                                    formatParticipantList(meeting.getParticipants()),
+                                    meeting.getRoom().getRoomColor(),
+                                    meeting.getId())
+                    );
+                }
             }
-            if(meetingsFilteredByDateViewStateItems.isEmpty()) {
-               setToast(context, message);
+            // If no meeting(s) found for this given date, display a Toast
+            if (meetingsFilteredByDateViewStateItems.isEmpty()) {
+                setToast(context, message + formatDate(date));
             }
             return meetingsFilteredByDateViewStateItems;
         });

@@ -69,12 +69,13 @@ public class RoomFilterDialogFragment extends DialogFragment {
 
         viewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(MeetingViewModel.class);
 
-
         binding.roomListviewMenu.setOnItemClickListener((adapterView, view1, position, id) -> {
             selectedRoomString = binding.roomListviewMenu.getItemAtPosition(position).toString();
 
+            // store the selected room name from ListView (String)
             listener.onRoomSelected(selectedRoomString);
 
+            // dismiss the dialog fragment
             dismiss();
         });
     }

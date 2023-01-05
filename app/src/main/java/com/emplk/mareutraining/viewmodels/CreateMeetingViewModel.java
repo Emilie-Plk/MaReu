@@ -1,13 +1,22 @@
 package com.emplk.mareutraining.viewmodels;
 
 
+import android.content.Context;
+import android.text.Editable;
+import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.emplk.mareutraining.R;
 import com.emplk.mareutraining.models.Room;
 import com.emplk.mareutraining.repositories.MeetingsRepository;
 import com.emplk.mareutraining.utils.SingleLiveEvent;
@@ -37,24 +46,30 @@ public class CreateMeetingViewModel extends ViewModel {
             @NonNull String timeStart,
             @NonNull String timeEnd,
             @NonNull List<String> participants,
-            @NonNull String meetingObject
+            @NonNull String meetingObject,
+            @NonNull Context context
             ) {
-        // add my newly created meeting
-        repository.addMeeting(meetingTitle,
-                getSelectedRoom(room),
-                formatDate(date),
-                formatTime(timeStart),
-                formatTime(timeEnd),
-                participants,
-                meetingObject);
 
-        // close the activity afterwards
-        closeActivity.call();
+        // check if all fields are completed, else display a toast
+        if (meetingTitle.isEmpty() || room.isEmpty() || date.isEmpty()
+        || timeStart.isEmpty() || timeEnd.isEmpty()|| participants.isEmpty() || meetingObject.isEmpty()) {
+            setToast(context, context.getString(R.string.check_submit_btn_toast));
+        } else {
+            // add my newly created meeting
+            repository.addMeeting(meetingTitle,
+                    getSelectedRoom(room),
+                    formatDate(date),
+                    formatTime(timeStart),
+                    formatTime(timeEnd),
+                    participants,
+                    meetingObject);
+
+            // close the activity afterwards
+            closeActivity.call();
+        }
     }
 
-    public void checkEveryFieldFilled(String date, String startTime, String endTime, String room, List<String> participants) {
-        isCreateButtonEnabled.setValue(!date.isEmpty() && !startTime.isEmpty() && !endTime.isEmpty() && !room.isEmpty() && !participants.isEmpty());
-    }
+
 
     public LiveData<Boolean> getIsCreateButtonEnabled() {
         return isCreateButtonEnabled;
@@ -91,9 +106,14 @@ public class CreateMeetingViewModel extends ViewModel {
     public void checkIfTimeOk(String startTime, String endTime) {
         LocalTime startTimeLocalTime = formatTime(startTime);
         LocalTime endTimeLocalTime = formatTime(endTime);
-        if (startTimeLocalTime.isAfter(endTimeLocalTime)) {
+        if (startTimeLocalTime.isAfter(endTimeLocalTime) || (startTimeLocalTime.equals(endTimeLocalTime))) {
             Log.e("EMILIE", "Please select a timestart after");
         }
+    }
+
+    public void setToast(Context context, String message) {
+        Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
+        toast.show();
     }
 
 }
