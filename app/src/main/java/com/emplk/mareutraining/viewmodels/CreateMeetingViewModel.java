@@ -33,7 +33,7 @@ public class CreateMeetingViewModel extends ViewModel {
 
     private final SingleLiveEvent<Void> closeActivity = new SingleLiveEvent<>();
 
-    private final MutableLiveData<Boolean> isCreateButtonEnabled = new MutableLiveData<>(false);
+    // private final MutableLiveData<Boolean> isCreateButtonEnabled = new MutableLiveData<>(false);
 
     public CreateMeetingViewModel(@NonNull MeetingsRepository repository) {
         this.repository = repository;
@@ -54,7 +54,10 @@ public class CreateMeetingViewModel extends ViewModel {
         if (meetingTitle.isEmpty() || room.isEmpty() || date.isEmpty()
         || timeStart.isEmpty() || timeEnd.isEmpty()|| participants.isEmpty() || meetingObject.isEmpty()) {
             setToast(context, context.getString(R.string.check_submit_btn_toast));
-        } else {
+        } else if (formatTime(timeStart).isAfter(formatTime(timeEnd))) {
+            setToast(context,context.getString(R.string.check_time_ok_toast) );
+        }
+        else {
             // add my newly created meeting
             repository.addMeeting(meetingTitle,
                     getSelectedRoom(room),
@@ -71,9 +74,9 @@ public class CreateMeetingViewModel extends ViewModel {
 
 
 
-    public LiveData<Boolean> getIsCreateButtonEnabled() {
+ /*   public LiveData<Boolean> getIsCreateButtonEnabled() {
         return isCreateButtonEnabled;
-    }
+    }*/
 
     // close the activity
     public SingleLiveEvent<Void> getCloseActivity() {
@@ -101,14 +104,6 @@ public class CreateMeetingViewModel extends ViewModel {
             }
         }
         return selectedRoom;
-    }
-
-    public void checkIfTimeOk(String startTime, String endTime) {
-        LocalTime startTimeLocalTime = formatTime(startTime);
-        LocalTime endTimeLocalTime = formatTime(endTime);
-        if (startTimeLocalTime.isAfter(endTimeLocalTime) || (startTimeLocalTime.equals(endTimeLocalTime))) {
-            Log.e("EMILIE", "Please select a timestart after");
-        }
     }
 
     public void setToast(Context context, String message) {
