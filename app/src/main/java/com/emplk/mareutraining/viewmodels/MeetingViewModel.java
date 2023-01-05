@@ -20,6 +20,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import es.dmoral.toasty.Toasty;
+
 public class MeetingViewModel extends ViewModel {
     @NonNull
     private final MeetingsRepository repository;
@@ -125,7 +127,6 @@ public class MeetingViewModel extends ViewModel {
     }
 
     public void setToast(Context context, String message) {
-        Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
-        toast.show();
+        Toasty.info(context, message, Toast.LENGTH_SHORT).show();
     }
 }

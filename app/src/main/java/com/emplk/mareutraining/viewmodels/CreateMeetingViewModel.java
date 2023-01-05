@@ -2,29 +2,24 @@ package com.emplk.mareutraining.viewmodels;
 
 
 import android.content.Context;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.util.Log;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
+import android.util.Patterns;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.mareutraining.R;
 import com.emplk.mareutraining.models.Room;
 import com.emplk.mareutraining.repositories.MeetingsRepository;
 import com.emplk.mareutraining.utils.SingleLiveEvent;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+
+import es.dmoral.toasty.Toasty;
 
 public class CreateMeetingViewModel extends ViewModel {
 
@@ -32,8 +27,6 @@ public class CreateMeetingViewModel extends ViewModel {
     private final MeetingsRepository repository;
 
     private final SingleLiveEvent<Void> closeActivity = new SingleLiveEvent<>();
-
-    // private final MutableLiveData<Boolean> isCreateButtonEnabled = new MutableLiveData<>(false);
 
     public CreateMeetingViewModel(@NonNull MeetingsRepository repository) {
         this.repository = repository;
@@ -48,16 +41,16 @@ public class CreateMeetingViewModel extends ViewModel {
             @NonNull List<String> participants,
             @NonNull String meetingObject,
             @NonNull Context context
-            ) {
-
-        // check if all fields are completed, else display a toast
+    ) {
+        // check if all fields are filled, else display a toast
         if (meetingTitle.isEmpty() || room.isEmpty() || date.isEmpty()
-        || timeStart.isEmpty() || timeEnd.isEmpty()|| participants.isEmpty() || meetingObject.isEmpty()) {
+                || timeStart.isEmpty() || timeEnd.isEmpty() || participants.isEmpty() || meetingObject.isEmpty()) {
             setToast(context, context.getString(R.string.check_submit_btn_toast));
-        } else if (formatTime(timeStart).isAfter(formatTime(timeEnd))) {
-            setToast(context,context.getString(R.string.check_time_ok_toast) );
-        }
-        else {
+        } else if (
+                formatTime(timeStart).isAfter(formatTime(timeEnd)) ||
+                formatTime(timeStart).equals(formatTime(timeEnd))) {
+            setToast(context, context.getString(R.string.check_time_ok_toast));
+        } else {
             // add my newly created meeting
             repository.addMeeting(meetingTitle,
                     getSelectedRoom(room),
@@ -73,16 +66,16 @@ public class CreateMeetingViewModel extends ViewModel {
     }
 
 
-
- /*   public LiveData<Boolean> getIsCreateButtonEnabled() {
-        return isCreateButtonEnabled;
-    }*/
-
     // close the activity
     public SingleLiveEvent<Void> getCloseActivity() {
         return closeActivity;
     }
 
+    /**
+     * Format date
+     * @param date String
+     * @return LocalDate
+     */
     private LocalDate formatDate(String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         return LocalDate.parse(date, formatter);
@@ -94,7 +87,7 @@ public class CreateMeetingViewModel extends ViewModel {
     }
 
 
-   private Room getSelectedRoom(String roomName) {
+    private Room getSelectedRoom(String roomName) {
         Room selectedRoom = Room.ROOM_ONE;
         Room[] rooms = Room.values();
         for (Room room : rooms) {
@@ -107,8 +100,19 @@ public class CreateMeetingViewModel extends ViewModel {
     }
 
     public void setToast(Context context, String message) {
-        Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
-        toast.show();
+        Toasty.error(context, message, Toast.LENGTH_SHORT).show();
+    }
+
+
+    public boolean isValidEmail(String target, TextInputLayout inputLayout, Context context) {
+        inputLayout.setError(null);
+        if (Patterns.EMAIL_ADDRESS.matcher(target).matches()) {
+            return true;
+        } else {
+            inputLayout.requestFocus();
+            inputLayout.setError(context.getString(R.string.invalid_email_input));
+            return false;
+        }
     }
 
 }

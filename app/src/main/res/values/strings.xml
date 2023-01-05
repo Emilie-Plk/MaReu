@@ -27,6 +27,6 @@
     <string name="no_meeting_date_toast">"Aucune réunion dans la "</string>
     <string name="check_submit_btn_toast">"Merci de remplir tous les champs"</string>
     <string name="check_time_ok_toast">"Merci de choisir une heure de début antérieure à celle de fin"</string>
-
+    <string name="invalid_email_input">"Adresse e-mail invalide"</string>
 
 </resources>

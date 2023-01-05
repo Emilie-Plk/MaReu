@@ -88,9 +88,11 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
 
     private void addParticipants() {
         binding.addParticipantFab.setOnClickListener(view1 -> {
-            generateParticipantChip(binding.participantsInput);
-            binding.participantsInput.setText("");
-            binding.participantsInput.onEditorAction(EditorInfo.IME_ACTION_DONE);
+            if (viewModel.isValidEmail(Objects.requireNonNull(binding.participantsInput.getText()).toString(), binding.participantsLayout, this)) {
+                generateParticipantChip(binding.participantsInput);
+                binding.participantsInput.setText("");
+                binding.participantsInput.onEditorAction(EditorInfo.IME_ACTION_DONE);
+            }
         });
     }
 
