@@ -4,11 +4,11 @@ import androidx.annotation.NonNull;
 
 import java.util.Objects;
 
+/**
+ * A ViewState item contains all required dynamic info of the View (adapter for MainActivity).
+ * It's like a 'model' for the view.
+ */
 public class MeetingsViewStateItem {
-
-    /*ViewStateItem
-     Un objet 'ViewState' contient toutes les données nécessaires pour décrire l'état
-     de chaque sous-composant de la vue à la fois*/
 
     @NonNull
     private final String meetingTitle;

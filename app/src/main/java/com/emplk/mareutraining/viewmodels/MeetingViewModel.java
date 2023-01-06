@@ -1,7 +1,6 @@
 package com.emplk.mareutraining.viewmodels;
 
 import android.content.Context;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,16 +24,23 @@ import java.util.stream.Collectors;
 
 import es.dmoral.toasty.Toasty;
 
+/**
+ * Business logic for MainActivity
+ */
 public class MeetingViewModel extends ViewModel {
     @NonNull
     private final MeetingsRepository repository;
-
 
     public MeetingViewModel(@NonNull MeetingsRepository repository) {
         this.repository = repository;
     }
 
+    /**
+     * Returns a LiveData object of List of MeetingsViewStateItem
+     * @return List of MeetingsViewStateItem
+     */
     public LiveData<List<MeetingsViewStateItem>> getMeetingViewStateItems() {
+        // TODO: add booleans isRoomFiltered & isDateFiltered ?
         return Transformations.map(repository.getMeetings(), meetings -> {
                     List<MeetingsViewStateItem> meetingsViewStateItems = new ArrayList<>();
                     for (Meeting meeting : meetings) {
@@ -43,7 +49,7 @@ public class MeetingViewModel extends ViewModel {
                                         meeting.getMeetingTitle(),
                                         meeting.getRoom().getRoomName(),
                                         formatDate(meeting.getDate()),
-                                        formatTimeStart(meeting.getTimeStart()),
+                                        formatTime(meeting.getTimeStart()),
                                         formatParticipantList(meeting.getParticipants()),
                                         meeting.getRoom().getRoomColor(),
                                         meeting.getId())
@@ -54,6 +60,12 @@ public class MeetingViewModel extends ViewModel {
         );
     }
 
+    /**
+     * Format participant list to String,
+     * extract names from email (john@gmail.com -> John)
+     * @param participantList List<String>
+     * @return String
+     */
     private static String formatParticipantList(List<String> participantList) {
         String stringList = participantList.toString()
                 .replace("[", "")
@@ -65,11 +77,20 @@ public class MeetingViewModel extends ViewModel {
                 .collect(Collectors.joining(" "));
     }
 
-    private String formatTimeStart(LocalTime startingTime) {
+    /**
+     * Format time for the view
+     * @param startingTime LocalTime
+     * @return String
+     */
+    private String formatTime(LocalTime startingTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         return startingTime.format(formatter);
     }
 
+    /**
+     * @param date LocalDate
+     * @return String
+     */
     private String formatDate(LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return date.format(formatter);
@@ -89,7 +110,7 @@ public class MeetingViewModel extends ViewModel {
                                     meeting.getMeetingTitle(),
                                     meeting.getRoom().getRoomName(),
                                     formatDate(meeting.getDate()),
-                                    formatTimeStart(meeting.getTimeStart()),
+                                    formatTime(meeting.getTimeStart()),
                                     formatParticipantList(meeting.getParticipants()),
                                     meeting.getRoom().getRoomColor(),
                                     meeting.getId())
@@ -116,7 +137,7 @@ public class MeetingViewModel extends ViewModel {
                                     meeting.getMeetingTitle(),
                                     meeting.getRoom().getRoomName(),
                                     formatDate(meeting.getDate()),
-                                    formatTimeStart(meeting.getTimeStart()),
+                                    formatTime(meeting.getTimeStart()),
                                     formatParticipantList(meeting.getParticipants()),
                                     meeting.getRoom().getRoomColor(),
                                     meeting.getId())
@@ -124,6 +145,7 @@ public class MeetingViewModel extends ViewModel {
                 }
             }
             // If no meeting(s) found for this given date, display a Toast
+            //TODO: pas trigger au bon moment (retriggerd qd delete)
             if (meetingsFilteredByDateViewStateItems.isEmpty()) {
                 setToast(context, message + formatDate(date));
             }
@@ -135,6 +157,6 @@ public class MeetingViewModel extends ViewModel {
     }
 
     public void setToast(Context context, String message) {
-        Toasty.info(context, message, Toast.LENGTH_SHORT).show();
+        Toasty.info(context, message, Toast.LENGTH_LONG).show();
     }
 }

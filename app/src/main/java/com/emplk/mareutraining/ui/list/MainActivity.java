@@ -9,9 +9,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.emplk.mareutraining.R;
@@ -20,8 +18,8 @@ import com.emplk.mareutraining.adapters.MeetingListRVAdapter;
 import com.emplk.mareutraining.databinding.ActivityMainBinding;
 import com.emplk.mareutraining.ui.create.CreateNewMeetingActivity;
 import com.emplk.mareutraining.ui.detail.DetailActivity;
+import com.emplk.mareutraining.ui.list.room_filter.OnRoomSelectedListener;
 import com.emplk.mareutraining.ui.list.room_filter.RoomFilterDialogFragment;
-import com.emplk.mareutraining.ui.list.room_filter.onRoomSelectedListener;
 import com.emplk.mareutraining.utils.ViewModelFactory;
 import com.emplk.mareutraining.viewmodels.MeetingViewModel;
 
@@ -29,7 +27,7 @@ import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity implements onRoomSelectedListener {
+public class MainActivity extends AppCompatActivity implements OnRoomSelectedListener {
 
     private ActivityMainBinding binding;
     public MeetingListRVAdapter adapter;
@@ -117,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements onRoomSelectedLis
     }
 
     private void openRoomFilterList() {
-        RoomFilterDialogFragment.newInstance().show(getSupportFragmentManager(), "ROOM DIALOG");
+        RoomFilterDialogFragment.newInstance().show(getSupportFragmentManager(), null);
     }
 
     @Override
@@ -145,7 +143,6 @@ public class MainActivity extends AppCompatActivity implements onRoomSelectedLis
                             meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
                 }, mYear, mMonth, mDay);
         dpd.show();
-
     }
 
 }

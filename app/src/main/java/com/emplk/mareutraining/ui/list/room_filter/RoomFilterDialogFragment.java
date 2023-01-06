@@ -2,6 +2,7 @@ package com.emplk.mareutraining.ui.list.room_filter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,21 +12,16 @@ import android.widget.ArrayAdapter;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.ViewModelProvider;
 
-import com.emplk.mareutraining.adapters.MeetingListRVAdapter;
-import com.emplk.mareutraining.databinding.ActivityMainBinding;
 import com.emplk.mareutraining.databinding.FragmentRoomFilterBinding;
 import com.emplk.mareutraining.models.Room;
-import com.emplk.mareutraining.utils.ViewModelFactory;
-import com.emplk.mareutraining.viewmodels.MeetingViewModel;
 
 
 public class RoomFilterDialogFragment extends DialogFragment {
 
     private FragmentRoomFilterBinding binding;
 
-    private onRoomSelectedListener listener;
+    private OnRoomSelectedListener listener;
 
     private String selectedRoomString;
 
@@ -34,13 +30,23 @@ public class RoomFilterDialogFragment extends DialogFragment {
         return new RoomFilterDialogFragment();
     }
 
-    @Override
+ /*  @Override
     public void onAttach(@NonNull Activity activity) {
         super.onAttach(activity);
         try {
-            listener = (onRoomSelectedListener) activity;
+            listener = (OnRoomSelectedListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.getLocalClassName() + " must implement onSomeEventListener");
+        }
+    }*/
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        if (context instanceof  OnRoomSelectedListener) {
+            listener = (OnRoomSelectedListener) context;
+        } else  {
+            throw new ClassCastException(context + " must implement OnRoomSelectedListener");
         }
     }
 

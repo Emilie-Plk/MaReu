@@ -14,6 +14,9 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+/**
+ * Business logic for DetailActivity
+ */
 public class DetailMeetingViewModel extends ViewModel {
 
     @NonNull
@@ -30,8 +33,8 @@ public class DetailMeetingViewModel extends ViewModel {
                         meeting.getMeetingTitle(),
                         meeting.getRoom().getRoomName(),
                         formatDate(meeting.getDate()),
-                        formatTimeStart(meeting.getTimeStart()),
-                        formatTimeEnd(meeting.getTimeEnd()),
+                        formatTime(meeting.getTimeStart()),
+                        formatTime(meeting.getTimeEnd()),
                         formatParticipantList(meeting.getParticipants()),
                         meeting.getMeetingObject(),
                         meeting.getRoom().getRoomColor(),
@@ -50,15 +53,11 @@ public class DetailMeetingViewModel extends ViewModel {
         return date.format(formatter);
     }
 
-    private String formatTimeStart(LocalTime startingTime) {
+    private String formatTime(LocalTime timeLocalTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        return startingTime.format(formatter);
+        return timeLocalTime.format(formatter);
     }
 
-    private String formatTimeEnd(LocalTime endingTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        return endingTime.format(formatter);
-    }
 
 
 }

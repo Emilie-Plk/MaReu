@@ -12,8 +12,8 @@
         style="@style/Theme.MaReu.AppBarOverlay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.Toolbar
@@ -21,8 +21,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_weight="1"
-            app:titleTextColor="@color/white"
-            app:title="Détail de la réunion" />
+            app:title="Détail de la réunion"
+            android:theme="@style/Theme.MaReu.AppBarOverlay"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <TextView
@@ -92,8 +92,8 @@
         android:layout_marginStart="32dp"
         android:background="@drawable/room"
         android:gravity="center"
-        android:textStyle="bold"
         android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/room_title_detail"
         app:layout_constraintStart_toEndOf="@+id/room_title_detail"
         app:layout_constraintTop_toTopOf="@+id/room_title_detail"

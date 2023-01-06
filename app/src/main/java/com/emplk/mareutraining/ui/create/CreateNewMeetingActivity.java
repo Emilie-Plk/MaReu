@@ -35,6 +35,7 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
 
     CreateMeetingViewModel viewModel;
 
+
     @NonNull
     private String selectedRoom = "";
     private final ArrayList<String> participantsEmails = new ArrayList<>();

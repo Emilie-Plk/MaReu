@@ -21,6 +21,9 @@ import java.util.List;
 
 import es.dmoral.toasty.Toasty;
 
+/**
+ * Business logic for CreateNewMeetingActivity
+ */
 public class CreateMeetingViewModel extends ViewModel {
 
     @NonNull
@@ -48,7 +51,7 @@ public class CreateMeetingViewModel extends ViewModel {
             setToast(context, context.getString(R.string.check_submit_btn_toast));
         } else if (
                 formatTime(timeStart).isAfter(formatTime(timeEnd)) ||
-                formatTime(timeStart).equals(formatTime(timeEnd))) {
+                        formatTime(timeStart).equals(formatTime(timeEnd))) {
             setToast(context, context.getString(R.string.check_time_ok_toast));
         } else {
             // add my newly created meeting
@@ -65,14 +68,18 @@ public class CreateMeetingViewModel extends ViewModel {
         }
     }
 
-
-    // close the activity
+    /**
+     * Close the CreateNewMeetingActivity
+     *
+     * @return SingleLiveEvent of type Void
+     */
     public SingleLiveEvent<Void> getCloseActivity() {
         return closeActivity;
     }
 
     /**
      * Format date
+     *
      * @param date String
      * @return LocalDate
      */
@@ -81,12 +88,23 @@ public class CreateMeetingViewModel extends ViewModel {
         return LocalDate.parse(date, formatter);
     }
 
+    /**
+     * Format date
+     *
+     * @param startingTime time in String
+     * @return time in LocalTime
+     */
     private LocalTime formatTime(String startingTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm");
         return LocalTime.parse(startingTime, formatter);
     }
 
-
+    /**
+     * Parse given roomName (String) to corresponding Room constant
+     *
+     * @param roomName room name in String
+     * @return Room constant
+     */
     private Room getSelectedRoom(String roomName) {
         Room selectedRoom = Room.ROOM_ONE;
         Room[] rooms = Room.values();
@@ -100,10 +118,17 @@ public class CreateMeetingViewModel extends ViewModel {
     }
 
     public void setToast(Context context, String message) {
-        Toasty.error(context, message, Toast.LENGTH_SHORT).show();
+        Toasty.error(context, message, Toast.LENGTH_LONG).show();
     }
 
-
+    /**
+     * Check if entered email address is valid (correctly stylized)
+     *
+     * @param target      String
+     * @param inputLayout Layout from email EditText
+     * @param context     Context (CreateNewMeetingActivity)
+     * @return boolean (false: set message error)
+     */
     public boolean isValidEmail(String target, TextInputLayout inputLayout, Context context) {
         inputLayout.setError(null);
         if (Patterns.EMAIL_ADDRESS.matcher(target).matches()) {
