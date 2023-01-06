@@ -5,6 +5,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
@@ -78,7 +79,7 @@ public class MeetingViewModel extends ViewModel {
         repository.deleteMeeting(meetingId);
     }
 
-    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByRoom(String selectedRoom, Context context, String message, TextView roomHelperTV) {
+    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByRoom(String selectedRoom, Context context, String message, Toolbar roomFilterTV) {
         return Transformations.map(repository.getMeetings(), meetings -> {
             List<MeetingsViewStateItem> meetingsFilteredByRoomViewStateItems = new ArrayList<>();
             for (Meeting meeting : meetings) {
@@ -100,12 +101,12 @@ public class MeetingViewModel extends ViewModel {
                 setToast(context, message + selectedRoom);
             }
 
-            roomHelperTV.setText(R.string.room_filter_helper_sort_room);
+            roomFilterTV.setTitle(R.string.room_filter_helper_sort_room);
             return meetingsFilteredByRoomViewStateItems;
         });
     }
 
-    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByDate(LocalDate date, Context context, String message, TextView dateHelperTV) {
+    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByDate(LocalDate date, Context context, String message, Toolbar dateFilterTV) {
         return Transformations.map(repository.getMeetings(), meetings -> {
             List<MeetingsViewStateItem> meetingsFilteredByDateViewStateItems = new ArrayList<>();
             for (Meeting meeting : meetings) {
@@ -127,7 +128,8 @@ public class MeetingViewModel extends ViewModel {
                 setToast(context, message + formatDate(date));
             }
 
-            dateHelperTV.setText(R.string.room_filter_helper_sort_date);
+            dateFilterTV.setTitle(R.string.room_filter_helper_sort_date);
+
             return meetingsFilteredByDateViewStateItems;
         });
     }

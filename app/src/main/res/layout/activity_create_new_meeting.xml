@@ -142,6 +142,7 @@
                     android:id="@+id/title_textinput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="textCapSentences"
                     android:hint="Nom de la réunion" />
             </com.google.android.material.textfield.TextInputLayout>
 

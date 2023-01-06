@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.emplk.mareutraining.R;
 import com.emplk.mareutraining.adapters.MeetingListRVAdapter;
+
 import com.emplk.mareutraining.databinding.ActivityMainBinding;
 import com.emplk.mareutraining.ui.create.CreateNewMeetingActivity;
 import com.emplk.mareutraining.ui.detail.DetailActivity;
@@ -109,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements onRoomSelectedLis
         }
         if (id == R.id.sortdelete_menu) {
             getMeetingList();
-            binding.roomFilterHelperTv.setText("");
+            binding.toolbarMain.setTitle(R.string.app_name);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -121,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements onRoomSelectedLis
 
     @Override
     public void onRoomSelected(String roomName) {
-        viewModel.getMeetingsFilteredByRoom(roomName, this, getString(R.string.no_meeting_date_toast), binding.roomFilterHelperTv).observe(this,
+        viewModel.getMeetingsFilteredByRoom(roomName, this, getString(R.string.no_meeting_date_toast), binding.toolbarMain).observe(this,
                 meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
     }
 
@@ -140,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements onRoomSelectedLis
                     cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                     cal.set(Calendar.YEAR, year);
                     LocalDate selectedDate = LocalDate.of(year, monthOfYear + 1, dayOfMonth);
-                    viewModel.getMeetingsFilteredByDate(selectedDate, MainActivity.this, getString(R.string.no_meeting_room_toast), binding.roomFilterHelperTv).observe(this,
+                    viewModel.getMeetingsFilteredByDate(selectedDate, MainActivity.this, getString(R.string.no_meeting_room_toast), binding.toolbarMain).observe(this,
                             meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
                 }, mYear, mMonth, mDay);
         dpd.show();
