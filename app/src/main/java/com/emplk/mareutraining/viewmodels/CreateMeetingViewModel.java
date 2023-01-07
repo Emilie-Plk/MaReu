@@ -78,7 +78,7 @@ public class CreateMeetingViewModel extends ViewModel {
     }
 
     /**
-     * Format date
+     * Parse date in String to LocalDate
      *
      * @param date String
      * @return LocalDate
@@ -88,15 +88,16 @@ public class CreateMeetingViewModel extends ViewModel {
         return LocalDate.parse(date, formatter);
     }
 
+
     /**
-     * Format date
+     * Parse time in String to LocalTime
      *
-     * @param startingTime time in String
-     * @return time in LocalTime
+     * @param stringTime date in String
+     * @return LocalTime formatted time HH:mm
      */
-    private LocalTime formatTime(String startingTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("H:mm");
-        return LocalTime.parse(startingTime, formatter);
+    private LocalTime formatTime(String stringTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        return LocalTime.parse(stringTime, formatter);
     }
 
     /**
@@ -117,6 +118,12 @@ public class CreateMeetingViewModel extends ViewModel {
         return selectedRoom;
     }
 
+    /**
+     * Set a Toast (Toasty error)
+     *
+     * @param context Activity context
+     * @param message String toast
+     */
     public void setToast(Context context, String message) {
         Toasty.error(context, message, Toast.LENGTH_LONG).show();
     }
