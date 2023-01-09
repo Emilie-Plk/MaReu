@@ -69,6 +69,25 @@ public class MeetingsRepositoryTest {
     }
 
     @Test
+    public void addingMeetingWithSuccess() {
+        MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
+
+        repository.addMeeting(
+                TITLE,
+                ROOM,
+                DATE,
+                TIME_START,
+                TIME_END,
+                PARTICIPANTS,
+                OBJECT
+        );
+
+        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
     public void deleteMeetingWithSuccess() {
         MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
 
@@ -85,6 +104,12 @@ public class MeetingsRepositoryTest {
         List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
 
         assertEquals(1, result.size());
+
+        repository.deleteMeeting(0);
+
+        result = TestUtil.getValueForTesting(repository.getMeetings());
+
+        assertTrue(result.isEmpty());
     }
 
 
