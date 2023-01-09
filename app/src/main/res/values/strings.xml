@@ -27,5 +27,6 @@
     <string name="invalid_email_input">"Adresse e-mail invalide"</string>
     <string name="room_filter_helper_sort_date">Réunions filtrées par date</string>
     <string name="room_filter_helper_sort_room">Réunions triées par salle</string>
+    <string name="meeting_deleted_toast">"Réunion supprimée"</string>
 
 </resources>

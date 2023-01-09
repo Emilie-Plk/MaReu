@@ -34,7 +34,6 @@ public class MeetingViewModel extends ViewModel {
     public MeetingViewModel(@NonNull MeetingsRepository repository) {
         this.repository = repository;
     }
-
     /**
      * Returns a LiveData object of List of MeetingsViewStateItem
      *
@@ -49,6 +48,32 @@ public class MeetingViewModel extends ViewModel {
             return meetingsViewStateItems;
         });
     }
+
+    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByRoom(String selectedRoom) {
+        return Transformations.map(repository.getMeetings(), meetings -> {
+            List<MeetingsViewStateItem> meetingsFilteredByRoomViewStateItems = new ArrayList<>();
+            for (Meeting meeting : meetings) {
+                if ((meeting.getRoom().getRoomName()).equals(selectedRoom)) {
+                    meetingsFilteredByRoomViewStateItems.add(new MeetingsViewStateItem(meeting.getMeetingTitle(), meeting.getRoom().getRoomName(), formatDate(meeting.getDate()), formatTime(meeting.getTimeStart()), formatParticipantList(meeting.getParticipants()), meeting.getRoom().getRoomColor(), meeting.getId()));
+                }
+            }
+
+            return meetingsFilteredByRoomViewStateItems;
+        });
+    }
+
+    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByDate(LocalDate date) {
+        return Transformations.map(repository.getMeetings(), meetings -> {
+            List<MeetingsViewStateItem> meetingsFilteredByDateViewStateItems = new ArrayList<>();
+            for (Meeting meeting : meetings) {
+                if ((meeting.getDate()).equals(date)) {
+                    meetingsFilteredByDateViewStateItems.add(new MeetingsViewStateItem(meeting.getMeetingTitle(), meeting.getRoom().getRoomName(), formatDate(meeting.getDate()), formatTime(meeting.getTimeStart()), formatParticipantList(meeting.getParticipants()), meeting.getRoom().getRoomColor(), meeting.getId()));
+                }
+            }
+            return meetingsFilteredByDateViewStateItems;
+        });
+    }
+
 
     /**
      * Format participant list to String,
@@ -89,32 +114,4 @@ public class MeetingViewModel extends ViewModel {
         repository.deleteMeeting(meetingId);
     }
 
-    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByRoom(String selectedRoom) {
-        return Transformations.map(repository.getMeetings(), meetings -> {
-            List<MeetingsViewStateItem> meetingsFilteredByRoomViewStateItems = new ArrayList<>();
-            for (Meeting meeting : meetings) {
-                if ((meeting.getRoom().getRoomName()).equals(selectedRoom)) {
-                    meetingsFilteredByRoomViewStateItems.add(new MeetingsViewStateItem(meeting.getMeetingTitle(), meeting.getRoom().getRoomName(), formatDate(meeting.getDate()), formatTime(meeting.getTimeStart()), formatParticipantList(meeting.getParticipants()), meeting.getRoom().getRoomColor(), meeting.getId()));
-                }
-            }
-
-            return meetingsFilteredByRoomViewStateItems;
-        });
-    }
-
-    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByDate(LocalDate date) {
-        return Transformations.map(repository.getMeetings(), meetings -> {
-            List<MeetingsViewStateItem> meetingsFilteredByDateViewStateItems = new ArrayList<>();
-            for (Meeting meeting : meetings) {
-                if ((meeting.getDate()).equals(date)) {
-                    meetingsFilteredByDateViewStateItems.add(new MeetingsViewStateItem(meeting.getMeetingTitle(), meeting.getRoom().getRoomName(), formatDate(meeting.getDate()), formatTime(meeting.getTimeStart()), formatParticipantList(meeting.getParticipants()), meeting.getRoom().getRoomColor(), meeting.getId()));
-                }
-            }
-            return meetingsFilteredByDateViewStateItems;
-        });
-    }
-
-    public void setToast(Context context, String message) {
-        Toasty.info(context, message, Toast.LENGTH_LONG).show();
-    }
 }

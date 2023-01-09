@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +27,8 @@ import com.emplk.mareutraining.viewmodels.MeetingViewModel;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Locale;
+
+import es.dmoral.toasty.Toasty;
 
 public class MainActivity extends AppCompatActivity implements OnRoomSelectedListener {
 
@@ -67,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
             @Override
             public void onDeleteMeetingClicked(long meetingId) {
                 viewModel.onDeleteMeetingClicked(meetingId);
-                viewModel.setToast(MainActivity.this, "Réunion supprimée");
+                Toasty.info(MainActivity.this, R.string.meeting_deleted_toast, Toast.LENGTH_LONG).show();
             }
         });
         RecyclerView recyclerView = binding.meetingsRv;
