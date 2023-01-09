@@ -40,8 +40,7 @@ public class MeetingViewModel extends ViewModel {
      *
      * @return List of MeetingsViewStateItem
      */
-    public LiveData<List<MeetingsViewStateItem>> getMeetingViewStateItems(/*boolean isRoomFiltered, boolean isDateFiltered*/) {
-        // TODO: add booleans isRoomFiltered & isDateFiltered ?
+    public LiveData<List<MeetingsViewStateItem>> getMeetingViewStateItems() {
         return Transformations.map(repository.getMeetings(), meetings -> {
             List<MeetingsViewStateItem> meetingsViewStateItems = new ArrayList<>();
             for (Meeting meeting : meetings) {
@@ -90,7 +89,7 @@ public class MeetingViewModel extends ViewModel {
         repository.deleteMeeting(meetingId);
     }
 
-    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByRoom(String selectedRoom, Context context, String message, Toolbar roomFilterTV) {
+    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByRoom(String selectedRoom) {
         return Transformations.map(repository.getMeetings(), meetings -> {
             List<MeetingsViewStateItem> meetingsFilteredByRoomViewStateItems = new ArrayList<>();
             for (Meeting meeting : meetings) {
@@ -98,17 +97,12 @@ public class MeetingViewModel extends ViewModel {
                     meetingsFilteredByRoomViewStateItems.add(new MeetingsViewStateItem(meeting.getMeetingTitle(), meeting.getRoom().getRoomName(), formatDate(meeting.getDate()), formatTime(meeting.getTimeStart()), formatParticipantList(meeting.getParticipants()), meeting.getRoom().getRoomColor(), meeting.getId()));
                 }
             }
-            // If no meeting(s) found for this given room, display a Toast
-            if (meetingsFilteredByRoomViewStateItems.isEmpty()) {
-                setToast(context, message + selectedRoom);
-            }
 
-            roomFilterTV.setTitle(R.string.room_filter_helper_sort_room);
             return meetingsFilteredByRoomViewStateItems;
         });
     }
 
-    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByDate(LocalDate date, Context context, String message, Toolbar dateFilterTV) {
+    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByDate(LocalDate date) {
         return Transformations.map(repository.getMeetings(), meetings -> {
             List<MeetingsViewStateItem> meetingsFilteredByDateViewStateItems = new ArrayList<>();
             for (Meeting meeting : meetings) {
@@ -116,14 +110,6 @@ public class MeetingViewModel extends ViewModel {
                     meetingsFilteredByDateViewStateItems.add(new MeetingsViewStateItem(meeting.getMeetingTitle(), meeting.getRoom().getRoomName(), formatDate(meeting.getDate()), formatTime(meeting.getTimeStart()), formatParticipantList(meeting.getParticipants()), meeting.getRoom().getRoomColor(), meeting.getId()));
                 }
             }
-            // If no meeting(s) found for this given date, display a Toast
-            //TODO: pas trigger au bon moment (retriggerd qd delete)
-            if (meetingsFilteredByDateViewStateItems.isEmpty()) {
-                setToast(context, message + formatDate(date));
-            }
-
-            dateFilterTV.setTitle(R.string.room_filter_helper_sort_date);
-
             return meetingsFilteredByDateViewStateItems;
         });
     }

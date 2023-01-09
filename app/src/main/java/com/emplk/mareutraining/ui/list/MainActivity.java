@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
 
     @Override
     public void onRoomSelected(String roomName) {
-        viewModel.getMeetingsFilteredByRoom(roomName, this, getString(R.string.no_meeting_date_toast), binding.toolbarMain).observe(this,
+        viewModel.getMeetingsFilteredByRoom(roomName).observe(this,
                 meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
     }
 
@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
                     cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                     cal.set(Calendar.YEAR, year);
                     LocalDate selectedDate = LocalDate.of(year, monthOfYear + 1, dayOfMonth);
-                    viewModel.getMeetingsFilteredByDate(selectedDate, MainActivity.this, getString(R.string.no_meeting_room_toast), binding.toolbarMain).observe(this,
+                    viewModel.getMeetingsFilteredByDate(selectedDate).observe(this,
                             meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
                 }, mYear, mMonth, mDay);
         dpd.show();
