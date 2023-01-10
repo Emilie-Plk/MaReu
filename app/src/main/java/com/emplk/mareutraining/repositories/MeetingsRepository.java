@@ -1,6 +1,7 @@
 package com.emplk.mareutraining.repositories;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -13,7 +14,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -28,6 +28,7 @@ public class MeetingsRepository {
 
     /**
      * At startup, when creating repo, if we're in debug mode, add dummy meetings
+     *
      * @param buildConfigResolver
      */
     public MeetingsRepository(BuildConfigResolver buildConfigResolver) {
@@ -61,21 +62,35 @@ public class MeetingsRepository {
                         meetingObject
                 )
         );
-
         this.meetings.setValue(meetings);
     }
 
 
     /**
      * Fetch all existing meetings
+     *
      * @return List of Meeting LiveData
      */
     public LiveData<List<Meeting>> getMeetings() {
         return meetings;
     }
 
+    public LiveData<List<Meeting>> getMeetingsFilteredByRoom(@Nullable String roomName) {
+        return Transformations.map(meetings, meetings -> {
+            List<Meeting> meetingsFilteredByRoom = new ArrayList<>();
+            for (Meeting meeting : meetings) {
+                if ((meeting.getRoom().getRoomName()).equals(roomName)) {
+                    meetingsFilteredByRoom.add(meeting);
+                }
+            }
+            this.meetings.setValue(meetingsFilteredByRoom);
+            return meetingsFilteredByRoom;
+        });
+    }
+
     /**
      * Fetch a single meeting
+     *
      * @param meetingId long
      * @return Meeting LiveData
      */
@@ -92,19 +107,16 @@ public class MeetingsRepository {
 
     /**
      * Delete a given meeting
+     *
      * @param meetingId long
      */
     public void deleteMeeting(long meetingId) {
         List<Meeting> meetings = this.meetings.getValue();
-
         if (meetings == null) return;
 
-        for (Iterator<Meeting> iterator = meetings.iterator();
-             iterator.hasNext(); ) {
-            Meeting meeting = iterator.next();
-
+        for (Meeting meeting : meetings) {
             if (meeting.getId() == meetingId) {
-                iterator.remove();
+                meetings.remove(meeting);
                 break;
             }
         }

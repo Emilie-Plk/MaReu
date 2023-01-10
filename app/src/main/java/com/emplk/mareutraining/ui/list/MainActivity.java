@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
 
     private MeetingViewModel viewModel;
 
+    private String selectedRoomName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
      * Calls all existing meetings
      */
     private void getMeetingList() {
-        viewModel.getMeetingViewStateItems().observe(this,
+      viewModel.getMeetingViewStateItems(selectedRoomName).observe(this,
                 meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
     }
 
@@ -123,8 +125,9 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
 
     @Override
     public void onRoomSelected(String roomName) {
-        viewModel.getMeetingsFilteredByRoom(roomName).observe(this,
-                meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
+/*   viewModel.getMeetingsFilteredByRoom(roomName).observe(this,
+                meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));*/
+        selectedRoomName = roomName;
     }
 
     private void openDateFilterCalendar() {

@@ -1,15 +1,12 @@
 package com.emplk.mareutraining.viewmodels;
 
-import android.content.Context;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
-import com.emplk.mareutraining.R;
 import com.emplk.mareutraining.models.Meeting;
 import com.emplk.mareutraining.repositories.MeetingsRepository;
 import com.emplk.mareutraining.ui.list.MeetingsViewStateItem;
@@ -22,14 +19,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import es.dmoral.toasty.Toasty;
-
 /**
  * Business logic for MainActivity
  */
 public class MeetingViewModel extends ViewModel {
     @NonNull
     private final MeetingsRepository repository;
+
 
     public MeetingViewModel(@NonNull MeetingsRepository repository) {
         this.repository = repository;
@@ -39,15 +35,27 @@ public class MeetingViewModel extends ViewModel {
      *
      * @return List of MeetingsViewStateItem
      */
-    public LiveData<List<MeetingsViewStateItem>> getMeetingViewStateItems() {
-        return Transformations.map(repository.getMeetings(), meetings -> {
-            List<MeetingsViewStateItem> meetingsViewStateItems = new ArrayList<>();
-            for (Meeting meeting : meetings) {
-                meetingsViewStateItems.add(new MeetingsViewStateItem(meeting.getMeetingTitle(), meeting.getRoom().getRoomName(), formatDate(meeting.getDate()), formatTime(meeting.getTimeStart()), formatParticipantList(meeting.getParticipants()), meeting.getRoom().getRoomColor(), meeting.getId()));
-            }
-            return meetingsViewStateItems;
-        });
-    }
+    public LiveData<List<MeetingsViewStateItem>> getMeetingViewStateItems(@Nullable String roomName) {
+        // fetch all meetings from repo (LiveData<List<Meeting>>)
+        if (roomName != null) {
+           return getMeetingsFilteredByRoom(roomName);
+        } else {
+            return Transformations.map(repository.getMeetings(), meetings -> {
+                List<MeetingsViewStateItem> meetingsViewStateItems = new ArrayList<>();
+                for (Meeting meeting : meetings) {
+                    meetingsViewStateItems.add(new MeetingsViewStateItem(
+                            meeting.getMeetingTitle(),
+                            meeting.getRoom().getRoomName(),
+                            formatDate(meeting.getDate()),
+                            formatTime(meeting.getTimeStart()),
+                            formatParticipantList(meeting.getParticipants()),
+                            meeting.getRoom().getRoomColor(),
+                            meeting.getId()));
+                }
+                return meetingsViewStateItems;
+            });
+        }
+   }
 
     public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByRoom(String selectedRoom) {
         return Transformations.map(repository.getMeetings(), meetings -> {
@@ -57,7 +65,6 @@ public class MeetingViewModel extends ViewModel {
                     meetingsFilteredByRoomViewStateItems.add(new MeetingsViewStateItem(meeting.getMeetingTitle(), meeting.getRoom().getRoomName(), formatDate(meeting.getDate()), formatTime(meeting.getTimeStart()), formatParticipantList(meeting.getParticipants()), meeting.getRoom().getRoomColor(), meeting.getId()));
                 }
             }
-
             return meetingsFilteredByRoomViewStateItems;
         });
     }
@@ -82,7 +89,7 @@ public class MeetingViewModel extends ViewModel {
      * @param participantList List<String>
      * @return String
      */
-    private static String formatParticipantList(List<String> participantList) {
+    private String formatParticipantList(List<String> participantList) {
         String stringList = participantList.toString().replace("[", "").replace("]", "");
 
         return Arrays.stream(stringList.split(" ")).map(word -> word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase()).map(word -> word.substring(0, word.indexOf('@'))).collect(Collectors.joining(" "));

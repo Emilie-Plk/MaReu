@@ -30,16 +30,6 @@ public class RoomFilterDialogFragment extends DialogFragment {
         return new RoomFilterDialogFragment();
     }
 
- /*  @Override
-    public void onAttach(@NonNull Activity activity) {
-        super.onAttach(activity);
-        try {
-            listener = (OnRoomSelectedListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.getLocalClassName() + " must implement onSomeEventListener");
-        }
-    }*/
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
