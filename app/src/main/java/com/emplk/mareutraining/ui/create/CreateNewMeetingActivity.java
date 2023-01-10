@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.emplk.mareutraining.R;
 import com.emplk.mareutraining.databinding.ActivityCreateNewMeetingBinding;
@@ -28,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Objects;
+
+import es.dmoral.toasty.Toasty;
 
 public class CreateNewMeetingActivity extends AppCompatActivity {
 
@@ -81,7 +84,7 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
 
         viewModel.getCloseActivity().observe(this, closeActivitySingleLiveEvent -> finish());
 
-      //  viewModel.getIsCreateButtonEnabled().observe(this, isCreateButtonEnabled -> binding.createMeetingBtn.setEnabled(isCreateButtonEnabled));
+        //  viewModel.getIsCreateButtonEnabled().observe(this, isCreateButtonEnabled -> binding.createMeetingBtn.setEnabled(isCreateButtonEnabled));
     }
 
     private void addParticipantChip() {
@@ -110,9 +113,9 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
                     cal.set(Calendar.YEAR, year);
 
                     StringBuilder date = new StringBuilder();
-                    date.append((dayOfMonth<10?"0":"")).append(dayOfMonth)
+                    date.append((dayOfMonth < 10 ? "0" : "")).append(dayOfMonth)
                             .append("-").append((monthOfYear + 1) < 10 ? "0" : "")
-                            .append((monthOfYear+1)).append("-").append(year);
+                            .append((monthOfYear + 1)).append("-").append(year);
                     binding.selectedDayTv.setText(date);
                 }, mYear, mMonth, mDay);
         dpd.getDatePicker().setMinDate(now.getTimeInMillis());
@@ -164,8 +167,6 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_dropdown_item, rooms));
     }
 
-
-
     private void bindAddMeeting(
             CreateMeetingViewModel viewModel,
             TextInputEditText meetingTitle,
@@ -174,17 +175,28 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
             TextView timeEnd,
             TextInputEditText meetingObject
     ) {
-      //  viewModel.getIsCreateButtonEnabled().observe(this, aBoolean -> binding.createMeetingBtn.setEnabled(aBoolean));
 
-        binding.createMeetingBtn.setOnClickListener(v -> viewModel.onCreateMeetingClicked(
-                Objects.requireNonNull(meetingTitle.getText()).toString(),
-                selectedRoom,
-                date.getText().toString(),
-                timeStart.getText().toString(),
-                timeEnd.getText().toString(),
-                participantsEmails,
-                Objects.requireNonNull(meetingObject.getText()).toString(),
-                CreateNewMeetingActivity.this
-        ));
+        binding.createMeetingBtn.setOnClickListener(view -> {
+            if (viewModel.checkIfAllFieldsComplete(Objects.requireNonNull(meetingTitle.getText()).toString(),
+                    selectedRoom, date.getText().toString(),
+                    timeStart.getText().toString(), timeEnd.getText().toString(),  participantsEmails,
+                            Objects.requireNonNull(meetingObject.getText()).toString()))
+            {
+                Toasty.error(this, R.string.check_submit_btn_toast, Toasty.LENGTH_LONG).show();
+            } else if
+            (viewModel.checkIfTimeOk(timeStart.getText().toString(), timeEnd.getText().toString())) {
+                Toasty.error(this, R.string.check_time_ok_toast, Toasty.LENGTH_LONG).show();
+            } else {
+                viewModel.onCreateMeetingClicked(
+                        Objects.requireNonNull(meetingTitle.getText()).toString(),
+                        selectedRoom,
+                        date.getText().toString(),
+                        timeStart.getText().toString(),
+                        timeEnd.getText().toString(),
+                        participantsEmails,
+                        Objects.requireNonNull(meetingObject.getText()).toString()
+                );
+            }
+        });
     }
 }

@@ -3,7 +3,6 @@ package com.emplk.mareutraining.viewmodels;
 
 import android.content.Context;
 import android.util.Patterns;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
@@ -18,8 +17,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-
-import es.dmoral.toasty.Toasty;
 
 /**
  * Business logic for CreateNewMeetingActivity
@@ -42,31 +39,21 @@ public class CreateMeetingViewModel extends ViewModel {
             @NonNull String timeStart,
             @NonNull String timeEnd,
             @NonNull List<String> participants,
-            @NonNull String meetingObject,
-            @NonNull Context context
+            @NonNull String meetingObject
     ) {
-        // check if all fields are filled, else display a toast
-        if (meetingTitle.isEmpty() || room.isEmpty() || date.isEmpty()
-                || timeStart.isEmpty() || timeEnd.isEmpty() || participants.isEmpty() || meetingObject.isEmpty()) {
-            setToast(context, context.getString(R.string.check_submit_btn_toast));
-        } else if (
-                formatTime(timeStart).isAfter(formatTime(timeEnd)) ||
-                        formatTime(timeStart).equals(formatTime(timeEnd))) {
-            setToast(context, context.getString(R.string.check_time_ok_toast));
-        } else {
-            // add my newly created meeting
-            repository.addMeeting(meetingTitle,
-                    getSelectedRoom(room),
-                    formatDate(date),
-                    formatTime(timeStart),
-                    formatTime(timeEnd),
-                    participants,
-                    meetingObject);
+        // add my newly created meeting
+        repository.addMeeting(meetingTitle,
+                getSelectedRoom(room),
+                formatDate(date),
+                formatTime(timeStart),
+                formatTime(timeEnd),
+                participants,
+                meetingObject);
 
-            // close the activity afterwards
-            closeActivity.call();
-        }
+        // close the activity afterwards
+        closeActivity.call();
     }
+
 
     /**
      * Close the CreateNewMeetingActivity
@@ -95,7 +82,7 @@ public class CreateMeetingViewModel extends ViewModel {
      * @param stringTime date in String
      * @return LocalTime formatted time HH:mm
      */
-    private LocalTime formatTime(String stringTime) {
+    public LocalTime formatTime(String stringTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         return LocalTime.parse(stringTime, formatter);
     }
@@ -118,14 +105,27 @@ public class CreateMeetingViewModel extends ViewModel {
         return selectedRoom;
     }
 
-    /**
-     * Set a Toast (Toasty error)
-     *
-     * @param context Activity context
-     * @param message String toast
-     */
-    public void setToast(Context context, String message) {
-        Toasty.error(context, message, Toast.LENGTH_LONG).show();
+    public boolean checkIfAllFieldsComplete(
+            @NonNull String meetingTitle,
+            @NonNull String room,
+            @NonNull String date,
+            @NonNull String timeStart,
+            @NonNull String timeEnd,
+            @NonNull List<String> participants,
+            @NonNull String meetingObject
+    ) {
+        return meetingTitle.isEmpty() ||
+                room.isEmpty() ||
+                date.isEmpty() ||
+                timeStart.isEmpty() ||
+                timeEnd.isEmpty() ||
+                participants.isEmpty() ||
+                meetingObject.isEmpty();
+    }
+
+    public boolean checkIfTimeOk(String timeStart, String timeEnd) {
+        return !formatTime(timeStart).isAfter(formatTime(timeEnd)) &&
+                !formatTime(timeStart).equals(formatTime(timeEnd));
     }
 
     /**

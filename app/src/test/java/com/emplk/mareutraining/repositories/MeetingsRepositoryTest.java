@@ -12,8 +12,6 @@ import com.emplk.mareutraining.models.Room;
 import com.emplk.mareutraining.utils.TestUtil;
 
 
-import net.bytebuddy.asm.Advice;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -25,7 +23,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 
 public class MeetingsRepositoryTest {
