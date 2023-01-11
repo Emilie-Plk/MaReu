@@ -45,9 +45,9 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
 
         setViewModel();
         configureToolbar();
-        createMeeting();
         initRecyclerView();
-        getMeetingList();
+        initMeetingList();
+        setCreateFab();
     }
 
     @Override
@@ -57,8 +57,8 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
         setEmptyListToast();
     }
 
-    private void createMeeting() {
-        binding.addFab.setOnClickListener(v -> startActivity(CreateNewMeetingActivity.navigate(this)));
+    private void setViewModel() {
+        viewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(MeetingViewModel.class);
     }
 
     private void configureToolbar() {
@@ -80,25 +80,20 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
             }
         });
         RecyclerView recyclerView = binding.meetingsRv;
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-                DividerItemDecoration.VERTICAL);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL);
         recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(adapter);
-    }
-
-    private void setViewModel() {
-        viewModel = new ViewModelProvider(this,
-                ViewModelFactory.getInstance())
-                .get(MeetingViewModel.class);
     }
 
     /**
      * Observer for meetings livedata
      */
-    private void getMeetingList() {
-        viewModel.getMeetingViewStateItems().observe(this,
-                meetingsViewStateItems ->
-                        adapter.submitList(meetingsViewStateItems));
+    private void initMeetingList() {
+        viewModel.getMeetingViewStateItems().observe(this, meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
+    }
+
+    private void setCreateFab() {
+        binding.addFab.setOnClickListener(v -> startActivity(CreateNewMeetingActivity.navigate(this)));
     }
 
     @Override
@@ -134,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
     @Override
     public void onRoomSelected(String roomName) {
         viewModel.getMeetingsFilteredByRoom(roomName);
-        binding.toolbarMain.setTitle("Réunions filtrées : " + roomName);
+        binding.toolbarMain.setTitle(getString(R.string.filter_meeting_appbar) + roomName);
     }
 
     private void openDateFilterCalendar() {
@@ -145,25 +140,23 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
         int mMonth = now.get(Calendar.MONTH);
         int mDay = now.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog dpd = new DatePickerDialog(this,
-                (view, year, monthOfYear, dayOfMonth) -> {
-                    Calendar cal = Calendar.getInstance();
-                    cal.set(Calendar.MONTH, monthOfYear);
-                    cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    cal.set(Calendar.YEAR, year);
-                    LocalDate selectedDate = LocalDate.of(year, monthOfYear + 1, dayOfMonth);
-                    viewModel.getMeetingsFilteredByDate(selectedDate);
-                    binding.toolbarMain.setTitle("Réunions filtrées :" + selectedDate);
-                }, mYear, mMonth, mDay);
+        DatePickerDialog dpd = new DatePickerDialog(this, (view, year, monthOfYear, dayOfMonth) -> {
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.MONTH, monthOfYear);
+            cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            cal.set(Calendar.YEAR, year);
+            LocalDate selectedDate = LocalDate.of(year, monthOfYear + 1, dayOfMonth);
+            viewModel.getMeetingsFilteredByDate(selectedDate);
+            binding.toolbarMain.setTitle(getString(R.string.filter_meeting_appbar) + viewModel.formatDate(selectedDate));
+        }, mYear, mMonth, mDay);
         dpd.show();
     }
 
     private void setEmptyListToast() {
-        viewModel.getMeetingViewStateItems().observe(this,
-                meetingsViewStateItems -> {
-                    if (meetingsViewStateItems.isEmpty()) {
-                        Toasty.info(MainActivity.this, R.string.no_meeting_toast, Toasty.LENGTH_SHORT).show();
-                    }
-                });
+        viewModel.getMeetingViewStateItems().observe(this, meetingsViewStateItems -> {
+            if (meetingsViewStateItems.isEmpty()) {
+                Toasty.info(MainActivity.this, R.string.no_meeting_toast, Toasty.LENGTH_SHORT).show();
+            }
+        });
     }
 }

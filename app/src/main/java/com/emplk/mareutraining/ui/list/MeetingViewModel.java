@@ -98,7 +98,7 @@ public class MeetingViewModel extends ViewModel {
      * @param date LocalDate
      * @return String formatted date dd/MM/yyyy
      */
-    private String formatDate(LocalDate date) {
+    public String formatDate(LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return date.format(formatter);
     }

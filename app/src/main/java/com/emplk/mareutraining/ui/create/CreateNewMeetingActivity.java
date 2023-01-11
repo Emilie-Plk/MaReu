@@ -182,7 +182,7 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
                     timeStart.getText().toString(), timeEnd.getText().toString(), participantsEmails,
                     Objects.requireNonNull(meetingObject.getText()).toString())) {
                 Toasty.error(this, R.string.check_submit_btn_toast, Toasty.LENGTH_SHORT).show();
-            } else if (viewModel.isValidTime(timeStart.getText().toString(), timeEnd.getText().toString())) {
+            } else if (viewModel.isInvalidTime(timeStart.getText().toString(), timeEnd.getText().toString())) {
                 Toasty.error(this, R.string.check_time_ok_toast, Toasty.LENGTH_SHORT).show();
             } else {
                 viewModel.onCreateMeetingClicked(

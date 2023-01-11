@@ -1,17 +1,14 @@
 package com.emplk.mareutraining.ui.create;
 
 
-import android.content.Context;
 import android.util.Patterns;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 
-import com.emplk.mareutraining.R;
 import com.emplk.mareutraining.models.Room;
 import com.emplk.mareutraining.repositories.MeetingsRepository;
 import com.emplk.mareutraining.utils.SingleLiveEvent;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -123,7 +120,7 @@ public class CreateMeetingViewModel extends ViewModel {
                 meetingObject.isEmpty();
     }
 
-    public boolean isValidTime(String timeStart, String timeEnd) {
+    public boolean isInvalidTime(String timeStart, String timeEnd) {
         return formatTime(timeStart).isAfter(formatTime(timeEnd)) ||
                 formatTime(timeStart).equals(formatTime(timeEnd));
     }

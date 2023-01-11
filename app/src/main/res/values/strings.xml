@@ -35,5 +35,6 @@
     <string name="filter_by_room_descr">Filtrer par salle</string>
     <string name="reset_filter">Supprimer les filtres</string>
     <string name="reset_filter_descr">Supprimer les filtres</string>
+    <string name="filter_meeting_appbar">"Réunions filtrées : "</string>
 
 </resources>

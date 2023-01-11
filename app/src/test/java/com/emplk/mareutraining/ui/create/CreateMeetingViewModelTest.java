@@ -46,7 +46,7 @@ public class CreateMeetingViewModelTest {
     @Before
     public void setUp() {
         viewModel = new CreateMeetingViewModel(repository);
-        Mockito.doReturn(false).when(buildConfigResolver).isDebug();
+      /*  Mockito.doReturn(false).when(buildConfigResolver).isDebug();*/
     }
 
     @Test
@@ -72,10 +72,18 @@ public class CreateMeetingViewModelTest {
 
 
     @Test
-    public void setToast() {
+    public void isValidTime() {
+        String timeStart = "14:00";
+        String timeEnd = "08:00";
+        assertTrue(viewModel.isInvalidTime(timeStart, timeEnd));
+
+        // check if time start and time end are the same
+        timeEnd = timeStart;
+        assertTrue(viewModel.isInvalidTime(timeStart, timeEnd));
+
+        // check when time start is prior to time end
+        timeEnd = "15:30";
+        assertFalse(viewModel.isInvalidTime(timeStart, timeEnd));
     }
 
-    @Test
-    public void isValidEmail() {
     }
-}
