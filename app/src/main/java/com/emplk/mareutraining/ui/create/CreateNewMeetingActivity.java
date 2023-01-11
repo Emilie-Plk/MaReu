@@ -1,11 +1,5 @@
 package com.emplk.mareutraining.ui.create;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.ViewModelProvider;
-
-
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -15,13 +9,16 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.emplk.mareutraining.R;
 import com.emplk.mareutraining.databinding.ActivityCreateNewMeetingBinding;
 import com.emplk.mareutraining.models.Room;
 import com.emplk.mareutraining.utils.ViewModelFactory;
-import com.emplk.mareutraining.viewmodels.CreateMeetingViewModel;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -38,9 +35,9 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
 
     CreateMeetingViewModel viewModel;
 
-
     @NonNull
     private String selectedRoom = "";
+
     private final ArrayList<String> participantsEmails = new ArrayList<>();
 
     public static Intent navigate(Context context) {
@@ -89,10 +86,13 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
 
     private void addParticipantChip() {
         binding.addParticipantFab.setOnClickListener(view1 -> {
-            if (viewModel.isValidEmail(Objects.requireNonNull(binding.participantsInput.getText()).toString(), binding.participantsLayout, this)) {
+            if (viewModel.isValidEmail(Objects.requireNonNull(binding.participantsInput.getText()).toString())) {
                 generateParticipantChip(binding.participantsInput);
+                binding.participantsLayout.setError(null);
                 binding.participantsInput.setText("");
                 binding.participantsInput.onEditorAction(EditorInfo.IME_ACTION_DONE);
+            } else {
+                binding.participantsLayout.setError(getString(R.string.invalid_email_input));
             }
         });
     }
@@ -179,13 +179,11 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
         binding.createMeetingBtn.setOnClickListener(view -> {
             if (viewModel.checkIfAllFieldsComplete(Objects.requireNonNull(meetingTitle.getText()).toString(),
                     selectedRoom, date.getText().toString(),
-                    timeStart.getText().toString(), timeEnd.getText().toString(),  participantsEmails,
-                            Objects.requireNonNull(meetingObject.getText()).toString()))
-            {
-                Toasty.error(this, R.string.check_submit_btn_toast, Toasty.LENGTH_LONG).show();
-            } else if
-            (viewModel.checkIfTimeOk(timeStart.getText().toString(), timeEnd.getText().toString())) {
-                Toasty.error(this, R.string.check_time_ok_toast, Toasty.LENGTH_LONG).show();
+                    timeStart.getText().toString(), timeEnd.getText().toString(), participantsEmails,
+                    Objects.requireNonNull(meetingObject.getText()).toString())) {
+                Toasty.error(this, R.string.check_submit_btn_toast, Toasty.LENGTH_SHORT).show();
+            } else if (viewModel.isValidTime(timeStart.getText().toString(), timeEnd.getText().toString())) {
+                Toasty.error(this, R.string.check_time_ok_toast, Toasty.LENGTH_SHORT).show();
             } else {
                 viewModel.onCreateMeetingClicked(
                         Objects.requireNonNull(meetingTitle.getText()).toString(),

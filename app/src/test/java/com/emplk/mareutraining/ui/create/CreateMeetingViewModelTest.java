@@ -4,14 +4,10 @@ import static org.junit.Assert.*;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
-import com.emplk.mareutraining.R;
 import com.emplk.mareutraining.config.BuildConfigResolver;
 import com.emplk.mareutraining.models.Meeting;
-import com.emplk.mareutraining.models.Room;
 import com.emplk.mareutraining.repositories.MeetingsRepository;
-import com.emplk.mareutraining.repositories.MeetingsRepositoryTest;
 import com.emplk.mareutraining.utils.TestUtil;
-import com.emplk.mareutraining.viewmodels.CreateMeetingViewModel;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -21,8 +17,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -68,6 +62,8 @@ public class CreateMeetingViewModelTest {
                 PARTICIPANTS,
                 OBJECT
         );
+
+        // Comment faire car mes paramètres passent ensuite par des méthodes privées ? (formatDate, etc.)
 
         List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
 

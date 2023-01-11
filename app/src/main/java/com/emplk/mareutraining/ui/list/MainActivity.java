@@ -11,18 +11,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.emplk.mareutraining.R;
 import com.emplk.mareutraining.adapters.MeetingListRVAdapter;
-
 import com.emplk.mareutraining.databinding.ActivityMainBinding;
 import com.emplk.mareutraining.ui.create.CreateNewMeetingActivity;
 import com.emplk.mareutraining.ui.detail.DetailActivity;
 import com.emplk.mareutraining.ui.list.room_filter.OnRoomSelectedListener;
 import com.emplk.mareutraining.ui.list.room_filter.RoomFilterDialogFragment;
 import com.emplk.mareutraining.utils.ViewModelFactory;
-import com.emplk.mareutraining.viewmodels.MeetingViewModel;
 
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -37,8 +36,6 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
 
     private MeetingViewModel viewModel;
 
-    private String selectedRoomName;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +48,13 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
         createMeeting();
         initRecyclerView();
         getMeetingList();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        viewModel.resetFilter();
+        setEmptyListToast();
     }
 
     private void createMeeting() {
@@ -72,10 +76,13 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
             @Override
             public void onDeleteMeetingClicked(long meetingId) {
                 viewModel.onDeleteMeetingClicked(meetingId);
-                Toasty.info(MainActivity.this, R.string.meeting_deleted_toast, Toast.LENGTH_LONG).show();
+                Toasty.info(MainActivity.this, R.string.meeting_deleted_toast, Toast.LENGTH_SHORT).show();
             }
         });
         RecyclerView recyclerView = binding.meetingsRv;
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
+                DividerItemDecoration.VERTICAL);
+        recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(adapter);
     }
 
@@ -86,11 +93,12 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
     }
 
     /**
-     * Calls all existing meetings
+     * Observer for meetings livedata
      */
     private void getMeetingList() {
-      viewModel.getMeetingViewStateItems(selectedRoomName).observe(this,
-                meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
+        viewModel.getMeetingViewStateItems().observe(this,
+                meetingsViewStateItems ->
+                        adapter.submitList(meetingsViewStateItems));
     }
 
     @Override
@@ -112,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
             return true;
         }
         if (id == R.id.sortdelete_menu) {
-            getMeetingList();
+            viewModel.resetFilter();
             binding.toolbarMain.setTitle(R.string.app_name);
             return true;
         }
@@ -125,9 +133,8 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
 
     @Override
     public void onRoomSelected(String roomName) {
-/*   viewModel.getMeetingsFilteredByRoom(roomName).observe(this,
-                meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));*/
-        selectedRoomName = roomName;
+        viewModel.getMeetingsFilteredByRoom(roomName);
+        binding.toolbarMain.setTitle("Réunions filtrées : " + roomName);
     }
 
     private void openDateFilterCalendar() {
@@ -145,10 +152,18 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
                     cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                     cal.set(Calendar.YEAR, year);
                     LocalDate selectedDate = LocalDate.of(year, monthOfYear + 1, dayOfMonth);
-                    viewModel.getMeetingsFilteredByDate(selectedDate).observe(this,
-                            meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
+                    viewModel.getMeetingsFilteredByDate(selectedDate);
+                    binding.toolbarMain.setTitle("Réunions filtrées :" + selectedDate);
                 }, mYear, mMonth, mDay);
         dpd.show();
     }
 
+    private void setEmptyListToast() {
+        viewModel.getMeetingViewStateItems().observe(this,
+                meetingsViewStateItems -> {
+                    if (meetingsViewStateItems.isEmpty()) {
+                        Toasty.info(MainActivity.this, R.string.no_meeting_toast, Toasty.LENGTH_SHORT).show();
+                    }
+                });
+    }
 }

@@ -1,4 +1,4 @@
-package com.emplk.mareutraining.viewmodels;
+package com.emplk.mareutraining.ui.create;
 
 
 import android.content.Context;
@@ -82,7 +82,7 @@ public class CreateMeetingViewModel extends ViewModel {
      * @param stringTime date in String
      * @return LocalTime formatted time HH:mm
      */
-    public LocalTime formatTime(String stringTime) {
+    private LocalTime formatTime(String stringTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         return LocalTime.parse(stringTime, formatter);
     }
@@ -123,27 +123,19 @@ public class CreateMeetingViewModel extends ViewModel {
                 meetingObject.isEmpty();
     }
 
-    public boolean checkIfTimeOk(String timeStart, String timeEnd) {
-        return !formatTime(timeStart).isAfter(formatTime(timeEnd)) &&
-                !formatTime(timeStart).equals(formatTime(timeEnd));
+    public boolean isValidTime(String timeStart, String timeEnd) {
+        return formatTime(timeStart).isAfter(formatTime(timeEnd)) ||
+                formatTime(timeStart).equals(formatTime(timeEnd));
     }
 
     /**
      * Check if entered email address is valid (correctly stylized)
      *
      * @param target      String
-     * @param inputLayout Layout from email EditText
-     * @param context     Context (CreateNewMeetingActivity)
      * @return boolean (false: set message error)
      */
-    public boolean isValidEmail(String target, TextInputLayout inputLayout, Context context) {
-        inputLayout.setError(null);
-        if (Patterns.EMAIL_ADDRESS.matcher(target).matches()) {
-            return true;
-        } else {
-            inputLayout.setError(context.getString(R.string.invalid_email_input));
-            return false;
-        }
+    public boolean isValidEmail(String target) {
+       return Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 
 }

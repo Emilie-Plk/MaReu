@@ -1,4 +1,4 @@
-package com.emplk.mareutraining.viewmodels;
+package com.emplk.mareutraining.ui.detail;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -81,6 +81,5 @@ public class DetailMeetingViewModel extends ViewModel {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         return timeLocalTime.format(formatter);
     }
-
 
 }

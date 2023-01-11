@@ -1,4 +1,4 @@
-package com.emplk.mareutraining.viewmodels;
+package com.emplk.mareutraining.ui.list;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
  * Business logic for MainActivity
  */
 public class MeetingViewModel extends ViewModel {
+
     @NonNull
     private final MeetingsRepository repository;
 
@@ -30,16 +31,13 @@ public class MeetingViewModel extends ViewModel {
     public MeetingViewModel(@NonNull MeetingsRepository repository) {
         this.repository = repository;
     }
+
     /**
      * Returns a LiveData object of List of MeetingsViewStateItem
      *
      * @return List of MeetingsViewStateItem
      */
-    public LiveData<List<MeetingsViewStateItem>> getMeetingViewStateItems(@Nullable String roomName) {
-        // fetch all meetings from repo (LiveData<List<Meeting>>)
-        if (roomName != null) {
-           return getMeetingsFilteredByRoom(roomName);
-        } else {
+    public LiveData<List<MeetingsViewStateItem>> getMeetingViewStateItems() {
             return Transformations.map(repository.getMeetings(), meetings -> {
                 List<MeetingsViewStateItem> meetingsViewStateItems = new ArrayList<>();
                 for (Meeting meeting : meetings) {
@@ -54,31 +52,19 @@ public class MeetingViewModel extends ViewModel {
                 }
                 return meetingsViewStateItems;
             });
-        }
-   }
-
-    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByRoom(String selectedRoom) {
-        return Transformations.map(repository.getMeetings(), meetings -> {
-            List<MeetingsViewStateItem> meetingsFilteredByRoomViewStateItems = new ArrayList<>();
-            for (Meeting meeting : meetings) {
-                if ((meeting.getRoom().getRoomName()).equals(selectedRoom)) {
-                    meetingsFilteredByRoomViewStateItems.add(new MeetingsViewStateItem(meeting.getMeetingTitle(), meeting.getRoom().getRoomName(), formatDate(meeting.getDate()), formatTime(meeting.getTimeStart()), formatParticipantList(meeting.getParticipants()), meeting.getRoom().getRoomColor(), meeting.getId()));
-                }
-            }
-            return meetingsFilteredByRoomViewStateItems;
-        });
     }
 
-    public LiveData<List<MeetingsViewStateItem>> getMeetingsFilteredByDate(LocalDate date) {
-        return Transformations.map(repository.getMeetings(), meetings -> {
-            List<MeetingsViewStateItem> meetingsFilteredByDateViewStateItems = new ArrayList<>();
-            for (Meeting meeting : meetings) {
-                if ((meeting.getDate()).equals(date)) {
-                    meetingsFilteredByDateViewStateItems.add(new MeetingsViewStateItem(meeting.getMeetingTitle(), meeting.getRoom().getRoomName(), formatDate(meeting.getDate()), formatTime(meeting.getTimeStart()), formatParticipantList(meeting.getParticipants()), meeting.getRoom().getRoomColor(), meeting.getId()));
-                }
-            }
-            return meetingsFilteredByDateViewStateItems;
-        });
+
+    public void getMeetingsFilteredByRoom(String roomName) {
+        repository.getMeetingsFilteredByRoom(roomName);
+    }
+
+    public void resetFilter() {
+        repository.getAllMeetings();
+    }
+
+    public void getMeetingsFilteredByDate(LocalDate date) {
+       repository.getMeetingsFilteredByDate(date);
     }
 
 

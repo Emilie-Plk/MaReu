@@ -21,16 +21,16 @@
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             android:layout_weight="1"
-            app:title="Nouvelle réunion"
-            app:titleTextColor="@color/white" />
+            app:theme="@style/Theme.MaReu.AppBarOverlay"
+            app:title="Nouvelle réunion" />
     </com.google.android.material.appbar.AppBarLayout>
 
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:fillViewport="true"
         android:layout_marginBottom="18dp"
+        android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -142,8 +142,8 @@
                     android:id="@+id/title_textinput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textCapSentences"
-                    android:hint="Nom de la réunion" />
+                    android:hint="Nom de la réunion"
+                    android:inputType="textCapSentences" />
             </com.google.android.material.textfield.TextInputLayout>
 
 

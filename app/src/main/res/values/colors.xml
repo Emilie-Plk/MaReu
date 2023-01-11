@@ -19,14 +19,14 @@
 
 
     <!-- Meetings colors-->
-    <color name="room_one">#92DDEE</color>
-    <color name="room_two">#FFB9DF</color>
-    <color name="room_three">#9DA19F</color>
-    <color name="room_four">#CB9DF9</color>
-    <color name="room_five">#F8DC7B</color>
-    <color name="room_six">#8DE0AE</color>
-    <color name="room_seven">#FF9A61</color>
-    <color name="room_eight">#B98C77</color>
-    <color name="room_nine">#6FAEF6</color>
-    <color name="room_ten">#FE9696</color>
+    <color name="room_one">#DAF1C9</color>
+    <color name="room_two">#F5C9F6</color>
+    <color name="room_three">#B6B6B6</color>
+    <color name="room_four">#DCC6F1</color>
+    <color name="room_five">#F6E6B0</color>
+    <color name="room_six">#AFE4C4</color>
+    <color name="room_seven">#FBD3BC</color>
+    <color name="room_eight">#A9F1F1</color>
+    <color name="room_nine">#9CC5F4</color>
+    <color name="room_ten">#FBB9B9</color>
 </resources>

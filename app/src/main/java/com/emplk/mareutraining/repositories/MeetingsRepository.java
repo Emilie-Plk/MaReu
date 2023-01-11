@@ -24,6 +24,8 @@ public class MeetingsRepository {
 
     private final MutableLiveData<List<Meeting>> meetings = new MutableLiveData<>(new ArrayList<>());
 
+    private List<Meeting> allMeetings = new ArrayList<>();
+
     private int idIncrement = 0;
 
     /**
@@ -46,11 +48,10 @@ public class MeetingsRepository {
             @NonNull List<String> participants,
             @NonNull String meetingObject
     ) {
-        List<Meeting> meetings = this.meetings.getValue();
+      allMeetings = this.meetings.getValue();
 
-        if (meetings == null) return;
-
-        meetings.add(
+        assert allMeetings != null;
+        allMeetings.add(
                 new Meeting(
                         idIncrement++,
                         meetingTitle,
@@ -62,7 +63,7 @@ public class MeetingsRepository {
                         meetingObject
                 )
         );
-        this.meetings.setValue(meetings);
+        this.meetings.setValue(allMeetings);
     }
 
 
@@ -75,17 +76,25 @@ public class MeetingsRepository {
         return meetings;
     }
 
-    public LiveData<List<Meeting>> getMeetingsFilteredByRoom(@Nullable String roomName) {
-        return Transformations.map(meetings, meetings -> {
-            List<Meeting> meetingsFilteredByRoom = new ArrayList<>();
-            for (Meeting meeting : meetings) {
-                if ((meeting.getRoom().getRoomName()).equals(roomName)) {
-                    meetingsFilteredByRoom.add(meeting);
-                }
+    public void getMeetingsFilteredByRoom(String roomName) {
+        List<Meeting> roomFilteredMeetings = new ArrayList<>();
+        assert allMeetings != null;
+        for (Meeting meeting : allMeetings) {
+            if ((meeting.getRoom().getRoomName()).equals(roomName)) {
+                roomFilteredMeetings.add(meeting);
             }
-            this.meetings.setValue(meetingsFilteredByRoom);
-            return meetingsFilteredByRoom;
-        });
+        }
+        this.meetings.setValue(roomFilteredMeetings);
+    }
+
+    public void getMeetingsFilteredByDate(LocalDate date) {
+        List<Meeting> roomfilteredByDate = new ArrayList<>();
+        for (Meeting meeting : allMeetings) {
+            if (meeting.getDate().equals(date)) {
+                roomfilteredByDate.add(meeting);
+            }
+        }
+        this.meetings.setValue(roomfilteredByDate);
     }
 
     /**
@@ -121,6 +130,10 @@ public class MeetingsRepository {
             }
         }
         this.meetings.setValue(meetings);
+    }
+
+    public void getAllMeetings() {
+        this.meetings.setValue(allMeetings);
     }
 
     /**
