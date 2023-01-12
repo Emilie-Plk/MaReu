@@ -36,7 +36,7 @@ public class MeetingsRepositoryTest {
     private static final String OBJECT = "TEST MEETING OBJECT";
 
     @Rule
-    public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
+    public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
 
     @Mock
     private BuildConfigResolver buildConfigResolver = Mockito.mock(BuildConfigResolver.class);

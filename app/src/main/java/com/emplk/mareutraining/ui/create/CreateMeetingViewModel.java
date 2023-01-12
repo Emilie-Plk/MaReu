@@ -31,19 +31,20 @@ public class CreateMeetingViewModel extends ViewModel {
 
     public void onCreateMeetingClicked(
             @NonNull String meetingTitle,
-            @NonNull String room,
-            @NonNull String date,
-            @NonNull String timeStart,
-            @NonNull String timeEnd,
+            @NonNull Room room,
+            @NonNull LocalDate date,
+            @NonNull LocalTime timeStart,
+            @NonNull LocalTime timeEnd,
             @NonNull List<String> participants,
             @NonNull String meetingObject
     ) {
         // add my newly created meeting
-        repository.addMeeting(meetingTitle,
-                getSelectedRoom(room),
-                formatDate(date),
-                formatTime(timeStart),
-                formatTime(timeEnd),
+        repository.addMeeting(
+                meetingTitle,
+                room,
+                date,
+                timeStart,
+                timeEnd,
                 participants,
                 meetingObject);
 
@@ -67,7 +68,7 @@ public class CreateMeetingViewModel extends ViewModel {
      * @param date String
      * @return LocalDate
      */
-    private LocalDate formatDate(String date) {
+    public LocalDate formatDate(String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         return LocalDate.parse(date, formatter);
     }
@@ -79,9 +80,8 @@ public class CreateMeetingViewModel extends ViewModel {
      * @param stringTime date in String
      * @return LocalTime formatted time HH:mm
      */
-    private LocalTime formatTime(String stringTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        return LocalTime.parse(stringTime, formatter);
+    public LocalTime formatTime(String stringTime) {
+        return LocalTime.parse(stringTime);
     }
 
     /**
@@ -90,7 +90,7 @@ public class CreateMeetingViewModel extends ViewModel {
      * @param roomName room name in String
      * @return Room constant
      */
-    private Room getSelectedRoom(String roomName) {
+    public Room getSelectedRoom(String roomName) {
         Room selectedRoom = Room.ROOM_ONE;
         Room[] rooms = Room.values();
         for (Room room : rooms) {
@@ -102,7 +102,7 @@ public class CreateMeetingViewModel extends ViewModel {
         return selectedRoom;
     }
 
-    public boolean checkIfAllFieldsComplete(
+    public boolean isMeetingInfoIncomplete(
             @NonNull String meetingTitle,
             @NonNull String room,
             @NonNull String date,

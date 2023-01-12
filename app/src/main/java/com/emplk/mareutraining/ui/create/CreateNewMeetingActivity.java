@@ -81,7 +81,6 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
 
         viewModel.getCloseActivity().observe(this, closeActivitySingleLiveEvent -> finish());
 
-        //  viewModel.getIsCreateButtonEnabled().observe(this, isCreateButtonEnabled -> binding.createMeetingBtn.setEnabled(isCreateButtonEnabled));
     }
 
     private void addParticipantChip() {
@@ -177,7 +176,7 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
     ) {
 
         binding.createMeetingBtn.setOnClickListener(view -> {
-            if (viewModel.checkIfAllFieldsComplete(Objects.requireNonNull(meetingTitle.getText()).toString(),
+            if (viewModel.isMeetingInfoIncomplete(Objects.requireNonNull(meetingTitle.getText()).toString(),
                     selectedRoom, date.getText().toString(),
                     timeStart.getText().toString(), timeEnd.getText().toString(), participantsEmails,
                     Objects.requireNonNull(meetingObject.getText()).toString())) {
@@ -187,10 +186,10 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
             } else {
                 viewModel.onCreateMeetingClicked(
                         Objects.requireNonNull(meetingTitle.getText()).toString(),
-                        selectedRoom,
-                        date.getText().toString(),
-                        timeStart.getText().toString(),
-                        timeEnd.getText().toString(),
+                        viewModel.getSelectedRoom(selectedRoom),
+                        viewModel.formatDate(date.getText().toString()),
+                        viewModel.formatTime(timeStart.getText().toString()),
+                        viewModel.formatTime(timeEnd.getText().toString()),
                         participantsEmails,
                         Objects.requireNonNull(meetingObject.getText()).toString()
                 );

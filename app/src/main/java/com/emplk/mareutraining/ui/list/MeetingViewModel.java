@@ -1,15 +1,12 @@
 package com.emplk.mareutraining.ui.list;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.mareutraining.models.Meeting;
 import com.emplk.mareutraining.repositories.MeetingsRepository;
-import com.emplk.mareutraining.ui.list.MeetingsViewStateItem;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -54,19 +51,17 @@ public class MeetingViewModel extends ViewModel {
             });
     }
 
-
-    public void getMeetingsFilteredByRoom(String roomName) {
+    public void onFetchingMeetingsFilteredByRoom(String roomName) {
         repository.getMeetingsFilteredByRoom(roomName);
     }
 
-    public void resetFilter() {
-        repository.getAllMeetings();
-    }
-
-    public void getMeetingsFilteredByDate(LocalDate date) {
+    public void onFetchingMeetingsFilteredByDate(LocalDate date) {
        repository.getMeetingsFilteredByDate(date);
     }
 
+    public void onResetFilter() {
+        repository.getAllMeetings();
+    }
 
     /**
      * Format participant list to String,

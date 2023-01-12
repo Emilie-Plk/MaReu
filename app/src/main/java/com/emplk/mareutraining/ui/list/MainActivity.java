@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
     @Override
     protected void onResume() {
         super.onResume();
-        viewModel.resetFilter();
+        viewModel.onResetFilter();
         setEmptyListToast();
     }
 
@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
             return true;
         }
         if (id == R.id.sortdelete_menu) {
-            viewModel.resetFilter();
+            viewModel.onResetFilter();
             binding.toolbarMain.setTitle(R.string.app_name);
             return true;
         }
@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
 
     @Override
     public void onRoomSelected(String roomName) {
-        viewModel.getMeetingsFilteredByRoom(roomName);
+        viewModel.onFetchingMeetingsFilteredByRoom(roomName);
         binding.toolbarMain.setTitle(getString(R.string.filter_meeting_appbar) + roomName);
     }
 
@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
             cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             cal.set(Calendar.YEAR, year);
             LocalDate selectedDate = LocalDate.of(year, monthOfYear + 1, dayOfMonth);
-            viewModel.getMeetingsFilteredByDate(selectedDate);
+            viewModel.onFetchingMeetingsFilteredByDate(selectedDate);
             binding.toolbarMain.setTitle(getString(R.string.filter_meeting_appbar) + viewModel.formatDate(selectedDate));
         }, mYear, mMonth, mDay);
         dpd.show();
