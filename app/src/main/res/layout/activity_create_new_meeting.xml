@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/blueish_white"
     android:focusableInTouchMode="true"
+    android:id="@+id/activity_create_meeting"
     tools:context=".ui.create.CreateNewMeetingActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -21,16 +22,18 @@
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             android:layout_weight="1"
-            app:title="Nouvelle réunion"
-            app:titleTextColor="@color/white" />
+            app:theme="@style/Theme.MaReu.AppBarOverlay"
+            app:title="Nouvelle réunion" />
     </com.google.android.material.appbar.AppBarLayout>
 
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:fadeScrollbars="false"
         android:fillViewport="true"
-        android:layout_marginBottom="18dp"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -142,7 +145,8 @@
                     android:id="@+id/title_textinput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Nom de la réunion" />
+                    android:hint="@string/meeting_title_et_hint"
+                    android:inputType="textCapSentences" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -195,6 +199,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
+                app:backgroundTint="@color/colorPrimaryVariant"
                 android:contentDescription="@string/add_fab_descr"
                 android:src="@drawable/ic_baseline_add_24"
                 app:layout_constraintBottom_toBottomOf="@id/participants_layout"
@@ -208,7 +213,8 @@
                 android:id="@+id/participant_chipgroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 app:layout_constraintTop_toBottomOf="@id/participants_layout" />
 
             <!--Submit button-->
@@ -217,7 +223,12 @@
                 style="@style/Widget.MaterialComponents.Button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="28dp"
+                android:layout_margin="16dp"
+                android:paddingStart="28dp"
+                android:paddingEnd="28dp"
+                android:paddingBottom="16dp"
+                android:paddingTop="16dp"
+                android:textSize="16sp"
                 android:contentDescription="@string/create_btn_descr"
                 android:text="@string/create_btn"
                 app:layout_constraintEnd_toEndOf="parent"

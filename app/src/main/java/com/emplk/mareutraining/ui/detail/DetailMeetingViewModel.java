@@ -1,4 +1,4 @@
-package com.emplk.mareutraining.viewmodels;
+package com.emplk.mareutraining.ui.detail;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -8,12 +8,14 @@ import androidx.lifecycle.ViewModel;
 import com.emplk.mareutraining.repositories.MeetingsRepository;
 import com.emplk.mareutraining.ui.detail.DetailViewState;
 
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+/**
+ * Business logic for DetailActivity
+ */
 public class DetailMeetingViewModel extends ViewModel {
 
     @NonNull
@@ -23,15 +25,21 @@ public class DetailMeetingViewModel extends ViewModel {
         this.repository = repository;
     }
 
-  public LiveData<DetailViewState> getDetailViewStateLiveData(long meetingId) {
+    /**
+     * Returns ViewState for a single, given meeting
+     *
+     * @param meetingId long
+     * @return LiveDate of DetailViewState
+     */
+    public LiveData<DetailViewState> getDetailViewStateLiveData(long meetingId) {
         return Transformations.map(
                 repository.getSingleMeeting(meetingId),
                 meeting -> new DetailViewState(
                         meeting.getMeetingTitle(),
                         meeting.getRoom().getRoomName(),
                         formatDate(meeting.getDate()),
-                        formatTimeStart(meeting.getTimeStart()),
-                        formatTimeEnd(meeting.getTimeEnd()),
+                        formatTime(meeting.getTimeStart()),
+                        formatTime(meeting.getTimeEnd()),
                         formatParticipantList(meeting.getParticipants()),
                         meeting.getMeetingObject(),
                         meeting.getRoom().getRoomColor(),
@@ -39,26 +47,39 @@ public class DetailMeetingViewModel extends ViewModel {
                 ));
     }
 
+    /**
+     * Format participants list to a String
+     *
+     * @param participantsList List of participants
+     * @return String of all participants
+     */
+    @NonNull
     private String formatParticipantList(List<String> participantsList) {
         return participantsList.toString()
-                   .replace("[", "")
-                   .replace("]", "");
+                .replace("[", "")
+                .replace("]", "");
     }
 
-    private String formatDate(LocalDate date) {
+    /**
+     * Format date for the view
+     *
+     * @param date LocalDate
+     * @return String formatted date dd/MM/yyyy
+     */
+    private String formatDate(@NonNull LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
         return date.format(formatter);
     }
 
-    private String formatTimeStart(LocalTime startingTime) {
+    /**
+     * Format time for the view
+     *
+     * @param timeLocalTime LocalTime
+     * @return String formatted time HH:mm
+     */
+    private String formatTime(@NonNull LocalTime timeLocalTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        return startingTime.format(formatter);
+        return timeLocalTime.format(formatter);
     }
-
-    private String formatTimeEnd(LocalTime endingTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
-        return endingTime.format(formatter);
-    }
-
 
 }

@@ -1,6 +1,6 @@
 package com.emplk.mareutraining.ui.list.room_filter;
 
-public interface onRoomSelectedListener {
+public interface OnRoomSelectedListener {
     /**
      * Callback for selected room name
      */

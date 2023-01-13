@@ -12,8 +12,8 @@
         style="@style/Theme.MaReu.AppBarOverlay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.appcompat.widget.Toolbar
@@ -21,23 +21,39 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:layout_weight="1"
-            app:titleTextColor="@color/white"
-            app:title="Détail de la réunion" />
+            app:title="Détail de la réunion"
+            android:theme="@style/Theme.MaReu.AppBarOverlay"/>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <TextView
-        android:id="@+id/meeting_title_detail"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:gravity="center"
-        android:textAllCaps="true"
-        android:textSize="18sp"
-        android:textStyle="bold"
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="false"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appbarlayout_detail"
-        tools:text="Réunion de débrief hebdomadaire" />
+        app:layout_constraintTop_toBottomOf="@+id/appbarlayout_detail"
+        tools:context=".ui.detail.DetailActivity">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/meeting_title_detail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:gravity="center"
+                android:textAllCaps="true"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Réunion de débrief hebdomadaire" />
 
     <View
         android:id="@+id/divider"
@@ -92,8 +108,8 @@
         android:layout_marginStart="32dp"
         android:background="@drawable/room"
         android:gravity="center"
-        android:textStyle="bold"
         android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/room_title_detail"
         app:layout_constraintStart_toEndOf="@+id/room_title_detail"
         app:layout_constraintTop_toTopOf="@+id/room_title_detail"
@@ -150,6 +166,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/participants_title_detail"
         tools:text="alain@lamzone.com, alexia@lamzone.com, robert@dev.fr, marie@lamzone.fr" />
-
-
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,7 @@
 package com.emplk.mareutraining.repositories;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -13,20 +14,29 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
+/**
+ * Data source for the meetings
+ */
 public class MeetingsRepository {
 
 
     private final MutableLiveData<List<Meeting>> meetings = new MutableLiveData<>(new ArrayList<>());
 
-    private int maxId = 0;
+    private List<Meeting> allMeetings = new ArrayList<>();
 
+    private int idIncrement = 0;
+
+    /**
+     * At startup, when creating repo, if we're in debug mode, add dummy meetings
+     *
+     * @param buildConfigResolver
+     */
     public MeetingsRepository(BuildConfigResolver buildConfigResolver) {
-        // At startup, when creating repo, if we're in debug mode, add dummy meetings
         if (buildConfigResolver.isDebug()) {
             generateRandomMeetings();
+            allMeetings = this.meetings.getValue();
         }
     }
 
@@ -39,13 +49,10 @@ public class MeetingsRepository {
             @NonNull List<String> participants,
             @NonNull String meetingObject
     ) {
-        List<Meeting> meetings = this.meetings.getValue();
-
-        if (meetings == null) return;
-
-        meetings.add(
+        assert allMeetings != null;
+        allMeetings.add(
                 new Meeting(
-                        maxId++,
+                        idIncrement++,
                         meetingTitle,
                         room,
                         date,
@@ -55,16 +62,46 @@ public class MeetingsRepository {
                         meetingObject
                 )
         );
-
-        this.meetings.setValue(meetings);
+        this.meetings.setValue(allMeetings);
     }
-/**
- * Returns LiveDate of List of Meetings
- * */
+
+
+    /**
+     * Fetch all existing meetings
+     *
+     * @return List of Meeting LiveData
+     */
     public LiveData<List<Meeting>> getMeetings() {
         return meetings;
     }
 
+    public void getMeetingsFilteredByRoom(String roomName) {
+        List<Meeting> roomFilteredMeetings = new ArrayList<>();
+        assert allMeetings != null;
+        for (Meeting meeting : allMeetings) {
+            if ((meeting.getRoom().getRoomName()).equals(roomName)) {
+                roomFilteredMeetings.add(meeting);
+            }
+        }
+        this.meetings.setValue(roomFilteredMeetings);
+    }
+
+    public void getMeetingsFilteredByDate(LocalDate date) {
+        List<Meeting> roomFilteredByDate = new ArrayList<>();
+        for (Meeting meeting : allMeetings) {
+            if (meeting.getDate().equals(date)) {
+                roomFilteredByDate.add(meeting);
+            }
+        }
+        this.meetings.setValue(roomFilteredByDate);
+    }
+
+    /**
+     * Fetch a single meeting
+     *
+     * @param meetingId long
+     * @return Meeting LiveData
+     */
     public LiveData<Meeting> getSingleMeeting(long meetingId) {
         return Transformations.map(meetings, meetings -> {
             for (Meeting meeting : meetings) {
@@ -76,23 +113,31 @@ public class MeetingsRepository {
         });
     }
 
+    /**
+     * Delete a given meeting
+     *
+     * @param meetingId long
+     */
     public void deleteMeeting(long meetingId) {
         List<Meeting> meetings = this.meetings.getValue();
-
         if (meetings == null) return;
 
-        for (Iterator<Meeting> iterator = meetings.iterator();
-             iterator.hasNext(); ) {
-            Meeting meeting = iterator.next();
-
+        for (Meeting meeting : meetings) {
             if (meeting.getId() == meetingId) {
-                iterator.remove();
+                meetings.remove(meeting);
                 break;
             }
         }
         this.meetings.setValue(meetings);
     }
 
+    public void getAllMeetings() {
+        this.meetings.setValue(allMeetings);
+    }
+
+    /**
+     * Generate dummy meetings for the demo
+     */
     private void generateRandomMeetings() {
         addMeeting(
                 "Réunion d'info",
@@ -104,9 +149,9 @@ public class MeetingsRepository {
                         "pierre@lamzone.fr",
                         "charlotte@lamzone.fr",
                         "patrice@lamzone.fr"),
-                "blablablabla blablablabla blablablabla");
+                "Nouveaux arrivants dans l'équipe + point sur les congés");
         addMeeting(
-                "Réunion d'info",
+                "Retour sur les tests",
                 Room.ROOM_ONE,
                 LocalDate.of(2022, 12, 8),
                 LocalTime.of(10, 0),
@@ -115,18 +160,18 @@ public class MeetingsRepository {
                         "marie@lamzone.fr",
                         "ahmed@lamzone.fr",
                         "jocelyn@lamzone.fr"),
-                "blablablabla blablablabla");
+                "Résultats des premiers tests par l'équipe Android");
         addMeeting(
                 "Présentation nouveau design",
                 Room.ROOM_TEN,
-                LocalDate.of(2022, 12, 8),
+                LocalDate.of(2022, 12, 15),
                 LocalTime.of(11, 0),
                 LocalTime.of(11, 20),
                 Arrays.asList(
                         "nicolas@lamzone.fr",
                         "jpaul@lamzone.fr",
                         "soizic@lamzone.fr"),
-                "blabla blabllablabla blablabla");
+                "Retour des utilisateurs du projet MaRéu, présentation du nouveau design");
         addMeeting(
                 "Projet secret",
                 Room.ROOM_FOUR,
@@ -141,7 +186,7 @@ public class MeetingsRepository {
         addMeeting(
                 "Brainstorm dev",
                 Room.ROOM_SEVEN,
-                LocalDate.of(2022, 12, 9),
+                LocalDate.of(2022, 12, 11),
                 LocalTime.of(15, 0),
                 LocalTime.of(15, 45),
                 Arrays.asList(

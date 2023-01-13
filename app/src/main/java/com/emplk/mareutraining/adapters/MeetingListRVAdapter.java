@@ -12,8 +12,11 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.emplk.mareutraining.databinding.MeetingItemBinding;
+import com.emplk.mareutraining.ui.list.MainActivity;
 import com.emplk.mareutraining.ui.list.MeetingsViewStateItem;
 import com.emplk.mareutraining.ui.list.OnMeetingClickedListener;
+
+import es.dmoral.toasty.Toasty;
 
 
 public class MeetingListRVAdapter extends ListAdapter<MeetingsViewStateItem, MeetingListRVAdapter.MeetingsViewHolder> {
