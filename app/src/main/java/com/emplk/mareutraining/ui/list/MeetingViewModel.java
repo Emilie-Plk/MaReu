@@ -72,8 +72,10 @@ public class MeetingViewModel extends ViewModel {
      */
     private String formatParticipantList(List<String> participantList) {
         String stringList = participantList.toString().replace("[", "").replace("]", "");
-
-        return Arrays.stream(stringList.split(" ")).map(word -> word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase()).map(word -> word.substring(0, word.indexOf('@'))).collect(Collectors.joining(" "));
+        return Arrays.stream(stringList.split(" "))
+                .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())
+                .map(word -> word.substring(0, word.indexOf('@')))
+                .collect(Collectors.joining(" "));
     }
 
     /**

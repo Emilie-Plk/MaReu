@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/blueish_white"
     android:focusableInTouchMode="true"
+    android:id="@+id/activity_create_meeting"
     tools:context=".ui.create.CreateNewMeetingActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -29,8 +30,10 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="18dp"
+        android:fadeScrollbars="false"
         android:fillViewport="true"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -142,7 +145,7 @@
                     android:id="@+id/title_textinput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Nom de la réunion"
+                    android:hint="@string/meeting_title_et_hint"
                     android:inputType="textCapSentences" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -196,6 +199,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
+                app:backgroundTint="@color/colorPrimaryVariant"
                 android:contentDescription="@string/add_fab_descr"
                 android:src="@drawable/ic_baseline_add_24"
                 app:layout_constraintBottom_toBottomOf="@id/participants_layout"
@@ -219,6 +223,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="28dp"
+                android:paddingStart="28dp"
+                android:paddingEnd="28dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:textSize="16sp"
                 android:contentDescription="@string/create_btn_descr"
                 android:text="@string/create_btn"
                 app:layout_constraintEnd_toEndOf="parent"

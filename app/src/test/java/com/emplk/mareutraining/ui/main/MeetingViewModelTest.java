@@ -109,10 +109,13 @@ public class MeetingViewModelTest {
 
     @Test
     public void check_meeting_filtered_by_date_with_success() {
-        // WHEN
+        // GIVEN
         LocalDate date = LocalDate.of(2023, 1, 16);
+
+        // WHEN
         viewModel.onFetchingMeetingsFilteredByDate(date);
 
+        // THEN
         TestUtil.observeForTesting(viewModel.getMeetingViewStateItems(), value -> {
             verify(repository).getMeetingsFilteredByDate(date);
             assertEquals(2, value.size());

@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
@@ -37,6 +38,11 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
 
     @NonNull
     private String selectedRoom = "";
+
+    @Nullable
+    private Integer pickedStartHour;
+    @Nullable
+    private Integer pickedStartMinute;
 
     private final ArrayList<String> participantsEmails = new ArrayList<>();
 
@@ -128,8 +134,12 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
             int minute = cal.get(Calendar.MINUTE);
 
             TimePickerDialog timePickerDialog = new TimePickerDialog(view.getContext(),
-                    (timePicker, hourOfDay, mMinute) ->
-                            binding.selectedTimeStartTv.setText(String.format(Locale.FRANCE, "%02d:%02d", hourOfDay, mMinute)), hour, minute, true);
+                    (timePicker, hourOfDay, mMinute) -> {
+                        pickedStartHour = hourOfDay;
+                        pickedStartMinute = mMinute;
+                        binding.selectedTimeStartTv.setText(String.format(Locale.FRANCE, "%02d:%02d", hourOfDay, mMinute));
+                    }, hour, minute, true);
+
             timePickerDialog.show();
         });
     }
@@ -143,6 +153,10 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
             TimePickerDialog timePickerDialog = new TimePickerDialog(view.getContext(),
                     (timePicker, hourOfDay, mMinute) ->
                             binding.selectedTimeEndTv.setText(String.format(Locale.FRANCE, "%02d:%02d", hourOfDay, mMinute)), hour, minute, true);
+            if (pickedStartHour != null && pickedStartMinute != null) {
+                timePickerDialog.updateTime(pickedStartHour, pickedStartMinute);
+            }
+
             timePickerDialog.show();
         });
     }

@@ -88,13 +88,13 @@ public class MeetingsRepository {
     }
 
     public void getMeetingsFilteredByDate(LocalDate date) {
-        List<Meeting> roomfilteredByDate = new ArrayList<>();
+        List<Meeting> roomFilteredByDate = new ArrayList<>();
         for (Meeting meeting : allMeetings) {
             if (meeting.getDate().equals(date)) {
-                roomfilteredByDate.add(meeting);
+                roomFilteredByDate.add(meeting);
             }
         }
-        this.meetings.setValue(roomfilteredByDate);
+        this.meetings.setValue(roomFilteredByDate);
     }
 
     /**
