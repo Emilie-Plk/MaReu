@@ -1,4 +1,4 @@
-package com.emplk.mareutraining.ui.list;
+package com.emplk.mareutraining.ui.list.main;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -20,6 +20,8 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
 import com.emplk.mareutraining.R;
+import com.emplk.mareutraining.ui.list.MainActivity;
+import com.emplk.mareutraining.ui.list.RecyclerViewMatcher;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,7 +41,6 @@ public class MainActivityTest {
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
-
 
     @Test
     public void isRecyclerViewVisible_onAppLaunch() {
