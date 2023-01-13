@@ -6,12 +6,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.emplk.mareutraining.models.Meeting;
 import com.emplk.mareutraining.models.Room;
 import com.emplk.mareutraining.repositories.MeetingsRepository;
 import com.emplk.mareutraining.ui.list.MeetingViewModel;
+import com.emplk.mareutraining.ui.list.MeetingsViewStateItem;
 import com.emplk.mareutraining.utils.TestUtil;
 
 import org.junit.Before;
@@ -42,17 +44,16 @@ public class MeetingViewModelTest {
 
     @Before
     public void setUp() {
-
         meetingsList = new MutableLiveData<>();
 
         // Mocked LiveData from repo
         given(repository.getMeetings()).willReturn(meetingsList);
 
-        viewModel = new MeetingViewModel(repository);
-
         // Set dummy values to MutableLiveData
         List<Meeting> dummyMeetings = getDefaultMeetings();
         meetingsList.setValue(dummyMeetings);
+
+        viewModel = new MeetingViewModel(repository);
     }
 
     @Test
@@ -66,11 +67,11 @@ public class MeetingViewModelTest {
 
     @Test
     public void edge_case_no_meetings() {
-        // GIVEN LiveData populated with empty list of Meeting (edge case)
+             // GIVEN LiveData populated with empty list of Meeting (edge case)
         List<Meeting> emptyMeetingsList = new ArrayList<>();
         meetingsList.setValue(emptyMeetingsList);
 
-        // WHEN observe for testing
+            // WHEN observe for testing
         TestUtil.observeForTesting(viewModel.getMeetingViewStateItems(), value -> {
             // THEN no View State item found (empty)
             assertEquals(0, value.size());
@@ -95,17 +96,23 @@ public class MeetingViewModelTest {
 
     @Test
     public void check_meeting_filtered_by_room_with_success() {
+      // WHEN
+        viewModel.onFetchingMeetingsFilteredByRoom("Salle 4");
+        verify(repository).getMeetingsFilteredByRoom("Salle 4");
+    }
 
+    @Test
+    public void check_meeting_filtered_by_room_with_success2() {
         // WHEN
-        viewModel.onFetchingMeetingsFilteredByRoom("Salle 3");
-// TODO: doesn't work!
         TestUtil.observeForTesting(viewModel.getMeetingViewStateItems(), value -> {
-            verify(repository).getMeetingsFilteredByRoom("Salle 3");
+            // TODO: expected:<2> but was:<4>, why no filter applied?
+            assertEquals(4, value.size());
+            viewModel.onFetchingMeetingsFilteredByRoom("Salle 3");
+            repository.getMeetingsFilteredByRoom("Salle 3");
             assertEquals(2, value.size());
-            verify(repository).getMeetings();
-            verifyNoMoreInteractions(repository);
         });
     }
+
 
     @Test
     public void check_meeting_filtered_by_date_with_success() {
@@ -124,7 +131,7 @@ public class MeetingViewModelTest {
         });
     }
 
-// region private method (getDefaultMeetings)
+    // region private method (getDefaultMeetings)
     private List<Meeting> getDefaultMeetings() {
         List<Meeting> meetingList = new ArrayList<>();
         meetingList.add(new Meeting(

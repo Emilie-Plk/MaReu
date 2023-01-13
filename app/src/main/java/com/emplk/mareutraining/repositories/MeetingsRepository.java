@@ -36,6 +36,7 @@ public class MeetingsRepository {
     public MeetingsRepository(BuildConfigResolver buildConfigResolver) {
         if (buildConfigResolver.isDebug()) {
             generateRandomMeetings();
+            allMeetings = this.meetings.getValue();
         }
     }
 
@@ -48,8 +49,6 @@ public class MeetingsRepository {
             @NonNull List<String> participants,
             @NonNull String meetingObject
     ) {
-      allMeetings = this.meetings.getValue();
-
         assert allMeetings != null;
         allMeetings.add(
                 new Meeting(

@@ -54,7 +54,7 @@ public class DetailMeetingViewModel extends ViewModel {
      * @return String of all participants
      */
     @NonNull
-    private String formatParticipantList(List<String> participantsList) {
+    public String formatParticipantList(List<String> participantsList) {
         return participantsList.toString()
                 .replace("[", "")
                 .replace("]", "");
@@ -66,7 +66,7 @@ public class DetailMeetingViewModel extends ViewModel {
      * @param date LocalDate
      * @return String formatted date dd/MM/yyyy
      */
-    private String formatDate(@NonNull LocalDate date) {
+    public String formatDate(@NonNull LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yy");
         return date.format(formatter);
     }
@@ -77,7 +77,7 @@ public class DetailMeetingViewModel extends ViewModel {
      * @param timeLocalTime LocalTime
      * @return String formatted time HH:mm
      */
-    private String formatTime(@NonNull LocalTime timeLocalTime) {
+    public String formatTime(@NonNull LocalTime timeLocalTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         return timeLocalTime.format(formatter);
     }
