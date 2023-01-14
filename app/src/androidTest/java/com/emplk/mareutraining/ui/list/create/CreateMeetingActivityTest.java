@@ -5,7 +5,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
 import com.emplk.mareutraining.ui.create.CreateNewMeetingActivity;
-import com.emplk.mareutraining.ui.detail.DetailActivity;
+
 
 import org.junit.Rule;
 import org.junit.runner.RunWith;

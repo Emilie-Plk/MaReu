@@ -31,7 +31,7 @@ public class MeetingsRepository {
     /**
      * At startup, when creating repo, if we're in debug mode, add dummy meetings
      *
-     * @param buildConfigResolver
+     * @param buildConfigResolver buildConfigResolver
      */
     public MeetingsRepository(BuildConfigResolver buildConfigResolver) {
         if (buildConfigResolver.isDebug()) {

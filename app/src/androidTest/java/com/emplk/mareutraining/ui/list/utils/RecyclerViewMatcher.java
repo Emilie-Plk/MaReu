@@ -1,4 +1,4 @@
-package com.emplk.mareutraining.ui.list;
+package com.emplk.mareutraining.ui.list.utils;
 
 import android.content.res.Resources;
 import android.view.View;

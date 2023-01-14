@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
@@ -21,6 +22,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.LocalDate;
@@ -28,6 +30,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MeetingViewModelTest {
@@ -103,6 +106,9 @@ public class MeetingViewModelTest {
 
     @Test
     public void check_meeting_filtered_by_room_with_success2() {
+        viewModel.onFetchingMeetingsFilteredByRoom("Salle 3");
+        repository.getMeetingsFilteredByRoom("Salle 3");
+
         // WHEN
         TestUtil.observeForTesting(viewModel.getMeetingViewStateItems(), value -> {
             // TODO: expected:<2> but was:<4>, why no filter applied?
@@ -120,10 +126,10 @@ public class MeetingViewModelTest {
         LocalDate date = LocalDate.of(2023, 1, 16);
 
         // WHEN
-        viewModel.onFetchingMeetingsFilteredByDate(date);
 
         // THEN
         TestUtil.observeForTesting(viewModel.getMeetingViewStateItems(), value -> {
+            viewModel.onFetchingMeetingsFilteredByDate(date);
             verify(repository).getMeetingsFilteredByDate(date);
             assertEquals(2, value.size());
             verify(repository).getMeetings();
