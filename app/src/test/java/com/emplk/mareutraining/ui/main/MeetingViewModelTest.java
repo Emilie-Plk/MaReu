@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
+import androidx.annotation.NonNull;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -40,10 +41,12 @@ public class MeetingViewModelTest {
     @Rule
     public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
 
+
     @Mock
     private MeetingsRepository repository;
 
     private MeetingViewModel viewModel;
+
 
     @Before
     public void setUp() {
@@ -62,7 +65,7 @@ public class MeetingViewModelTest {
     @Test
     public void nominalCase() {
         TestUtil.observeForTesting(viewModel.getMeetingViewStateItems(), value -> {
-            assertEquals(4, value.size());
+            assertEquals(5, value.size());
             verify(repository).getMeetings();
             verifyNoMoreInteractions(repository);
         });
@@ -106,15 +109,14 @@ public class MeetingViewModelTest {
 
     @Test
     public void check_meeting_filtered_by_room_with_success2() {
-        viewModel.onFetchingMeetingsFilteredByRoom("Salle 3");
-        repository.getMeetingsFilteredByRoom("Salle 3");
+
 
         // WHEN
         TestUtil.observeForTesting(viewModel.getMeetingViewStateItems(), value -> {
-            // TODO: expected:<2> but was:<4>, why no filter applied?
-            assertEquals(4, value.size());
-            viewModel.onFetchingMeetingsFilteredByRoom("Salle 3");
-            repository.getMeetingsFilteredByRoom("Salle 3");
+            viewModel.onFetchingMeetingsFilteredByRoom("Salle 4");
+            verify(repository).getMeetingsFilteredByRoom("Salle 4");
+            verify(repository).getMeetings();
+            // TODO: expected:<2> but was:<5>, why no filter applied?
             assertEquals(2, value.size());
         });
     }
@@ -138,49 +140,75 @@ public class MeetingViewModelTest {
     }
 
     // region private method (getDefaultMeetings)
+    @NonNull
     private List<Meeting> getDefaultMeetings() {
-        List<Meeting> meetingList = new ArrayList<>();
-        meetingList.add(new Meeting(
-                0,
-                "REUNION 1",
-                Room.ROOM_ONE,
-                LocalDate.of(2023, 1, 15),
+        List<Meeting> dummyMeetings = new ArrayList<>();
+
+        dummyMeetings.add(new Meeting(0,
+                "Réunion d'info",
+                Room.ROOM_FOUR,
+                LocalDate.of(2022, 12, 8),
                 LocalTime.of(10, 0),
                 LocalTime.of(10, 30),
-                Arrays.asList("john@doe.fr", "jane@doe.fr"),
-                "MEETING OBJECT 1"
-        ));
-        meetingList.add(new Meeting(
-                1,
-                "REUNION 2",
-                Room.ROOM_TWO,
-                LocalDate.of(2023, 1, 16),
-                LocalTime.of(11, 0),
-                LocalTime.of(11, 30),
-                Arrays.asList("johnny@doe.fr", "jolyne@doe.fr"),
-                "MEETING OBJECT 2"
-        ));
-        meetingList.add(new Meeting(
-                2,
-                "REUNION 3",
-                Room.ROOM_THREE,
-                LocalDate.of(2023, 1, 16),
-                LocalTime.of(12, 0),
-                LocalTime.of(12, 30),
-                Arrays.asList("joseph@doe.fr", "jotaro@doe.fr"),
-                "MEETING OBJECT 2"
-        ));
-        meetingList.add(new Meeting(
-                3,
-                "REUNION 4",
-                Room.ROOM_THREE,
-                LocalDate.of(2023, 1, 17),
-                LocalTime.of(15, 0),
-                LocalTime.of(15, 30),
-                Arrays.asList("johnathan@doe.fr", "josuke@doe.fr"),
-                "MEETING OBJECT 2"
-        ));
-        return meetingList;
+                Arrays.asList(
+                        "pierre@lamzone.fr",
+                        "charlotte@lamzone.fr",
+                        "patrice@lamzone.fr"),
+                "Nouveaux arrivants dans l'équipe + point sur les congés"));
+        dummyMeetings.add(
+                new Meeting(1,
+                        "Retour sur les tests",
+                        Room.ROOM_ONE,
+                        LocalDate.of(2022, 12, 8),
+                        LocalTime.of(10, 0),
+                        LocalTime.of(10, 30),
+                        Arrays.asList(
+                                "marie@lamzone.fr",
+                                "ahmed@lamzone.fr",
+                                "jocelyn@lamzone.fr"),
+                        "Résultats des premiers tests par l'équipe Android"));
+
+        dummyMeetings.add(
+                new Meeting(
+                        2,
+                        "Présentation nouveau design",
+                        Room.ROOM_TEN,
+                        LocalDate.of(2022, 12, 15),
+                        LocalTime.of(11, 0),
+                        LocalTime.of(11, 20),
+                        Arrays.asList(
+                                "nicolas@lamzone.fr",
+                                "jpaul@lamzone.fr",
+                                "soizic@lamzone.fr"),
+                        "Retour des utilisateurs du projet MaRéu, présentation du nouveau design"));
+
+        dummyMeetings.add(
+                new Meeting(3,
+                        "Projet secret",
+                        Room.ROOM_FOUR,
+                        LocalDate.of(2022, 12, 9),
+                        LocalTime.of(14, 30),
+                        LocalTime.of(14, 50),
+                        Arrays.asList(
+                                "djamilla@lamzone.fr",
+                                "hubert@lamzone.fr",
+                                "joan@lamzone.fr"),
+                        "Point avec Joan et Hubert sur l'avancée des maquettes + phases de tests"));
+
+        dummyMeetings.add(
+                new Meeting(4,
+                        "Brainstorm dev",
+                        Room.ROOM_SEVEN,
+                        LocalDate.of(2022, 12, 11),
+                        LocalTime.of(15, 0),
+                        LocalTime.of(15, 45),
+                        Arrays.asList(
+                                "nicolas@lamzone.fr",
+                                "gregory@lamzone.fr",
+                                "pauline@lamzone.fr"),
+                        "Debrief hebdo dev"));
+
+        return dummyMeetings;
     }
     // endregion
 }

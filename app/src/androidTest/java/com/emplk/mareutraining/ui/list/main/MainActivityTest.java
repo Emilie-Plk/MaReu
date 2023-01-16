@@ -37,7 +37,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 
-
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
@@ -90,14 +89,14 @@ public class MainActivityTest {
                 .perform(click());
 
         onView(withId(R.id.meetings_rv)).check(matches(hasChildCount(0)));
-        }
+    }
 
-        @Test
-        public void onDeleteOneItem_shouldDisplayToast() {
-            onView(withId(R.id.meetings_rv)).perform(actionOnItemViewAtPosition(0,
-                    R.id.delete_meeting,
-                    click()));
-            onView(withText(R.string.meeting_deleted_toast)).inRoot(isToast()).check(matches(isDisplayed()));
+    @Test
+    public void onDeleteOneItem_shouldDisplayToast() {
+        onView(withId(R.id.meetings_rv)).perform(actionOnItemViewAtPosition(0,
+                R.id.delete_meeting,
+                click()));
+        onView(withText(R.string.meeting_deleted_toast)).inRoot(isToast()).check(matches(isDisplayed()));
     }
 
     @Test
@@ -132,7 +131,7 @@ public class MainActivityTest {
         onView(withText(ROOM_FOUR)).perform(click());
 
         // THEN recycler view should have two meetings filtered (room 4)
-       onView(withRecyclerView(R.id.meetings_rv)
+        onView(withRecyclerView(R.id.meetings_rv)
                 .atPositionOnView(0, R.id.room_number))
                 .check(matches(withText(ROOM_FOUR)));
         onView(withRecyclerView(R.id.meetings_rv)

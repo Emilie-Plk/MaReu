@@ -41,6 +41,6 @@ public class DetailMeetingViewModelTest {
         MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
         DetailMeetingViewModel viewModel = new DetailMeetingViewModel(repository);
         viewModel.getDetailViewStateLiveData(0);
-
+// TODO: complete this
     }
 }
