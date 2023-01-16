@@ -102,14 +102,13 @@ public class MeetingViewModelTest {
 
     @Test
     public void check_meeting_filtered_by_room_with_success() {
-      // WHEN
+      // TODO: doesn't work
         viewModel.onFetchingMeetingsFilteredByRoom("Salle 4");
         verify(repository).getMeetingsFilteredByRoom("Salle 4");
     }
 
     @Test
     public void check_meeting_filtered_by_room_with_success2() {
-
 
         // WHEN
         TestUtil.observeForTesting(viewModel.getMeetingViewStateItems(), value -> {

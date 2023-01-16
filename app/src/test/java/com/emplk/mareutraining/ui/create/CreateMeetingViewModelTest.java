@@ -63,7 +63,7 @@ public class CreateMeetingViewModelTest {
                 object
         );
 
-        // THEN should return same info added from the repo
+        // THEN should return same info added from the repo...
         TestUtil.observeForTesting(viewModel.getCloseActivity(), value -> {
             verify(repository).addMeeting(
                     eq(title),
@@ -75,7 +75,7 @@ public class CreateMeetingViewModelTest {
                     eq(object)
             );
 
-// check that nothing else has been invoked in the mocks
+// ...and check that nothing else has been invoked in the mocks
             verifyNoMoreInteractions(repository);
         });
     }
@@ -93,7 +93,6 @@ public class CreateMeetingViewModelTest {
         boolean isEqual = viewModel.formatTime(time).equals(LocalTime.of(14, 30));
         assertTrue(isEqual);
     }
-
 
     @Test
     public void isValidTime() {
@@ -123,19 +122,19 @@ public class CreateMeetingViewModelTest {
     @Test
     public void isAllInfoCompletedForCreatedMeeting() {
         // GIVEN meeting info
-         String meetingTitle = "MEETING TITLE";
-         String room = "Salle 1";
-         String date = "14/01/2023";
-         String timeStart = "14:30";
-         String timeEnd = "15:30";
-         List<String> participants = Arrays.asList("john@doe.com", "jane@doe.com");
-         String meetingObject = "MEETING OBJECT";
+        String meetingTitle = "MEETING TITLE";
+        String room = "Salle 1";
+        String date = "14/01/2023";
+        String timeStart = "14:30";
+        String timeEnd = "15:30";
+        List<String> participants = Arrays.asList("john@doe.com", "jane@doe.com");
+        String meetingObject = "MEETING OBJECT";
 
-         // WHEN checking if incomplete
+        // WHEN checking if incomplete
         // THEN return false if every field isn't empty
-         assertFalse(viewModel.isMeetingInfoIncomplete(meetingTitle, room, date, timeStart, timeEnd, participants, meetingObject));
+        assertFalse(viewModel.isMeetingInfoIncomplete(meetingTitle, room, date, timeStart, timeEnd, participants, meetingObject));
 
-         // return true if at least one field is empty
-         assertTrue(viewModel.isMeetingInfoIncomplete("", room, date, timeStart, timeEnd, participants, meetingObject));
+        // return true if at least one field is empty
+        assertTrue(viewModel.isMeetingInfoIncomplete("", room, date, timeStart, timeEnd, participants, meetingObject));
     }
 }
