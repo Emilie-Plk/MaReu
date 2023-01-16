@@ -61,7 +61,7 @@ public class MeetingsRepositoryTest {
         MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
 
         List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
-
+// TODO : list static final
         assertEquals(getDummyMeetings(), result);
     }
 

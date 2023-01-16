@@ -50,12 +50,21 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
         setCreateFab();
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
         viewModel.onResetFilter();
+        // TODO : remove title
         setEmptyListToast();
     }
+
+  /*  @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        viewModel.onResetFilter();
+        setEmptyListToast();
+    }*/
 
     private void setViewModel() {
         viewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(MeetingViewModel.class);

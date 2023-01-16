@@ -77,8 +77,6 @@ public class MeetingsRepository {
 
     public void getMeetingsFilteredByRoom(String roomName) {
         List<Meeting> roomFilteredMeetings = new ArrayList<>();
-       /* assert allMeetings != null;*/
-        allMeetings = meetings.getValue();
         assert allMeetings != null;
         for (Meeting meeting : allMeetings) {
             if ((meeting.getRoom().getRoomName()).equals(roomName)) {

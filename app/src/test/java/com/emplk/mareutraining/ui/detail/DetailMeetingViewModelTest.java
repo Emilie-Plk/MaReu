@@ -44,34 +44,46 @@ public class DetailMeetingViewModelTest {
     /*@Mock
     private BuildConfigResolver buildConfigResolver = Mockito.mock(BuildConfigResolver.class);*/
 
+    List<Meeting> dummyMeetings = new ArrayList<>();
+
+    private final Meeting meetingOne = new Meeting(0,
+            "Réunion d'info",
+            Room.ROOM_FOUR,
+            LocalDate.of(2022, 12, 8),
+            LocalTime.of(10, 0),
+            LocalTime.of(10, 30),
+            Arrays.asList(
+                    "pierre@lamzone.fr",
+                    "charlotte@lamzone.fr",
+                    "patrice@lamzone.fr"),
+            "Nouveaux arrivants dans l'équipe + point sur les congés");
     @Mock
     private MeetingsRepository repository;
 
     private DetailMeetingViewModel viewModel;
 
-   /* @Mock
-    private BuildConfigResolver buildConfigResolver = Mockito.mock(BuildConfigResolver.class);*/
-    private MutableLiveData<List<Meeting>> meetingList;
+    private MutableLiveData<Meeting> meeting;
 
     @Before
     public void setUp() {
-        meetingList = new MutableLiveData<>();
+        dummyMeetings.add(meetingOne);
 
-        given(repository.getMeetings()).willReturn(meetingList);
-
-        List<Meeting> dummyMeetings = getDefaultMeetings();
-        meetingList.setValue(dummyMeetings);
+        meeting = new MutableLiveData<>();
 
         viewModel = new DetailMeetingViewModel(repository);
     }
 
     @Test
     public void getDetailMeeting() {
-        viewModel.getDetailViewStateLiveData(0);
-        verify(repository).getSingleMeeting(0);
+        long meetingId = 0;
+        // GIVEN
+        meeting.setValue(meetingOne);
+        given(repository.getSingleMeeting(meetingId)).willReturn(meeting);
+        // THEN
+        viewModel.getDetailViewStateLiveData(meetingId);
+        verify(repository).getSingleMeeting(meetingId);
         TestUtil.observeForTesting(viewModel.getDetailViewStateLiveData(0), value ->
-            assertEquals(value.getMeetingTitle(), "Réunion d'info"));
-// TODO: Doesn't work!
+                assertEquals(value.getMeetingTitle(), "Réunion d'info"));
     }
 
     // region private method (getDefaultMeetings)
@@ -102,7 +114,6 @@ public class DetailMeetingViewModelTest {
                                 "ahmed@lamzone.fr",
                                 "jocelyn@lamzone.fr"),
                         "Résultats des premiers tests par l'équipe Android"));
-
         dummyMeetings.add(
                 new Meeting(
                         2,
