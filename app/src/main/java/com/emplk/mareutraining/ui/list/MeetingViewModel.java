@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.mareutraining.models.Meeting;
@@ -27,102 +28,76 @@ public class MeetingViewModel extends ViewModel {
     private final MeetingsRepository repository;
 
 
-    private final MediatorLiveData<List<MeetingsViewStateItem>> meetingsViewStateItems = new MediatorLiveData<>();
-
-    // The filter value
+    private final MediatorLiveData<List<Meeting>> meetingListMediator = new MediatorLiveData<>();
     private final MutableLiveData<String> roomFilter = new MutableLiveData<>();
-
     private final MutableLiveData<LocalDate> dateFilter = new MutableLiveData<>();
-
-    private boolean isFilterApplied;
 
     public MeetingViewModel(@NonNull MeetingsRepository repository) {
         this.repository = repository;
 
-        // The source of unfiltered meetings
-if (!isFilterApplied) {
-    meetingsViewStateItems.addSource(repository.getMeetings(), meetings -> {
-        if (roomFilter.getValue() == null) {
-            meetingsViewStateItems.setValue(convertToViewStateItems(meetings));
-        } else {
-            List<Meeting> filteredMeetings = new ArrayList<>();
-            for (Meeting meeting : meetings) {
-                if (meeting.getRoom().getRoomName().equals(roomFilter.getValue())) {
-                    filteredMeetings.add(meeting);
+        // source of unfiltered meetings
+        meetingListMediator.addSource(repository.getMeetings(), meetings -> {
+            if (roomFilter.getValue() == null) {
+                meetingListMediator.setValue(meetings);
+            } else {
+                List<Meeting> allMeetings = new ArrayList<>();
+                for (Meeting meeting : meetings) {
+                    if (meeting.getRoom().getRoomName().equals(roomFilter.getValue())) {
+                        allMeetings.add(meeting);
+                    }
                 }
+                meetingListMediator.setValue(allMeetings);
             }
-            meetingsViewStateItems.setValue(convertToViewStateItems(filteredMeetings));
-        }
-    });
-}
+        });
 
-        meetingsViewStateItems.addSource(roomFilter, filterValue -> {
-            if (meetingsViewStateItems.getValue() != null) {
-                List<Meeting> meetings = convertToMeetings(meetingsViewStateItems.getValue());
-                List<Meeting> filteredMeetings = new ArrayList<>();
+
+        // meetings filtered by room
+        meetingListMediator.addSource(roomFilter, filterValue -> {
+            if (meetingListMediator.getValue() != null) {
+                List<Meeting> meetings = repository.getMeetings().getValue();
+                List<Meeting> roomFilterMeetings = new ArrayList<>();
+                assert meetings != null;
                 for (Meeting meeting : meetings) {
                     if (meeting.getRoom().getRoomName().equals(filterValue)) {
-                        filteredMeetings.add(meeting);
+                        roomFilterMeetings.add(meeting);
                     }
-                    isFilterApplied = true;
                 }
-
-                meetingsViewStateItems.setValue(convertToViewStateItems(filteredMeetings));
+                meetingListMediator.setValue(roomFilterMeetings);
             }
         });
 
-        meetingsViewStateItems.addSource(dateFilter, filterValue -> {
-            if (meetingsViewStateItems.getValue() != null) {
-                List<Meeting> meetings = convertToMeetings(meetingsViewStateItems.getValue());
-                List<Meeting> filteredMeetings = new ArrayList<>();
+        // meetings filtered by date
+        meetingListMediator.addSource(dateFilter, filterValue -> {
+            if (meetingListMediator.getValue() != null) {
+                List<Meeting> meetings = repository.getMeetings().getValue();
+                List<Meeting> dateFilterMeetings = new ArrayList<>();
+                assert meetings != null;
                 for (Meeting meeting : meetings) {
                     if (meeting.getDate().equals(filterValue)) {
-                        filteredMeetings.add(meeting);
+                        dateFilterMeetings.add(meeting);
                     }
-                    isFilterApplied = true;
                 }
-                meetingsViewStateItems.setValue(convertToViewStateItems(filteredMeetings));
+                meetingListMediator.setValue(dateFilterMeetings);
             }
         });
     }
+
+
     public LiveData<List<MeetingsViewStateItem>> getMeetingViewStateItems() {
-        return meetingsViewStateItems;
-    }
-
-    private List<MeetingsViewStateItem> convertToViewStateItems(List<Meeting> meetings) {
-        List<MeetingsViewStateItem> meetingsViewStateItems = new ArrayList<>();
-        for (Meeting meeting : meetings) {
-            meetingsViewStateItems.add(new MeetingsViewStateItem(
-                    meeting.getMeetingTitle(),
-                    meeting.getRoom().getRoomName(),
-                    formatDate(meeting.getDate()),
-                    formatTime(meeting.getTimeStart()),
-                    formatParticipantList(meeting.getParticipants()),
-                    meeting.getRoom().getRoomColor(),
-                    meeting.getId()));
-        }
-        return meetingsViewStateItems;
-    }
-
-    private List<Meeting> convertToMeetings(List<MeetingsViewStateItem> meetingsViewStateItems) {
-        List<Meeting> meetings = new ArrayList<>();
-        for (MeetingsViewStateItem meetingsViewStateItem : meetingsViewStateItems) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            Room room = getRoomFromName(meetingsViewStateItem.getRoomName());
-            assert room != null;
-            Meeting meeting = new Meeting(
-                    meetingsViewStateItem.getMeetingId(),
-                    meetingsViewStateItem.getMeetingTitle(),
-                    room,
-                    LocalDate.parse(meetingsViewStateItem.getDate(), formatter),
-                    LocalTime.parse(meetingsViewStateItem.getTimeStart()),
-                    null, // Assume timeEnd is not known
-                    Arrays.asList(meetingsViewStateItem.getParticipants()),
-                    null // Assume meetingObject is not known
-            );
-            meetings.add(meeting);
-        }
-        return meetings;
+        return Transformations.map(meetingListMediator, meetings -> {
+            List<MeetingsViewStateItem> meetingsViewStateItems = new ArrayList<>();
+            for (Meeting meeting : meetings) {
+                meetingsViewStateItems.add(new MeetingsViewStateItem(
+                        meeting.getMeetingTitle(),
+                        meeting.getRoom().getRoomName(),
+                        formatDate(meeting.getDate()),
+                        formatTime(meeting.getTimeStart()),
+                        formatParticipantList(meeting.getParticipants()),
+                        meeting.getRoom().getRoomColor(),
+                        meeting.getId()));
+            }
+            return meetingsViewStateItems;
+        });
     }
 
 
@@ -135,40 +110,8 @@ if (!isFilterApplied) {
     }
 
     public void resetFilters() {
-        isFilterApplied = false;
-        meetingsViewStateItems.setValue(getMeetingViewStateItems().getValue());
+        meetingListMediator.setValue(repository.getMeetings().getValue());
     }
-
-    private Room getRoomFromName(String roomName) {
-        switch (roomName) {
-            case "Salle 1":
-                return Room.ROOM_ONE;
-            case "Salle 2":
-                return Room.ROOM_TWO;
-            case "Salle 3":
-                return Room.ROOM_THREE;
-            case "Salle 4":
-                return Room.ROOM_FOUR;
-            case "Salle 5":
-                return Room.ROOM_FIVE;
-            case "Salle 6":
-                return Room.ROOM_SIX;
-            case "Salle 7":
-                return Room.ROOM_SEVEN;
-            case "Salle 8":
-                return Room.ROOM_EIGHT;
-            case "Salle 9":
-                return Room.ROOM_NINE;
-            case "Salle 10":
-                return Room.ROOM_TEN;
-        }
-        return null;
-    }
-
-
-   /* public void onResetFilter() {
-        repository.getAllMeetings();
-    }*/
 
     /**
      * Format participant list to String,
@@ -178,10 +121,9 @@ if (!isFilterApplied) {
      * @return String
      */
     private String formatParticipantList(List<String> participantList) {
-        String stringList = participantList.toString().replace("[", "").replace("]", "");
-        return Arrays.stream(stringList.split(" "))
+        return participantList.stream()
                 .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())
-                .map(word -> word.indexOf('@') != -1 ? word.substring(0, word.indexOf('@')) : word)
+                .map(word -> word.split("@")[0])
                 .collect(Collectors.joining(" "));
     }
 

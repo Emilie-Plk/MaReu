@@ -74,25 +74,6 @@ public class MeetingsRepository {
         return meetings;
     }
 
-    public void getMeetingsFilteredByRoom(String roomName) {
-        List<Meeting> roomFilteredMeetings = new ArrayList<>();
-        for (Meeting meeting : allMeetings) {
-            if ((meeting.getRoom().getRoomName()).equals(roomName)) {
-                roomFilteredMeetings.add(meeting);
-            }
-        }
-        this.meetings.setValue(roomFilteredMeetings);
-    }
-
-    public void getMeetingsFilteredByDate(LocalDate date) {
-        List<Meeting> roomFilteredByDate = new ArrayList<>();
-        for (Meeting meeting : allMeetings) {
-            if (meeting.getDate().equals(date)) {
-                roomFilteredByDate.add(meeting);
-            }
-        }
-        this.meetings.setValue(roomFilteredByDate);
-    }
 
     /**
      * Fetch a single meeting
