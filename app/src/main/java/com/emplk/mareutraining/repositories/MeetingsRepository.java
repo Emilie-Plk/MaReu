@@ -49,7 +49,6 @@ public class MeetingsRepository {
             @NonNull List<String> participants,
             @NonNull String meetingObject
     ) {
-        assert allMeetings != null;
         allMeetings.add(
                 new Meeting(
                         idIncrement++,
@@ -77,7 +76,6 @@ public class MeetingsRepository {
 
     public void getMeetingsFilteredByRoom(String roomName) {
         List<Meeting> roomFilteredMeetings = new ArrayList<>();
-        assert allMeetings != null;
         for (Meeting meeting : allMeetings) {
             if ((meeting.getRoom().getRoomName()).equals(roomName)) {
                 roomFilteredMeetings.add(meeting);

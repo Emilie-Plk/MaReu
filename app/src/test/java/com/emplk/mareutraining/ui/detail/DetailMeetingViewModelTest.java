@@ -41,12 +41,9 @@ public class DetailMeetingViewModelTest {
     @Rule
     public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
 
-    /*@Mock
-    private BuildConfigResolver buildConfigResolver = Mockito.mock(BuildConfigResolver.class);*/
-
     List<Meeting> dummyMeetings = new ArrayList<>();
-
-    private final Meeting meetingOne = new Meeting(0,
+    private final Meeting meetingOne = new Meeting(
+            0,
             "Réunion d'info",
             Room.ROOM_FOUR,
             LocalDate.of(2022, 12, 8),
@@ -57,6 +54,7 @@ public class DetailMeetingViewModelTest {
                     "charlotte@lamzone.fr",
                     "patrice@lamzone.fr"),
             "Nouveaux arrivants dans l'équipe + point sur les congés");
+
     @Mock
     private MeetingsRepository repository;
 
@@ -66,95 +64,24 @@ public class DetailMeetingViewModelTest {
 
     @Before
     public void setUp() {
-        dummyMeetings.add(meetingOne);
-
         meeting = new MutableLiveData<>();
+
+        dummyMeetings.add(meetingOne);
 
         viewModel = new DetailMeetingViewModel(repository);
     }
 
     @Test
     public void getDetailMeeting() {
-        long meetingId = 0;
         // GIVEN
+        long meetingId = 0;
         meeting.setValue(meetingOne);
         given(repository.getSingleMeeting(meetingId)).willReturn(meeting);
-        // THEN
+        // WHEN
         viewModel.getDetailViewStateLiveData(meetingId);
         verify(repository).getSingleMeeting(meetingId);
+        // THEN
         TestUtil.observeForTesting(viewModel.getDetailViewStateLiveData(0), value ->
-                assertEquals(value.getMeetingTitle(), "Réunion d'info"));
+                assertEquals(meetingOne.getMeetingTitle(), value.getMeetingTitle()));
     }
-
-    // region private method (getDefaultMeetings)
-    @NonNull
-    private List<Meeting> getDefaultMeetings() {
-        List<Meeting> dummyMeetings = new ArrayList<>();
-
-        dummyMeetings.add(new Meeting(0,
-                "Réunion d'info",
-                Room.ROOM_FOUR,
-                LocalDate.of(2022, 12, 8),
-                LocalTime.of(10, 0),
-                LocalTime.of(10, 30),
-                Arrays.asList(
-                        "pierre@lamzone.fr",
-                        "charlotte@lamzone.fr",
-                        "patrice@lamzone.fr"),
-                "Nouveaux arrivants dans l'équipe + point sur les congés"));
-        dummyMeetings.add(
-                new Meeting(1,
-                        "Retour sur les tests",
-                        Room.ROOM_ONE,
-                        LocalDate.of(2022, 12, 8),
-                        LocalTime.of(10, 0),
-                        LocalTime.of(10, 30),
-                        Arrays.asList(
-                                "marie@lamzone.fr",
-                                "ahmed@lamzone.fr",
-                                "jocelyn@lamzone.fr"),
-                        "Résultats des premiers tests par l'équipe Android"));
-        dummyMeetings.add(
-                new Meeting(
-                        2,
-                        "Présentation nouveau design",
-                        Room.ROOM_TEN,
-                        LocalDate.of(2022, 12, 15),
-                        LocalTime.of(11, 0),
-                        LocalTime.of(11, 20),
-                        Arrays.asList(
-                                "nicolas@lamzone.fr",
-                                "jpaul@lamzone.fr",
-                                "soizic@lamzone.fr"),
-                        "Retour des utilisateurs du projet MaRéu, présentation du nouveau design"));
-
-        dummyMeetings.add(
-                new Meeting(3,
-                        "Projet secret",
-                        Room.ROOM_FOUR,
-                        LocalDate.of(2022, 12, 9),
-                        LocalTime.of(14, 30),
-                        LocalTime.of(14, 50),
-                        Arrays.asList(
-                                "djamilla@lamzone.fr",
-                                "hubert@lamzone.fr",
-                                "joan@lamzone.fr"),
-                        "Point avec Joan et Hubert sur l'avancée des maquettes + phases de tests"));
-
-        dummyMeetings.add(
-                new Meeting(4,
-                        "Brainstorm dev",
-                        Room.ROOM_SEVEN,
-                        LocalDate.of(2022, 12, 11),
-                        LocalTime.of(15, 0),
-                        LocalTime.of(15, 45),
-                        Arrays.asList(
-                                "nicolas@lamzone.fr",
-                                "gregory@lamzone.fr",
-                                "pauline@lamzone.fr"),
-                        "Debrief hebdo dev"));
-
-        return dummyMeetings;
-    }
-    // endregion
 }
