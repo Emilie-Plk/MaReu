@@ -3,6 +3,7 @@ package com.emplk.mareutraining.ui.list.utils;
 import android.content.res.Resources;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.hamcrest.Description;
@@ -18,10 +19,6 @@ public class RecyclerViewMatcher {
 
     public RecyclerViewMatcher(int recyclerViewId) {
         this.recyclerViewId = recyclerViewId;
-    }
-
-    public Matcher<View> atPosition(final int position) {
-        return atPositionOnView(position, -1);
     }
 
     public Matcher<View> atPositionOnView(final int position, final int targetViewId) {
@@ -52,7 +49,8 @@ public class RecyclerViewMatcher {
                     RecyclerView recyclerView =
                             (RecyclerView) view.getRootView().findViewById(recyclerViewId);
                     if (recyclerView != null && recyclerView.getId() == recyclerViewId) {
-                        childView = Objects.requireNonNull(recyclerView.findViewHolderForAdapterPosition(position)).itemView;
+                        //noinspection ConstantConditions
+                        childView = recyclerView.findViewHolderForAdapterPosition(position).itemView;
                     }
                     else {
                         return false;

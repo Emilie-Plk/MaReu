@@ -50,12 +50,14 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
         setCreateFab();
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
-        viewModel.onResetFilter();
+        resetFilters();
         setEmptyListToast();
     }
+
 
     private void setViewModel() {
         viewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(MeetingViewModel.class);
@@ -115,8 +117,7 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
             return true;
         }
         if (id == R.id.sortdelete_menu) {
-            viewModel.onResetFilter();
-            binding.toolbarMain.setSubtitle(null);
+            resetFilters();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -128,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
 
     @Override
     public void onRoomSelected(String roomName) {
-        viewModel.onFetchingMeetingsFilteredByRoom(roomName);
+        viewModel.setRoomFilter(roomName);
         binding.toolbarMain.setSubtitle(getString(R.string.filter_meeting_appbar) + roomName);
     }
 
@@ -146,10 +147,15 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
             cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
             cal.set(Calendar.YEAR, year);
             LocalDate selectedDate = LocalDate.of(year, monthOfYear + 1, dayOfMonth);
-            viewModel.onFetchingMeetingsFilteredByDate(selectedDate);
+            viewModel.setDateFilter(selectedDate);
             binding.toolbarMain.setSubtitle(getString(R.string.filter_meeting_appbar) + viewModel.formatDate(selectedDate));
         }, mYear, mMonth, mDay);
         dpd.show();
+    }
+
+    private void resetFilters() {
+        viewModel.resetFilters();
+        binding.toolbarMain.setSubtitle(null);
     }
 
     private void setEmptyListToast() {

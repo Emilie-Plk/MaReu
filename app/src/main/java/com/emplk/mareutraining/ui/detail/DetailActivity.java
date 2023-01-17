@@ -38,7 +38,9 @@ public class DetailActivity extends AppCompatActivity {
 
         Toolbar myToolbar = binding.toolbarDetail;
         setSupportActionBar(myToolbar);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
+        //noinspection ConstantConditions
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         long meetingId = getIntent().getLongExtra(KEY_MEETING_ID, -1);

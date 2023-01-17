@@ -60,10 +60,11 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(CreateMeetingViewModel.class);
 
-
         Toolbar myToolbar = binding.toolbarCreate;
         setSupportActionBar(myToolbar);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+
+        //noinspection ConstantConditions
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         bindAddMeeting(viewModel, binding.titleTextinput, binding.selectedDayTv,
@@ -91,7 +92,8 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
 
     private void addParticipantChip() {
         binding.addParticipantFab.setOnClickListener(view1 -> {
-            if (viewModel.isValidEmail(Objects.requireNonNull(binding.participantsInput.getText()).toString())) {
+            //noinspection ConstantConditions
+            if (viewModel.isValidEmail(binding.participantsInput.getText().toString())) {
                 generateParticipantChip(binding.participantsInput);
                 binding.participantsLayout.setError(null);
                 binding.participantsInput.setText("");
@@ -163,7 +165,8 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
 
     private void generateParticipantChip(@NonNull TextInputEditText textInputEditText) {
         Chip participantChip = new Chip(this);
-        participantChip.setText(Objects.requireNonNull(textInputEditText.getText()).toString());
+        //noinspection ConstantConditions
+        participantChip.setText(textInputEditText.getText().toString());
         participantChip.setChipIconResource(R.drawable.ic_baseline_person_24);
         participantChip.setCloseIconVisible(true);
         participantChip.setOnCloseIconClickListener(v -> {
@@ -185,27 +188,32 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
             TextInputEditText meetingTitle,
             TextView date,
             TextView timeStart,
+            @NonNull
             TextView timeEnd,
+            @NonNull
             TextInputEditText meetingObject
     ) {
 
         binding.createMeetingBtn.setOnClickListener(view -> {
-            if (viewModel.isMeetingInfoIncomplete(Objects.requireNonNull(meetingTitle.getText()).toString(),
+            //noinspection ConstantConditions
+            if (viewModel.isMeetingInfoIncomplete(meetingTitle.getText().toString(),
                     selectedRoom, date.getText().toString(),
-                    timeStart.getText().toString(), timeEnd.getText().toString(), participantsEmails,
-                    Objects.requireNonNull(meetingObject.getText()).toString())) {
+                    timeStart.getText().toString(),
+                    timeEnd.getText().toString(),
+                    participantsEmails,
+                    meetingObject.getText().toString())) {
                 Toasty.error(this, R.string.check_submit_btn_toast, Toasty.LENGTH_SHORT).show();
             } else if (viewModel.isInvalidTime(timeStart.getText().toString(), timeEnd.getText().toString())) {
                 Toasty.error(this, R.string.check_time_ok_toast, Toasty.LENGTH_SHORT).show();
             } else {
                 viewModel.onCreateMeetingClicked(
-                        Objects.requireNonNull(meetingTitle.getText()).toString(),
+                        meetingTitle.getText().toString(),
                         viewModel.getSelectedRoom(selectedRoom),
                         viewModel.formatDate(date.getText().toString()),
                         viewModel.formatTime(timeStart.getText().toString()),
                         viewModel.formatTime(timeEnd.getText().toString()),
                         participantsEmails,
-                        Objects.requireNonNull(meetingObject.getText()).toString()
+                        meetingObject.getText().toString()
                 );
             }
         });

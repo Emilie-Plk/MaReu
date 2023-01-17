@@ -5,13 +5,11 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.is;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,14 +32,14 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class rooomfilter {
+public class fdfs {
 
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
 
     @Test
-    public void rooomfilter() {
+    public void fdfs() {
         ViewInteraction actionMenuItemView = onView(
                 allOf(withId(R.id.menu_filter_main), withContentDescription("Filtrer les r�unions"),
                         childAtPosition(
@@ -65,10 +63,30 @@ public class rooomfilter {
         DataInteraction appCompatCheckedTextView = onData(anything())
                 .inAdapterView(allOf(withId(R.id.room_listview_menu),
                         childAtPosition(
-                                withClassName(is("android.widget.LinearLayout")),
+                                withId(R.id.room_filter_fragment),
                                 1)))
                 .atPosition(3);
         appCompatCheckedTextView.perform(click());
+
+        ViewInteraction actionMenuItemView2 = onView(
+                allOf(withId(R.id.menu_filter_main), withContentDescription("Filtrer les r�unions"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.toolbar_main),
+                                        1),
+                                0),
+                        isDisplayed()));
+        actionMenuItemView2.perform(click());
+
+        ViewInteraction materialTextView2 = onView(
+                allOf(withId(androidx.transition.R.id.title), withText("Supprimer les filtres"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(com.google.android.material.R.id.content),
+                                        1),
+                                0),
+                        isDisplayed()));
+        materialTextView2.perform(click());
     }
 
     private static Matcher<View> childAtPosition(
