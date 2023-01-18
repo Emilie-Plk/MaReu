@@ -2,20 +2,19 @@ package com.emplk.mareutraining.ui.main;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.ignoreStubs;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
 
 import androidx.annotation.NonNull;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.emplk.mareutraining.models.Meeting;
 import com.emplk.mareutraining.models.Room;
 import com.emplk.mareutraining.repositories.MeetingsRepository;
 import com.emplk.mareutraining.ui.list.MeetingViewModel;
-import com.emplk.mareutraining.ui.list.MeetingsViewStateItem;
+import com.emplk.mareutraining.ui.list.MeetingViewStateItem;
 import com.emplk.mareutraining.utils.TestUtil;
 
 import org.junit.Before;
@@ -23,16 +22,15 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MeetingViewModelTest {
@@ -42,12 +40,10 @@ public class MeetingViewModelTest {
     @Rule
     public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
 
-
     @Mock
     private MeetingsRepository repository;
 
     private MeetingViewModel viewModel;
-
 
     @Before
     public void setUp() {
@@ -58,84 +54,114 @@ public class MeetingViewModelTest {
         meetingsList.setValue(dummyMeetings);
 
         // Mocked LiveData from repo
-        given(repository.getMeetings()).willReturn(meetingsList);
+        given(repository.getMeetingsLiveData()).willReturn(meetingsList);
 
         viewModel = new MeetingViewModel(repository);
+
+        verify(repository).getMeetingsLiveData();
     }
 
     @Test
     public void nominalCase() {
-        // GIVEN meetingList (in setup)
-        // WHEN calling Meeting View State items
-        TestUtil.observeForTesting(viewModel.getMeetingViewStateItems(), value -> {
-            // THEN all 5 meetings are found
-            assertEquals(5, value.size());
-            verify(repository).getMeetings();
-            verifyNoMoreInteractions(repository);
-        });
+        // WHEN
+        List<MeetingViewStateItem> result = TestUtil.getValueForTesting(viewModel.getMeetingViewStateItemsLiveData());
+
+        // THEN
+        // TODO Emilie, un bon début, mais on pourrait aller plus loin pour vérifier que le title, date et participants sont bien générés
+        assertEquals(5, result.size());
+
+        verifyNoMoreInteractions(repository);
+    }
+
+    @Test
+    public void meeting_title_date_participants_are_generated() {
+        // WHEN
+        List<MeetingViewStateItem> result = TestUtil.getValueForTesting(viewModel.getMeetingViewStateItemsLiveData());
+
+        // THEN
+        for (int i = 0; i < result.size(); i++) {
+            assertEquals(getDefaultMeetings().get(i).getMeetingTitle(), result.get(i).getMeetingTitle());
+        }
+
+        for (int i = 0; i < result.size(); i++) {
+            assertEquals(getDefaultMeetings().get(i).getDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), result.get(i).getDate());
+        }
+
+        for (int i = 0; i < result.size(); i++) {
+            assertEquals(getDefaultMeetings().get(i).getParticipants()
+                    .stream()
+                    .map(word -> word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase())
+                    .map(word -> word.split("@")[0])
+                    .collect(Collectors.joining(" ")), result.get(i).getParticipants());
+        }
+        verifyNoMoreInteractions(repository);
     }
 
     @Test
     public void edge_case_no_meeting() {
-        // GIVEN LiveData populated with empty list of Meeting (edge case)
+        // GIVEN
         List<Meeting> emptyMeetingsList = new ArrayList<>();
+
+        // WHEN
         meetingsList.setValue(emptyMeetingsList);
 
-        // WHEN observe for testing
-        TestUtil.observeForTesting(viewModel.getMeetingViewStateItems(), value -> {
-            // THEN no View State item found (empty)
-            assertEquals(0, value.size());
+        // THEN
+        List<MeetingViewStateItem> result = TestUtil.getValueForTesting(viewModel.getMeetingViewStateItemsLiveData());
 
-            verify(repository).getMeetings();
-            verifyNoMoreInteractions(repository);
-        });
+        assertEquals(0, result.size());
+        verifyNoMoreInteractions(repository);
+    }
+
+    @Test
+    public void room_filter_meetings() {
+        // WHEN
+        viewModel.onRoomFilter("Salle 4");
+
+        // THEN
+        List<MeetingViewStateItem> result = TestUtil.getValueForTesting(viewModel.getMeetingViewStateItemsLiveData());
+        assertEquals(2, result.size());
+    }
+
+    @Test
+    public void date_filter_meetings() {
+        // GIVEN
+        LocalDate date = LocalDate.of(2022, 12, 15);
+        viewModel.onDateFilter(date);
+
+        // WHEN
+        List<MeetingViewStateItem> result = TestUtil.getValueForTesting(viewModel.getMeetingViewStateItemsLiveData());
+
+        // THEN
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    public void reset_filter_meetings() {
+        // GIVEN
+        LocalDate date = LocalDate.of(2022, 12, 15);
+        viewModel.onDateFilter(date);
+        List<MeetingViewStateItem> filteredResult = TestUtil.getValueForTesting(viewModel.getMeetingViewStateItemsLiveData());
+        assertEquals(1, filteredResult.size());
+
+        // WHEN
+        viewModel.onResetFilters();
+
+        // THEN
+        List<MeetingViewStateItem> result = TestUtil.getValueForTesting(viewModel.getMeetingViewStateItemsLiveData());
+        assertEquals(5, result.size());
     }
 
     @Test
     public void check_on_delete_meeting() {
-        // GIVEN meetingId
+        // GIVEN
         long meetingId = 4;
 
-        // WHEN delete given meeting
+        // WHEN
         viewModel.onDeleteMeetingClicked(meetingId);
 
-        // THEN verify repo's behavior and check nothing else has been invoked in the mocks
+        // THEN
         verify(repository).deleteMeeting(meetingId);
         verifyNoMoreInteractions(repository);
-    }
-
-    @Test
-    //TODO: is it enough? we already check it in repo, here we just verify viewModel <-> repo ?
-    public void check_meeting_filtered_by_room_with_success() {
-        // GIVEN room name
-        String roomName = "Salle 4";
-
-        // WHEN filter meetings with given room name
-        viewModel.onFetchingMeetingsFilteredByRoom(roomName);
-
-        // THEN verify repo's behavior and check nothing else has been invoked in the mocks
-        verify(repository).getMeetingsFilteredByRoom(roomName);
-        verifyNoMoreInteractions(repository);
-    }
-
-
-    @Test
-    public void check_meeting_filtered_by_date_with_success() {
-        // GIVEN date
-        LocalDate date = LocalDate.of(2023, 1, 16);
-
-        // WHEN filter meetings with given date
-        viewModel.onFetchingMeetingsFilteredByDate(date);
-
-        // THEN verify repo's behavior and check nothing else has been invoked in the mocks
-        verify(repository).getMeetingsFilteredByDate(date);
-        verifyNoMoreInteractions(repository);
-    }
-
-    @Test
-    public void reset_meetings_filtered_with_success() {
-        viewModel.onResetFilter();
-        verify(repository).getAllMeetings();
     }
 
     // region dummy meetings list
@@ -144,7 +170,7 @@ public class MeetingViewModelTest {
         List<Meeting> dummyMeetings = new ArrayList<>();
 
         dummyMeetings.add(new Meeting(0,
-                "Réunion d'info",
+                "Réungfgfgion d'info",
                 Room.ROOM_FOUR,
                 LocalDate.of(2022, 12, 8),
                 LocalTime.of(10, 0),
@@ -154,6 +180,7 @@ public class MeetingViewModelTest {
                         "charlotte@lamzone.fr",
                         "patrice@lamzone.fr"),
                 "Nouveaux arrivants dans l'équipe + point sur les congés"));
+
         dummyMeetings.add(
                 new Meeting(1,
                         "Retour sur les tests",

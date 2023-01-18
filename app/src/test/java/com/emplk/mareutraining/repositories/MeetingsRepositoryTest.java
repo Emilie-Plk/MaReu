@@ -29,8 +29,6 @@ public class MeetingsRepositoryTest {
 
     private static final String TITLE = "TEST MEETING TITLE";
     private static final Room ROOM = Room.ROOM_FOUR;
-
-    private static final String ROOM_FILTER = "Salle 4";
     private static final LocalDate DATE = LocalDate.now();
     private static final LocalTime TIME_START = LocalTime.of(14,0);
     private static final LocalTime TIME_END = LocalTime.of(14, 30);
@@ -54,7 +52,7 @@ public class MeetingsRepositoryTest {
         MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
 
         // WHEN fetching meetings
-        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
+        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetingsLiveData());
 
         // THEN meeting repo is empty
         assertEquals(0, result.size());
@@ -65,8 +63,8 @@ public class MeetingsRepositoryTest {
         Mockito.doReturn(true).when(buildConfigResolver).isDebug();
         MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
 
-        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
-// TODO : list static final
+        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetingsLiveData());
+
         assertEquals(result, getDummyMeetings());
     }
 
@@ -87,115 +85,11 @@ public class MeetingsRepositoryTest {
         );
 
         // THEN newly added meeting has been added to repo
-        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
+        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetingsLiveData());
         assertEquals(1, result.size());
     }
 
-    @Test
-    public void delete_one_meeting_should_decrement_meeting_list_by_1() {
-        // GIVEN mocked repository (empty) and adding new meeting
-        MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
-        repository.addMeeting(
-                TITLE,
-                ROOM,
-                DATE,
-                TIME_START,
-                TIME_END,
-                PARTICIPANTS,
-                OBJECT
-        );
-        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
-        assertEquals(1, result.size());
 
-        // WHEN delete newly added meeting
-        repository.deleteMeeting(0);
-        result = TestUtil.getValueForTesting(repository.getMeetings());
-
-        // THEN meeting has been deleted, repo is empty again
-        assertTrue(result.isEmpty());
-    }
-
-    @Test
-    public void filter_meeting_list_by_given_room_should_return_2_meetings() {
-        // GIVEN mocked repository with 5 meetings
-        Mockito.doReturn(true).when(buildConfigResolver).isDebug();
-        MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
-
-        // WHEN calling this method
-        repository.getMeetingsFilteredByRoom(ROOM_FILTER);
-        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
-
-        // THEN return two meetings scheduled in given room
-        assertEquals(2, result.size());
-        assertEquals(ROOM_FILTER, result.get(0).getRoom().getRoomName());
-        assertEquals(ROOM_FILTER, result.get(1).getRoom().getRoomName());
-    }
-
-    @Test
-    public void filter_meeting_list_by_given_date_should_return_1_meeting() {
-        // GIVEN mocked repository with 5 meetings and given date
-        Mockito.doReturn(true).when(buildConfigResolver).isDebug();
-        MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
-        LocalDate date = LocalDate.of(2022, 12, 11);
-
-        // WHEN filtering by date
-        repository.getMeetingsFilteredByDate(date);
-        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
-
-        // THEN return one meeting scheduled at given date
-        assertEquals(1, result.size());
-        assertEquals(date, result.get(0).getDate());
-    }
-
-    @Test
-    public void filterByDate_edge_case() {
-        // GIVEN mocked repository with 5 meetings and given date
-        Mockito.doReturn(true).when(buildConfigResolver).isDebug();
-        MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
-        LocalDate date = LocalDate.of(2000, 12, 2);
-
-        // WHEN filtering by date
-        repository.getMeetingsFilteredByDate(date);
-        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
-
-        // THEN no meeting found
-        assertEquals(0, result.size());
-    }
-
-    @Test
-    public void resetDateFilteredMeetings() {
-        // GIVEN meetings filtered by date
-        Mockito.doReturn(true).when(buildConfigResolver).isDebug();
-        MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
-        LocalDate date = LocalDate.of(2022, 12, 11);
-        repository.getMeetingsFilteredByDate(date);
-        List<Meeting> filteredResult = TestUtil.getValueForTesting(repository.getMeetings());
-        assertEquals(1, filteredResult.size());
-
-        // WHEN filter meetings
-        repository.getAllMeetings();
-
-        // THEN retrieve all 5 meetings
-        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
-        assertEquals(5, result.size());
-    }
-
-    @Test
-    public void resetRoomFilteredMeetings() {
-        // GIVEN meetings filtered by room
-        Mockito.doReturn(true).when(buildConfigResolver).isDebug();
-        MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
-        repository.getMeetingsFilteredByRoom(ROOM_FILTER);
-        List<Meeting> filteredResult = TestUtil.getValueForTesting(repository.getMeetings());
-        assertEquals(2, filteredResult.size());
-
-        // WHEN filter meetings
-        repository.getAllMeetings();
-
-        // THEN retrieve all 5 meetings
-        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
-        assertEquals(5, result.size());
-    }
 
 // region dummy meetings list
     @NonNull

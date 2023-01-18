@@ -35,7 +35,6 @@ public class DetailActivityTest {
 
     @Test
     public void displayedMeetingInfo_displayedMeetingInfoInDetailActivity_shouldMatch() {
-        // GIVEN third meeting
         onView(withRecyclerView(R.id.meetings_rv)
                 .atPositionOnView(2, R.id.meeting_title_tv))
                 .check(matches(withText(MEETING_TITLE)));
@@ -46,17 +45,9 @@ public class DetailActivityTest {
                 .atPositionOnView(2, R.id.room_number))
                 .check(matches(withText(ROOM_TEN)));
 
-        // WHEN click on it to display details
         onView(allOf(withId(R.id.meetings_rv), isDisplayed())).perform(actionOnItemAtPosition(2, click()));
 
-        // THEN meeting title and room name are the same in detail Activity
         onView(withId(R.id.meeting_title_detail)).check(matches(withText(MEETING_TITLE)));
         onView(withId(R.id.room_name_detail)).check(matches(withText(ROOM_TEN)));
     }
-
-
 }
-
-
-
-//TODO: à faire

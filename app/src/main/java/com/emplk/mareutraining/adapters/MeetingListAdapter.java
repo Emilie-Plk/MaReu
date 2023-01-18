@@ -12,18 +12,15 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.emplk.mareutraining.databinding.MeetingItemBinding;
-import com.emplk.mareutraining.ui.list.MainActivity;
-import com.emplk.mareutraining.ui.list.MeetingsViewStateItem;
+import com.emplk.mareutraining.ui.list.MeetingViewStateItem;
 import com.emplk.mareutraining.ui.list.OnMeetingClickedListener;
 
-import es.dmoral.toasty.Toasty;
 
-
-public class MeetingListRVAdapter extends ListAdapter<MeetingsViewStateItem, MeetingListRVAdapter.MeetingsViewHolder> {
+public class MeetingListAdapter extends ListAdapter<MeetingViewStateItem, MeetingListAdapter.MeetingsViewHolder> {
 
     private final OnMeetingClickedListener listener;
 
-    public MeetingListRVAdapter(OnMeetingClickedListener listener) {
+    public MeetingListAdapter(OnMeetingClickedListener listener) {
         super(new ListMeetingItemCallback());
         this.listener = listener;
     }
@@ -56,7 +53,7 @@ public class MeetingListRVAdapter extends ListAdapter<MeetingsViewStateItem, Mee
             deleteMeeting = binding.deleteMeeting;
         }
 
-        public void bind(MeetingsViewStateItem item, OnMeetingClickedListener listener) {
+        public void bind(MeetingViewStateItem item, OnMeetingClickedListener listener) {
             itemView.setOnClickListener(v -> listener.onMeetingClicked(item.getMeetingId()));
             roomName.setBackgroundResource(item.getRoomColor());
             roomName.setContentDescription(item.getRoomName()); // for accessibility
@@ -69,15 +66,15 @@ public class MeetingListRVAdapter extends ListAdapter<MeetingsViewStateItem, Mee
         }
     }
 
-    private static class ListMeetingItemCallback extends DiffUtil.ItemCallback<MeetingsViewStateItem> {
+    private static class ListMeetingItemCallback extends DiffUtil.ItemCallback<MeetingViewStateItem> {
 
         @Override
-        public boolean areItemsTheSame(@NonNull MeetingsViewStateItem oldItem, @NonNull MeetingsViewStateItem newItem) {
+        public boolean areItemsTheSame(@NonNull MeetingViewStateItem oldItem, @NonNull MeetingViewStateItem newItem) {
             return oldItem.getMeetingId() == newItem.getMeetingId();
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull MeetingsViewStateItem oldItem, @NonNull MeetingsViewStateItem newItem) {
+        public boolean areContentsTheSame(@NonNull MeetingViewStateItem oldItem, @NonNull MeetingViewStateItem newItem) {
             return oldItem.equals(newItem);
         }
     }

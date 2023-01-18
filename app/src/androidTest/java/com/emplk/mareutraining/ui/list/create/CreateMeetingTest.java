@@ -48,7 +48,6 @@ public class CreateMeetingTest {
     private static final String MEETING_OBJECT = "Description de réunion test";
     private static final String ROOM = "Salle 5";
     private static final String PARTICIPANT_MAIL = "john@doe.fr";
-
     private static final String INVALID_PARTICIPANT_MAIL = "jôhИ@do€..fr";
 
     @Rule
