@@ -54,7 +54,7 @@ public class MeetingsRepositoryTest {
         MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
 
         // WHEN fetching meetings
-        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
+        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetingsLiveData());
 
         // THEN meeting repo is empty
         assertEquals(0, result.size());
@@ -65,7 +65,7 @@ public class MeetingsRepositoryTest {
         Mockito.doReturn(true).when(buildConfigResolver).isDebug();
         MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
 
-        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
+        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetingsLiveData());
 // TODO : list static final
         assertEquals(result, getDummyMeetings());
     }
@@ -87,7 +87,7 @@ public class MeetingsRepositoryTest {
         );
 
         // THEN newly added meeting has been added to repo
-        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
+        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetingsLiveData());
         assertEquals(1, result.size());
     }
 
@@ -104,12 +104,12 @@ public class MeetingsRepositoryTest {
                 PARTICIPANTS,
                 OBJECT
         );
-        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
+        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetingsLiveData());
         assertEquals(1, result.size());
 
         // WHEN delete newly added meeting
         repository.deleteMeeting(0);
-        result = TestUtil.getValueForTesting(repository.getMeetings());
+        result = TestUtil.getValueForTesting(repository.getMeetingsLiveData());
 
         // THEN meeting has been deleted, repo is empty again
         assertTrue(result.isEmpty());

@@ -1,7 +1,6 @@
 package com.emplk.mareutraining.repositories;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
@@ -22,9 +21,9 @@ import java.util.List;
 public class MeetingsRepository {
 
 
-    private final MutableLiveData<List<Meeting>> meetings = new MutableLiveData<>(new ArrayList<>());
+    private final MutableLiveData<List<Meeting>> meetingsMutableLiveData = new MutableLiveData<>(new ArrayList<>());
 
-    private List<Meeting> allMeetings = new ArrayList<>();
+    private final List<Meeting> allMeetings = new ArrayList<>();
 
     private int idIncrement = 0;
 
@@ -36,7 +35,6 @@ public class MeetingsRepository {
     public MeetingsRepository(BuildConfigResolver buildConfigResolver) {
         if (buildConfigResolver.isDebug()) {
             generateRandomMeetings();
-            allMeetings = this.meetings.getValue();
         }
     }
 
@@ -61,7 +59,7 @@ public class MeetingsRepository {
                         meetingObject
                 )
         );
-        this.meetings.setValue(allMeetings);
+        meetingsMutableLiveData.setValue(allMeetings);
     }
 
 
@@ -70,8 +68,8 @@ public class MeetingsRepository {
      *
      * @return List of Meeting LiveData
      */
-    public LiveData<List<Meeting>> getMeetings() {
-        return meetings;
+    public LiveData<List<Meeting>> getMeetingsLiveData() {
+        return meetingsMutableLiveData;
     }
 
 
@@ -82,7 +80,7 @@ public class MeetingsRepository {
      * @return Meeting LiveData
      */
     public LiveData<Meeting> getSingleMeeting(long meetingId) {
-        return Transformations.map(meetings, meetings -> {
+        return Transformations.map(meetingsMutableLiveData, meetings -> {
             for (Meeting meeting : meetings) {
                 if (meeting.getId() == meetingId) {
                     return meeting;
@@ -98,20 +96,13 @@ public class MeetingsRepository {
      * @param meetingId long
      */
     public void deleteMeeting(long meetingId) {
-        List<Meeting> meetings = this.meetings.getValue();
-        if (meetings == null) return;
-
-        for (Meeting meeting : meetings) {
+        for (Meeting meeting : allMeetings) {
             if (meeting.getId() == meetingId) {
-                meetings.remove(meeting);
+                allMeetings.remove(meeting);
                 break;
             }
         }
-        this.meetings.setValue(meetings);
-    }
-
-    public void getAllMeetings() {
-        this.meetings.setValue(allMeetings);
+        meetingsMutableLiveData.setValue(allMeetings);
     }
 
     /**
