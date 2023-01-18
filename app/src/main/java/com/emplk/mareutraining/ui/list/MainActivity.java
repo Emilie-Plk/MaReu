@@ -22,7 +22,6 @@ import com.emplk.mareutraining.ui.list.room_filter.RoomFilterDialogFragment;
 import com.emplk.mareutraining.utils.ViewModelFactory;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 
 import es.dmoral.toasty.Toasty;
@@ -45,14 +44,20 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
         configureToolbar();
         initRecyclerView();
         setCreateFab();
+
+        viewModel.getDisplayToolbarSubtitle().observe(this, subtitle -> {
+            binding.toolbarMain.setSubtitle(subtitle);
+        });
+
+        viewModel.getDisplayToast().observe(this, toast ->
+                Toasty.info(this, toast, Toasty.LENGTH_SHORT).show());
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        // resetFilters();  // called here to clear filters on rotate
-        setEmptyListToast();
+        resetFilters();  // called here to clear filters on rotate (POC)
     }
 
 
@@ -74,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
             @Override
             public void onDeleteMeetingClicked(long meetingId) {
                 viewModel.onDeleteMeetingClicked(meetingId);
-                Toasty.info(MainActivity.this, R.string.meeting_deleted_toast, Toast.LENGTH_SHORT).show();
             }
         });
         /**
@@ -126,7 +130,6 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
     @Override
     public void onRoomSelected(String roomName) {
         viewModel.onRoomFilter(roomName);
-        binding.toolbarMain.setSubtitle(getString(R.string.filter_meeting_appbar) + roomName);
     }
 
     private void openDateFilterCalendar() {
@@ -140,22 +143,12 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
                 (view, selectedYear, selectedMonthOfYear, selectedDayOfMonth) -> {
             LocalDate selectedDate = LocalDate.of(selectedYear, selectedMonthOfYear + 1, selectedDayOfMonth);
             viewModel.onDateFilter(selectedDate);
-            binding.toolbarMain.setSubtitle(
-                    getString(R.string.filter_meeting_appbar) + selectedDate.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         }, year, month, day);
         dpd.show();
     }
 
     private void resetFilters() {
         viewModel.onResetFilters();
-        binding.toolbarMain.setSubtitle(null);
     }
 
-    private void setEmptyListToast() {
-        viewModel.getMeetingViewStateItemsLiveData().observe(this, meetingsViewStateItems -> {
-            if (meetingsViewStateItems.isEmpty()) {
-                Toasty.info(MainActivity.this, R.string.no_meeting_toast, Toasty.LENGTH_SHORT).show();
-            }
-        });
-    }
 }

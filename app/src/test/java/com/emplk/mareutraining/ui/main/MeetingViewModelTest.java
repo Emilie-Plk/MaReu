@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
 
+import com.emplk.mareutraining.R;
 import com.emplk.mareutraining.models.Meeting;
 import com.emplk.mareutraining.models.Room;
 import com.emplk.mareutraining.repositories.MeetingsRepository;
@@ -67,7 +68,6 @@ public class MeetingViewModelTest {
         List<MeetingViewStateItem> result = TestUtil.getValueForTesting(viewModel.getMeetingViewStateItemsLiveData());
 
         // THEN
-        // TODO Emilie, un bon début, mais on pourrait aller plus loin pour vérifier que le title, date et participants sont bien générés
         assertEquals(5, result.size());
 
         verifyNoMoreInteractions(repository);
@@ -120,6 +120,7 @@ public class MeetingViewModelTest {
         // THEN
         List<MeetingViewStateItem> result = TestUtil.getValueForTesting(viewModel.getMeetingViewStateItemsLiveData());
         assertEquals(2, result.size());
+        verifyNoMoreInteractions(repository);
     }
 
     @Test
@@ -133,6 +134,7 @@ public class MeetingViewModelTest {
 
         // THEN
         assertEquals(1, result.size());
+        verifyNoMoreInteractions(repository);
     }
 
     @Test
@@ -149,6 +151,7 @@ public class MeetingViewModelTest {
         // THEN
         List<MeetingViewStateItem> result = TestUtil.getValueForTesting(viewModel.getMeetingViewStateItemsLiveData());
         assertEquals(5, result.size());
+        verifyNoMoreInteractions(repository);
     }
 
     @Test
@@ -170,7 +173,7 @@ public class MeetingViewModelTest {
         List<Meeting> dummyMeetings = new ArrayList<>();
 
         dummyMeetings.add(new Meeting(0,
-                "Réungfgfgion d'info",
+                "Réunion d'info",
                 Room.ROOM_FOUR,
                 LocalDate.of(2022, 12, 8),
                 LocalTime.of(10, 0),

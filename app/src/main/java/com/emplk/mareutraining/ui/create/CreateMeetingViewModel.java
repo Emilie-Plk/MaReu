@@ -73,7 +73,6 @@ public class CreateMeetingViewModel extends ViewModel {
         return LocalDate.parse(date, formatter);
     }
 
-
     /**
      * Parse time in String to LocalTime
      *
@@ -128,11 +127,11 @@ public class CreateMeetingViewModel extends ViewModel {
     /**
      * Check if entered email address is valid (correctly stylized)
      *
-     * @param target      String
+     * @param target String
      * @return boolean (false: set message error)
      */
     public boolean isValidEmail(String target) {
-       return Patterns.EMAIL_ADDRESS.matcher(target).matches();
+        return Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 
 }

@@ -26,7 +26,6 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.Objects;
 
 import es.dmoral.toasty.Toasty;
 
@@ -89,6 +88,7 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
         viewModel.getCloseActivity().observe(this, closeActivitySingleLiveEvent -> finish());
 
     }
+
 
     private void addParticipantChip() {
         binding.addParticipantFab.setOnClickListener(view1 -> {

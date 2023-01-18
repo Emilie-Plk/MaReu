@@ -1,5 +1,7 @@
 package com.emplk.mareutraining.utils;
 
+import android.content.res.Resources;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -8,6 +10,7 @@ import com.emplk.mareutraining.config.BuildConfigResolver;
 import com.emplk.mareutraining.repositories.MeetingsRepository;
 import com.emplk.mareutraining.ui.create.CreateMeetingViewModel;
 import com.emplk.mareutraining.ui.detail.DetailMeetingViewModel;
+import com.emplk.mareutraining.ui.list.MainActivity;
 import com.emplk.mareutraining.ui.list.MeetingViewModel;
 
 public class ViewModelFactory implements ViewModelProvider.Factory {

@@ -69,10 +69,8 @@ public class MainActivityTest {
 
     @Test
     public void onDeleteAllListItems_shouldDisplayNoMeeting() {
-        // GIVEN Recycler view with 5 meetings
         onView(withId(R.id.meetings_rv)).check(matches(hasChildCount(5)));
 
-        // WHEN delete all 5 meetings
         onView(withRecyclerView(R.id.meetings_rv)
                 .atPositionOnView(0, R.id.delete_meeting))
                 .perform(click());
@@ -89,42 +87,32 @@ public class MainActivityTest {
                 .atPositionOnView(0, R.id.delete_meeting))
                 .perform(click());
 
-        // THEN Recycler view is empty
         onView(withId(R.id.meetings_rv)).check(matches(hasChildCount(0)));
 
     }
 
     @Test
     public void onDeleteOneItem_shouldDisplayToast() {
-        // GIVEN recycler view
-        // ...WHEN delete first meeting
         onView(withId(R.id.meetings_rv)).perform(actionOnItemViewAtPosition(0,
                 R.id.delete_meeting,
                 click()));
-        // THEN display 'meeting deleted' Toast
-        onView(withText(R.string.meeting_deleted_toast)).inRoot(isToast()).check(matches(isDisplayed()));
+        onView(withText("Réunion supprimée")).inRoot(isToast()).check(matches(isDisplayed()));
     }
 
     @Test
     public void onClickFab_ShouldStartCreateActivity() {
-        // GIVEN Add meeting FAB
-        // ...WHEN click on it
         onView(withId(R.id.add_fab)).perform(click());
-        // THEN display create meeting activity
         onView(withId(R.id.activity_create_meeting)).check(matches(isDisplayed()));
     }
 
 
     @Test
     public void onFilterRoom4_shouldDisplayFilteredMeetings() {
-        // GIVEN click on filter menu
         onView(withId(R.id.menu_filter_main)).check(matches(isDisplayed())).perform(click());
 
-        // WHEN click on filter by room for room 4
         onView(withText(R.string.filter_by_room)).perform(click());
         onView(withText(ROOM_FOUR)).perform(click());
 
-        // THEN recycler view should have two meetings filtered (room 4)
         onView(withRecyclerView(R.id.meetings_rv)
                 .atPositionOnView(0, R.id.room_number))
                 .check(matches(withText(ROOM_FOUR)));
@@ -137,16 +125,13 @@ public class MainActivityTest {
 
     @Test
     public void onFilterDate_shouldDisplayFilteredMeetings() {
-        // GIVEN recycler view has 5 meeting items, click on filter menu
         onView(withId(R.id.meetings_rv)).check(matches(hasChildCount(5)));
         onView(withId(R.id.menu_filter_main)).check(matches(isDisplayed())).perform(click());
 
-        // WHEN click on filter by date for given date 08 dec 2022
         onView(withText(R.string.filter_by_date)).perform(click());
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2022, 12, 8));
         onView(withId(android.R.id.button1)).perform(click());
 
-        // THEN recycler view should have two meetings filtered (room 4)
         onView(withRecyclerView(R.id.meetings_rv)
                 .atPositionOnView(0, R.id.meeting_date_tv))
                 .check(matches(withText(DATE)));
@@ -159,37 +144,30 @@ public class MainActivityTest {
 
     @Test
     public void onFilterDate_resetFilter_shouldResetFilter() {
-        // GIVEN recycler view display 5 meeting items, click on filter menu
         onView(withId(R.id.meetings_rv)).check(matches(hasChildCount(5)));
         onView(withId(R.id.menu_filter_main)).check(matches(isDisplayed())).perform(click());
 
-        // WHEN click on filter by date for given date 08 dec 2022
         onView(withText(R.string.filter_by_date)).perform(click());
         onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2022, 12, 8));
         onView(withId(android.R.id.button1)).perform(click());
 
         onView(withId(R.id.meetings_rv)).check(matches(hasChildCount(2)));
 
-        // ...and click on reset filter
         onView(withId(R.id.menu_filter_main)).check(matches(isDisplayed())).perform(click());
         onView(withText(R.string.reset_filter)).perform(click());
 
-        // THEN recycler view should display all (5) meetings
         onView(withId(R.id.meetings_rv)).check(matches(hasChildCount(5)));
     }
 
     @Test
     public void onFilterMeeting_noMeetingFound_shouldDisplayToast() {
-        // GIVEN recycler view display 5 meeting items, click on filter menu
         onView(withId(R.id.meetings_rv)).check(matches(hasChildCount(5)));
         onView(withId(R.id.menu_filter_main)).check(matches(isDisplayed())).perform(click());
 
-        // WHEN click on filter by room for room 2
         onView(withText(R.string.filter_by_room)).perform(click());
         onView(withText("Salle 2")).perform(click());
 
-        // THEN recycler view should display 0 meeting and "Aucune réunion trouvée" Toast
-        onView(withText(R.string.no_meeting_toast)).inRoot(isToast()).check(matches(isDisplayed()));
+        onView(withText("Aucune réunion à afficher")).inRoot(isToast()).check(matches(isDisplayed()));
         onView(withId(R.id.meetings_rv)).check(matches(hasChildCount(0)));
     }
 

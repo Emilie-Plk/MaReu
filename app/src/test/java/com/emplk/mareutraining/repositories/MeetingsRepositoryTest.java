@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import androidx.annotation.NonNull;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.MutableLiveData;
 
 import com.emplk.mareutraining.config.BuildConfigResolver;
 import com.emplk.mareutraining.models.Meeting;
@@ -34,7 +35,6 @@ public class MeetingsRepositoryTest {
     private static final LocalTime TIME_END = LocalTime.of(14, 30);
     private static final List<String> PARTICIPANTS = Arrays.asList("john@doe.com", "jane@doe.com");
     private static final String OBJECT = "TEST MEETING OBJECT";
-
     @Rule
     public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
 
@@ -60,20 +60,23 @@ public class MeetingsRepositoryTest {
 
     @Test
     public void dummy_meeting_list_should_return_5_meetings() {
+        // GIVEN
         Mockito.doReturn(true).when(buildConfigResolver).isDebug();
         MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
 
+        // WHEN
         List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetingsLiveData());
 
+        // THEN
         assertEquals(result, getDummyMeetings());
     }
 
     @Test
     public void add_one_meeting_should_increment_meeting_list_by_1() {
-        // GIVEN mocked repository (empty) and adding new meeting
+        // GIVEN
         MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
 
-        // WHEN adding new meeting
+        // WHEN
         repository.addMeeting(
                 TITLE,
                 ROOM,
@@ -84,11 +87,10 @@ public class MeetingsRepositoryTest {
                 OBJECT
         );
 
-        // THEN newly added meeting has been added to repo
+        // THEN
         List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetingsLiveData());
         assertEquals(1, result.size());
     }
-
 
 
 // region dummy meetings list
