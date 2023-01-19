@@ -133,9 +133,11 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                viewModel.isValidTime(
+              viewModel.isValidTime(
                         binding.selectedTimeStartTv.getText().toString(),
                         binding.selectedTimeEndTv.getText().toString());
+                viewModel.timeEndColor.observe(CreateNewMeetingActivity.this, color ->
+                    binding.selectedTimeEndTv.setTextColor(color));
             }
 
             @Override

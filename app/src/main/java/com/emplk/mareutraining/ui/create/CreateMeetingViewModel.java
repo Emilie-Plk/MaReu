@@ -1,9 +1,11 @@
 package com.emplk.mareutraining.ui.create;
 
 
+import android.graphics.Color;
 import android.util.Patterns;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.mareutraining.models.Room;
@@ -29,6 +31,13 @@ public class CreateMeetingViewModel extends ViewModel {
     private final SingleLiveEvent<Boolean> buttonEnabled = new SingleLiveEvent<>();
 
     private final SingleLiveEvent<String> displayError = new SingleLiveEvent<>();
+
+    MutableLiveData<Integer> timeEndColor = new MutableLiveData<>();
+
+    private boolean isValidTime;
+
+    private boolean isAllFieldCompleted;
+
 
     public CreateMeetingViewModel(@NonNull MeetingsRepository repository) {
         this.repository = repository;
@@ -133,21 +142,27 @@ public class CreateMeetingViewModel extends ViewModel {
             @NonNull List<String> participants,
             @NonNull String meetingObject
     ) {
-        boolean isAllFieldsNotEmpty = Stream.of(meetingTitle, room, date, timeStart, timeEnd, meetingObject)
+        isAllFieldCompleted = Stream.of(meetingTitle, room, date, timeStart, timeEnd, meetingObject)
                 .noneMatch(s -> s.isEmpty()) && !participants.isEmpty();
-        buttonEnabled.setValue(isAllFieldsNotEmpty);
-        return isAllFieldsNotEmpty;
+        checkButtonEnabled();
+        return isAllFieldCompleted;
     }
-
 
     public boolean isValidTime(String timeStart, String timeEnd) {
         if (timeStart.isEmpty() || timeEnd.isEmpty()) return false;
-        boolean isValid = formatTime(timeStart).isBefore(formatTime(timeEnd));
-        if (!isValid) {
+        isValidTime = formatTime(timeStart).isBefore(formatTime(timeEnd));
+        checkButtonEnabled();
+        if (!isValidTime) {
+            timeEndColor.setValue(Color.RED);
             displayError.setValue("Merci de choisir une heure de début antérieure à celle de fin");
             return false;
         }
+        timeEndColor.setValue(Color.GRAY);
         return true;
+    }
+
+    public void checkButtonEnabled() {
+        buttonEnabled.setValue(isAllFieldCompleted && isValidTime);
     }
 
     /**
