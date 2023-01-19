@@ -95,9 +95,8 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
     }
 
     private void getPickedRoom() {
-        binding.roomsActv.setOnItemClickListener((adapterView, v, position, id) -> {
-            selectedRoom = adapterView.getItemAtPosition(position).toString();
-        });
+        binding.roomsActv.setOnItemClickListener((adapterView, v, position, id) ->
+                selectedRoom = adapterView.getItemAtPosition(position).toString());
 
         bindAddMeeting(viewModel, binding.titleTextinput, binding.selectedDayTv,
                 binding.selectedTimeStartTv, binding.selectedTimeEndTv, binding.meetingObjectInput);
@@ -133,11 +132,11 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-              viewModel.isValidTime(
+                viewModel.isValidTime(
                         binding.selectedTimeStartTv.getText().toString(),
                         binding.selectedTimeEndTv.getText().toString());
                 viewModel.timeEndColor.observe(CreateNewMeetingActivity.this, color ->
-                    binding.selectedTimeEndTv.setTextColor(color));
+                        binding.selectedTimeEndTv.setTextColor(color));
             }
 
             @Override

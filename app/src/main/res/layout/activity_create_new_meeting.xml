@@ -49,11 +49,11 @@
                 android:id="@+id/date_picker_btn_create"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
-                android:textColor="@color/create_meeting_btn_text_color"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:backgroundTint="@color/colorPrimaryVariantTransparency"
                 android:text="@string/date_picker_btn"
+                android:textColor="#01579B"
                 app:icon="@drawable/ic_baseline_calendar_month_24"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -95,8 +95,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:textColor="@color/create_meeting_btn_text_color"
                 android:text="@string/time_end_btn_create"
+                android:textColor="@color/create_meeting_btn_text_color"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/starting_time_btn" />
 
@@ -124,11 +124,13 @@
                 app:layout_constraintTop_toBottomOf="@+id/ending_time_btn">
 
                 <AutoCompleteTextView
-                    android:labelFor="@+id/rooms_actv"
                     android:id="@+id/rooms_actv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="none" />
+                    android:inputType="none"
+                    android:labelFor="@+id/rooms_actv"
+                    android:textColorHint="@color/create_et_hint_color"
+                    tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -150,7 +152,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/meeting_title_et_hint"
-                    android:inputType="textCapSentences" />
+                    android:inputType="textCapSentences"
+                    android:textColorHint="@color/create_et_hint_color"
+                    tools:ignore="TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -175,7 +179,9 @@
                     android:inputType="textCapSentences|textMultiLine"
                     android:maxLines="4"
                     android:minLines="2"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/create_et_hint_color"
+                    tools:ignore="TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--  Meeting participants input-->
@@ -193,10 +199,12 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/participants_input"
-                    android:textColor="@color/black"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/create_et_hint_color"
+                    tools:ignore="TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
