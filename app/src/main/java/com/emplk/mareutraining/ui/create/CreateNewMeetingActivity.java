@@ -69,7 +69,6 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
 
-
         addParticipantChip();
 
         // Set Time pickers
@@ -102,11 +101,18 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
 
         viewModel.getCloseActivity().observe(this, closeActivitySingleLiveEvent -> finish());
 
-        viewModel.getButtonEnabled().observe(CreateNewMeetingActivity.this, isButtonEnabled ->
+        viewModel.getButtonEnabled().observe(this, isButtonEnabled ->
                 binding.createMeetingBtn.setEnabled(isButtonEnabled));
 
-    }
+        binding.selectedTimeStartTv.addTextChangedListener(getChosenTimeCorrect());
+        binding.selectedTimeEndTv.addTextChangedListener(getChosenTimeCorrect());
 
+        viewModel.getDisplayError().observe(this, errorMessage -> {
+            if (errorMessage != null) {
+                Toasty.error(this, errorMessage, Toasty.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     private void onAddTextChangedListeners() {
         binding.selectedDayTv.addTextChangedListener(getTextWatcher());
@@ -118,6 +124,25 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
         binding.titleTextinput.addTextChangedListener(getTextWatcher());
 
         binding.meetingObjectInput.addTextChangedListener(getTextWatcher());
+    }
+
+    private TextWatcher getChosenTimeCorrect() {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                viewModel.isValidTime(
+                        binding.selectedTimeStartTv.getText().toString(),
+                        binding.selectedTimeEndTv.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        };
     }
 
     private TextWatcher getTextWatcher() {
@@ -262,19 +287,16 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
     ) {
 
         binding.createMeetingBtn.setOnClickListener(view -> {
-            if (viewModel.isInvalidTime(timeStart.getText().toString(), timeEnd.getText().toString())) {
-                Toasty.error(this, R.string.check_time_ok_toast, Toasty.LENGTH_SHORT).show();
-            } else {
-                viewModel.onCreateMeetingClicked(
-                        meetingTitle.getText().toString(),
-                        viewModel.getSelectedRoom(selectedRoom),
-                        viewModel.formatDate(date.getText().toString()),
-                        viewModel.formatTime(timeStart.getText().toString()),
-                        viewModel.formatTime(timeEnd.getText().toString()),
-                        participantsEmails,
-                        meetingObject.getText().toString()
-                );
-            }
+            viewModel.onCreateMeetingClicked(
+                    meetingTitle.getText().toString(),
+                    viewModel.getSelectedRoom(selectedRoom),
+                    viewModel.formatDate(date.getText().toString()),
+                    viewModel.formatTime(timeStart.getText().toString()),
+                    viewModel.formatTime(timeEnd.getText().toString()),
+                    participantsEmails,
+                    meetingObject.getText().toString()
+            );
+
         });
     }
 }

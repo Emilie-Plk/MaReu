@@ -28,6 +28,8 @@ public class CreateMeetingViewModel extends ViewModel {
 
     private final SingleLiveEvent<Boolean> buttonEnabled = new SingleLiveEvent<>();
 
+    private final SingleLiveEvent<String> displayError = new SingleLiveEvent<>();
+
     public CreateMeetingViewModel(@NonNull MeetingsRepository repository) {
         this.repository = repository;
     }
@@ -62,6 +64,16 @@ public class CreateMeetingViewModel extends ViewModel {
      */
     public SingleLiveEvent<Boolean> getButtonEnabled() {
         return buttonEnabled;
+    }
+
+    /**
+     * Called to display error message
+     * for adding participants
+     *
+     * @return SingleLiveEvent of type String
+     */
+    public SingleLiveEvent<String> getDisplayError() {
+        return displayError;
     }
 
     /**
@@ -128,9 +140,13 @@ public class CreateMeetingViewModel extends ViewModel {
     }
 
 
-    public boolean isInvalidTime(String timeStart, String timeEnd) {
-        return formatTime(timeStart).isAfter(formatTime(timeEnd)) ||
-                formatTime(timeStart).equals(formatTime(timeEnd));
+    public boolean isValidTime(String timeStart, String timeEnd) {
+        if (timeStart.isEmpty() || timeEnd.isEmpty()) return false;
+        boolean isValid = formatTime(timeStart).isBefore(formatTime(timeEnd));
+        if (!isValid) {
+            displayError.setValue("Merci de choisir une heure de début antérieure à celle de fin");
+        }
+        return isValid;
     }
 
     /**

@@ -103,7 +103,7 @@ public class CreateMeetingViewModelTest {
 
     @Test
     public void is_meeting_time_invalid() {
-        assertTrue(viewModel.isInvalidTime(timeStart, timeEnd));
+        assertTrue(viewModel.isValidTime(timeStart, timeEnd));
     }
 
     @Test
@@ -112,7 +112,7 @@ public class CreateMeetingViewModelTest {
         timeEnd = timeStart;
 
         // THEN return true
-        assertTrue(viewModel.isInvalidTime(timeStart, timeEnd));
+        assertTrue(viewModel.isValidTime(timeStart, timeEnd));
     }
 
     @Test
@@ -121,7 +121,7 @@ public class CreateMeetingViewModelTest {
         timeEnd = "15:30";
 
         // THEN
-        assertFalse(viewModel.isInvalidTime(timeStart, timeEnd));
+        assertFalse(viewModel.isValidTime(timeStart, timeEnd));
     }
 
     @Test
