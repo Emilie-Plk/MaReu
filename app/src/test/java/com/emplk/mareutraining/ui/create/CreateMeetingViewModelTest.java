@@ -3,8 +3,6 @@ package com.emplk.mareutraining.ui.create;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
@@ -78,7 +76,7 @@ public class CreateMeetingViewModelTest {
     }
 
     @Test
-    public void isDateFormattedWithSuccess() {
+    public void is_date_formatted_with_success() {
         // GIVEN
         String date = "14-01-2023";
 
@@ -90,7 +88,7 @@ public class CreateMeetingViewModelTest {
     }
 
     @Test
-    public void isTimeFormattedWithSuccess() {
+    public void is_time_formatted_with_success() {
         // GIVEN
         String time = "14:30";
 
@@ -102,30 +100,30 @@ public class CreateMeetingViewModelTest {
     }
 
     @Test
-    public void is_meeting_time_invalid() {
-        assertTrue(viewModel.isValidTime(timeStart, timeEnd));
+    public void is_meeting_start_at_14_ending_at_8_valid() {
+        assertFalse(viewModel.isValidTime(timeStart, timeEnd));
     }
 
     @Test
-    public void is_time_start_and_time_end_similar() {
+    public void is_time_start_and_time_end_similar_valid() {
         // WHEN
         timeEnd = timeStart;
-
-        // THEN return true
-        assertTrue(viewModel.isValidTime(timeStart, timeEnd));
-    }
-
-    @Test
-    public void is_time_start_prior_to_time_end() {
-        // WHEN
-        timeEnd = "15:30";
 
         // THEN
         assertFalse(viewModel.isValidTime(timeStart, timeEnd));
     }
 
     @Test
-    public void isStringRoomSelectedParsedToRoomInstanceWithSuccess() {
+    public void is_time_start_at_14_ending_at_15h30_valid() {
+        // WHEN
+        timeEnd = "15:30";
+
+        // THEN
+        assertTrue(viewModel.isValidTime(timeStart, timeEnd));
+    }
+
+    @Test
+    public void is_string_room_selected_parsed_to_room_instance_with_success() {
         // WHEN
         String selectedRoom = "Salle 1";
         Room roomOne = Room.ROOM_ONE;
@@ -135,7 +133,7 @@ public class CreateMeetingViewModelTest {
     }
 
     @Test
-    public void isAllInfoCompletedForCreatedMeeting() {
+    public void is_all_info_completed() {
         // GIVEN
         String meetingTitle = "MEETING TITLE";
         String room = "Salle 1";
@@ -145,11 +143,9 @@ public class CreateMeetingViewModelTest {
         List<String> participants = Arrays.asList("john@doe.com", "jane@doe.com");
         String meetingObject = "MEETING OBJECT";
 
-        // WHEN
         // THEN
-        assertFalse(viewModel.isMeetingInfoComplete(meetingTitle, room, date, timeStart, timeEnd, participants, meetingObject));
+        assertTrue(viewModel.isMeetingInfoComplete(meetingTitle, room, date, timeStart, timeEnd, participants, meetingObject));
 
-        // return true if at least one field is empty
-        assertTrue(viewModel.isMeetingInfoComplete("", room, date, timeStart, timeEnd, participants, meetingObject));
+        assertFalse(viewModel.isMeetingInfoComplete("", room, date, timeStart, timeEnd, participants, meetingObject));
     }
 }

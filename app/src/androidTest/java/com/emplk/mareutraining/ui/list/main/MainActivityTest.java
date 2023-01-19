@@ -3,20 +3,15 @@ package com.emplk.mareutraining.ui.list.main;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-
 import static com.emplk.mareutraining.ui.list.utils.TestUtils.actionOnItemViewAtPosition;
 import static com.emplk.mareutraining.ui.list.utils.TestUtils.isToast;
 import static com.emplk.mareutraining.ui.list.utils.TestUtils.withRecyclerView;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.junit.Assert.assertThat;
 
 import android.widget.DatePicker;
 
@@ -29,7 +24,6 @@ import com.emplk.mareutraining.R;
 import com.emplk.mareutraining.ui.list.MainActivity;
 
 import org.hamcrest.Matchers;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -105,7 +99,6 @@ public class MainActivityTest {
         onView(withId(R.id.activity_create_meeting)).check(matches(isDisplayed()));
     }
 
-
     @Test
     public void onFilterRoom4_shouldDisplayFilteredMeetings() {
         onView(withId(R.id.menu_filter_main)).check(matches(isDisplayed())).perform(click());
@@ -170,5 +163,4 @@ public class MainActivityTest {
         onView(withText("Aucune réunion à afficher")).inRoot(isToast()).check(matches(isDisplayed()));
         onView(withId(R.id.meetings_rv)).check(matches(hasChildCount(0)));
     }
-
 }

@@ -31,7 +31,7 @@ public class MeetingsRepositoryTest {
     private static final String TITLE = "TEST MEETING TITLE";
     private static final Room ROOM = Room.ROOM_FOUR;
     private static final LocalDate DATE = LocalDate.now();
-    private static final LocalTime TIME_START = LocalTime.of(14,0);
+    private static final LocalTime TIME_START = LocalTime.of(14, 0);
     private static final LocalTime TIME_END = LocalTime.of(14, 30);
     private static final List<String> PARTICIPANTS = Arrays.asList("john@doe.com", "jane@doe.com");
     private static final String OBJECT = "TEST MEETING OBJECT";
@@ -48,13 +48,13 @@ public class MeetingsRepositoryTest {
 
     @Test
     public void empty_dummy_meeting_list_should_return_0_meeting() {
-        // GIVEN mocked repo (empty)
+        // GIVEN
         MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
 
-        // WHEN fetching meetings
+        // WHEN
         List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetingsLiveData());
 
-        // THEN meeting repo is empty
+        // THEN
         assertEquals(0, result.size());
     }
 
@@ -93,22 +93,22 @@ public class MeetingsRepositoryTest {
     }
 
 
-// region dummy meetings list
+    // region dummy meetings list
     @NonNull
     private List<Meeting> getDummyMeetings() {
         List<Meeting> dummyMeetings = new ArrayList<>();
 
         dummyMeetings.add(new Meeting(0,
-                        "Réunion d'info",
-                        Room.ROOM_FOUR,
-                        LocalDate.of(2022, 12, 8),
-                        LocalTime.of(10, 0),
-                        LocalTime.of(10, 30),
-                        Arrays.asList(
-                                "pierre@lamzone.fr",
-                                "charlotte@lamzone.fr",
-                                "patrice@lamzone.fr"),
-                        "Nouveaux arrivants dans l'équipe + point sur les congés"));
+                "Réunion d'info",
+                Room.ROOM_FOUR,
+                LocalDate.of(2022, 12, 8),
+                LocalTime.of(10, 0),
+                LocalTime.of(10, 30),
+                Arrays.asList(
+                        "pierre@lamzone.fr",
+                        "charlotte@lamzone.fr",
+                        "patrice@lamzone.fr"),
+                "Nouveaux arrivants dans l'équipe + point sur les congés"));
         dummyMeetings.add(
                 new Meeting(1,
                         "Retour sur les tests",
@@ -165,4 +165,4 @@ public class MeetingsRepositoryTest {
         return dummyMeetings;
     }
     // endregion
-    }
+}

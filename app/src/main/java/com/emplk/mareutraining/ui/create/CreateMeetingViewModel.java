@@ -145,8 +145,9 @@ public class CreateMeetingViewModel extends ViewModel {
         boolean isValid = formatTime(timeStart).isBefore(formatTime(timeEnd));
         if (!isValid) {
             displayError.setValue("Merci de choisir une heure de début antérieure à celle de fin");
+            return false;
         }
-        return isValid;
+        return true;
     }
 
     /**

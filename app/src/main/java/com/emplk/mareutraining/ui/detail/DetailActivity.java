@@ -12,8 +12,6 @@ import androidx.lifecycle.ViewModelProvider;
 import com.emplk.mareutraining.databinding.ActivityDetailBinding;
 import com.emplk.mareutraining.utils.ViewModelFactory;
 
-import java.util.Objects;
-
 public class DetailActivity extends AppCompatActivity {
 
     public static final String KEY_MEETING_ID = "KEY_MEETING_ID";
@@ -30,7 +28,6 @@ public class DetailActivity extends AppCompatActivity {
         ActivityDetailBinding binding = ActivityDetailBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-
 
         DetailMeetingViewModel viewModel = new ViewModelProvider(this,
                 ViewModelFactory.getInstance())
@@ -53,7 +50,5 @@ public class DetailActivity extends AppCompatActivity {
             binding.participantsListDetail.setText(detailViewState.getParticipants());
             binding.meetingObjectTv.setText(detailViewState.getMeetingObject());
         });
-
     }
-
 }

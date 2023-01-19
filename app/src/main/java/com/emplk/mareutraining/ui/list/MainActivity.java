@@ -53,13 +53,11 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
                 Toasty.info(this, toast, Toasty.LENGTH_SHORT).show());
     }
 
-
     @Override
     protected void onResume() {
         super.onResume();
         resetFilters();  // called here to clear filters on rotate (POC)
     }
-
 
     private void setViewModel() {
         viewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(MeetingViewModel.class);
@@ -81,9 +79,6 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
                 viewModel.onDeleteMeetingClicked(meetingId);
             }
         });
-        /**
-         * Observer for meetings livedata
-         */
 
         viewModel.getMeetingViewStateItemsLiveData().observe(this, meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
@@ -141,14 +136,13 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
 
         DatePickerDialog dpd = new DatePickerDialog(this,
                 (view, selectedYear, selectedMonthOfYear, selectedDayOfMonth) -> {
-            LocalDate selectedDate = LocalDate.of(selectedYear, selectedMonthOfYear + 1, selectedDayOfMonth);
-            viewModel.onDateFilter(selectedDate);
-        }, year, month, day);
+                    LocalDate selectedDate = LocalDate.of(selectedYear, selectedMonthOfYear + 1, selectedDayOfMonth);
+                    viewModel.onDateFilter(selectedDate);
+                }, year, month, day);
         dpd.show();
     }
 
     private void resetFilters() {
         viewModel.onResetFilters();
     }
-
 }

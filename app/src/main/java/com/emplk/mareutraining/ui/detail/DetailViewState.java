@@ -9,7 +9,6 @@ public class DetailViewState {
     private final String meetingTitle;
     @NonNull
     private final String roomName;
-
     @NonNull
     private final String date;
     @NonNull

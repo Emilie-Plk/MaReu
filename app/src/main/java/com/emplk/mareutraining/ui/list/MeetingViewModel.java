@@ -1,7 +1,5 @@
 package com.emplk.mareutraining.ui.list;
 
-import static java.lang.String.valueOf;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
@@ -9,7 +7,6 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.emplk.mareutraining.R;
 import com.emplk.mareutraining.models.Meeting;
 import com.emplk.mareutraining.repositories.MeetingsRepository;
 import com.emplk.mareutraining.utils.SingleLiveEvent;
@@ -19,7 +16,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -64,6 +60,15 @@ public class MeetingViewModel extends ViewModel {
         return displayToast;
     }
 
+    /**
+     * Used to filter and combine three parameters together
+     * to produce a new list of MeetingViewStateItem
+     * depending on the filters (room or date)
+     *
+     * @param meetings   List of Meeting
+     * @param roomFilter String room filter
+     * @param dateFilter LocalDate date filter
+     */
     private void combine(@Nullable List<Meeting> meetings, @Nullable String roomFilter, @Nullable LocalDate dateFilter) {
         if (meetings == null) {
             return;
@@ -91,34 +96,72 @@ public class MeetingViewModel extends ViewModel {
         meetingViewStateItemsMediatorLiveData.setValue(filteredMeetings);
     }
 
+    /**
+     * @return LiveData List of MeetingViewStateItem
+     */
     public LiveData<List<MeetingViewStateItem>> getMeetingViewStateItemsLiveData() {
         return meetingViewStateItemsMediatorLiveData;
     }
 
+    /**
+     * Set roomFilterMutableLiveData with chosen filter room
+     * and display toolbar subtitle
+     * (might trigger setDisplayToast if needed)
+     *
+     * @param room String room
+     */
     public void onRoomFilter(String room) {
         roomFilterMutableLiveData.setValue(room);
         displayToolbarSubtitle.setValue("Réunions filtrées : " + room);
         setDisplayToast();
     }
 
+    /**
+     * Set dateFilterMutableLiveData with chosen filter date
+     * and display toolbar subtitle
+     * (might trigger setDisplayToast if needed)
+     *
+     * @param date LocalDate date
+     */
     public void onDateFilter(LocalDate date) {
         dateFilterMutableLiveData.setValue(date);
         displayToolbarSubtitle.setValue("Réunions filtrées : " + formatDate(date));
-       setDisplayToast();
+        setDisplayToast();
     }
 
+    /**
+     * Set displayToast (SingleLiveEvent String)
+     * with an "no meeting found" message if no meetingViewStateItems to display
+     * (used for a Toast)
+     */
     private void setDisplayToast() {
         if (meetingViewStateItemsMediatorLiveData.getValue() == null || meetingViewStateItemsMediatorLiveData.getValue().isEmpty()) {
             displayToast.setValue("Aucune réunion à afficher"); // hard coded but no memory leak risk
         }
     }
 
+    /**
+     * Reset room and date MutableLiveData,
+     * also set displayToolbarSubtitle (SingleLiveEvent String) to null
+     */
     public void onResetFilters() {
         roomFilterMutableLiveData.setValue(null);
         dateFilterMutableLiveData.setValue(null);
         displayToolbarSubtitle.setValue(null);
     }
 
+    /**
+     * Call repository to delete one given meeting by its ID,
+     * also set displayToast SingleLiveEvent String to "Meeting deleted"
+     *
+     * @param meetingId long meetingId
+     */
+    public void onDeleteMeetingClicked(long meetingId) {
+        repository.deleteMeeting(meetingId);
+        displayToast.setValue("Réunion supprimée");
+    }
+
+    // region private helper methods
 
     /**
      * Format participant list to String,
@@ -155,10 +198,5 @@ public class MeetingViewModel extends ViewModel {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return date.format(formatter);
     }
-
-    public void onDeleteMeetingClicked(long meetingId) {
-        repository.deleteMeeting(meetingId);
-        displayToast.setValue("Réunion supprimée");
-    }
-
+    // endregion
 }

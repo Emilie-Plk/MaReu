@@ -15,7 +15,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.filters.LargeTest;
 
 import com.emplk.mareutraining.R;
-import com.emplk.mareutraining.ui.detail.DetailActivity;
 import com.emplk.mareutraining.ui.list.MainActivity;
 
 import org.junit.Rule;
