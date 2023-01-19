@@ -161,6 +161,10 @@ public class CreateMeetingViewModel extends ViewModel {
         return true;
     }
 
+    /**
+     * Check for fields completion and time validation
+     * (SingleLiveEvent for submit button)
+     */
     public void checkButtonEnabled() {
         buttonEnabled.setValue(isAllFieldCompleted && isValidTime);
     }
@@ -174,5 +178,4 @@ public class CreateMeetingViewModel extends ViewModel {
     public boolean isValidEmail(String target) {
         return Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
-
 }

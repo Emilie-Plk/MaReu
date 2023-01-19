@@ -29,4 +29,8 @@
     <color name="room_eight">#BFF3F3</color>
     <color name="room_nine">#9CC5F4</color>
     <color name="room_ten">#FBB9B9</color>
+
+    <!-- Button colors -->
+    <color name="create_meeting_btn_text_color">#0277BD</color>
+
 </resources>
