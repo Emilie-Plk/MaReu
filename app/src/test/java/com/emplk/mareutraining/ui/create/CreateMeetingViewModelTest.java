@@ -147,9 +147,9 @@ public class CreateMeetingViewModelTest {
 
         // WHEN
         // THEN
-        assertFalse(viewModel.isMeetingInfoIncomplete(meetingTitle, room, date, timeStart, timeEnd, participants, meetingObject));
+        assertFalse(viewModel.isMeetingInfoComplete(meetingTitle, room, date, timeStart, timeEnd, participants, meetingObject));
 
         // return true if at least one field is empty
-        assertTrue(viewModel.isMeetingInfoIncomplete("", room, date, timeStart, timeEnd, participants, meetingObject));
+        assertTrue(viewModel.isMeetingInfoComplete("", room, date, timeStart, timeEnd, participants, meetingObject));
     }
 }

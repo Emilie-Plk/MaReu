@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Business logic for CreateNewMeetingActivity
@@ -24,6 +25,8 @@ public class CreateMeetingViewModel extends ViewModel {
     private final MeetingsRepository repository;
 
     private final SingleLiveEvent<Void> closeActivity = new SingleLiveEvent<>();
+
+    private final SingleLiveEvent<Boolean> buttonEnabled = new SingleLiveEvent<>();
 
     public CreateMeetingViewModel(@NonNull MeetingsRepository repository) {
         this.repository = repository;
@@ -52,9 +55,17 @@ public class CreateMeetingViewModel extends ViewModel {
         closeActivity.call();
     }
 
+    /**
+     * Called to enabled submit button
+     *
+     * @return SingleLiveEvent of type Boolean
+     */
+    public SingleLiveEvent<Boolean> getButtonEnabled() {
+        return buttonEnabled;
+    }
 
     /**
-     * Close the CreateNewMeetingActivity
+     * Called to CreateNewMeetingActivity
      *
      * @return SingleLiveEvent of type Void
      */
@@ -101,7 +112,7 @@ public class CreateMeetingViewModel extends ViewModel {
         return selectedRoom;
     }
 
-    public boolean isMeetingInfoIncomplete(
+    public boolean isMeetingInfoComplete(
             @NonNull String meetingTitle,
             @NonNull String room,
             @NonNull String date,
@@ -110,14 +121,12 @@ public class CreateMeetingViewModel extends ViewModel {
             @NonNull List<String> participants,
             @NonNull String meetingObject
     ) {
-        return meetingTitle.isEmpty() ||
-                room.isEmpty() ||
-                date.isEmpty() ||
-                timeStart.isEmpty() ||
-                timeEnd.isEmpty() ||
-                participants.isEmpty() ||
-                meetingObject.isEmpty();
+        boolean isAllFieldsNotEmpty = Stream.of(meetingTitle, room, date, timeStart, timeEnd, meetingObject)
+                .noneMatch(s -> s.isEmpty()) && !participants.isEmpty();
+        buttonEnabled.setValue(isAllFieldsNotEmpty);
+        return isAllFieldsNotEmpty;
     }
+
 
     public boolean isInvalidTime(String timeStart, String timeEnd) {
         return formatTime(timeStart).isAfter(formatTime(timeEnd)) ||
