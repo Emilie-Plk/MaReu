@@ -1,6 +1,16 @@
-Work in progress 
+# MaRéu 🤝
 
-<p align="center">
-<img src="https://user-images.githubusercontent.com/96174269/212474363-b956e6ec-749e-4c50-a2ce-bedbbd7f3c22.png" width="200">
-</p>
+## A meeting scheduling app developped by and for Lamzone company and collaborators.
 
+With this app, you can: <br />
+➡️ see all scheduled meetings with meeting info; <br />
+➡️ get more detail info about meetings; <br />
+➡️ filter meetings by date or room; <br />
+➡️ delete a meeting; <br />
+➡️ create a new meeting. <br />
+
+### Demo
+
+![gifdemomareu](https://user-images.githubusercontent.com/96174269/213779937-9eca9854-1be7-4b8e-8c95-2e734d04f5d4.gif)
+
+*This app is for learning purposes for an OpenClassrooms projet.*
