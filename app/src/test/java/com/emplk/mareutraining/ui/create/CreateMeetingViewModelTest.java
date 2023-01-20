@@ -49,7 +49,7 @@ public class CreateMeetingViewModelTest {
     }
 
     @Test
-    public void onCreateMeetingClicked() {
+    public void on_create_meeting_clicked_should_create_new_meeting() {
         // GIVEN
         String title = "TEST MEETING TITLE";
         Room room = Room.ROOM_ONE;
@@ -78,10 +78,10 @@ public class CreateMeetingViewModelTest {
     @Test
     public void is_date_formatted_with_success() {
         // GIVEN
-        String date = "14-01-2023";
+        String stringDate = "14/01/2023";
 
         // WHEN
-        boolean isEqual = viewModel.formatDate(date).isEqual(LocalDate.of(2023, 1, 14));
+        boolean isEqual = viewModel.formatDate(stringDate).isEqual(LocalDate.of(2023, 1, 14));
 
         // THEN
         assertTrue(isEqual);
@@ -101,7 +101,7 @@ public class CreateMeetingViewModelTest {
 
     @Test
     public void is_meeting_start_at_14_ending_at_8_valid() {
-        assertFalse(viewModel.isValidTime(timeStart, timeEnd));
+        assertFalse(viewModel.isTimeValidValidation(timeStart, timeEnd));
     }
 
     @Test
@@ -110,7 +110,7 @@ public class CreateMeetingViewModelTest {
         timeEnd = timeStart;
 
         // THEN
-        assertFalse(viewModel.isValidTime(timeStart, timeEnd));
+        assertFalse(viewModel.isTimeValidValidation(timeStart, timeEnd));
     }
 
     @Test
@@ -119,7 +119,7 @@ public class CreateMeetingViewModelTest {
         timeEnd = "15:30";
 
         // THEN
-        assertTrue(viewModel.isValidTime(timeStart, timeEnd));
+        assertTrue(viewModel.isTimeValidValidation(timeStart, timeEnd));
     }
 
     @Test
@@ -145,7 +145,6 @@ public class CreateMeetingViewModelTest {
 
         // THEN
         assertTrue(viewModel.isMeetingInfoComplete(meetingTitle, room, date, timeStart, timeEnd, participants, meetingObject));
-
         assertFalse(viewModel.isMeetingInfoComplete("", room, date, timeStart, timeEnd, participants, meetingObject));
     }
 }

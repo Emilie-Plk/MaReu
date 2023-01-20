@@ -62,6 +62,7 @@
                 android:id="@+id/selected_day_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/create_gray_text_color"
                 app:layout_constraintBottom_toBottomOf="@+id/date_picker_btn_create"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintStart_toEndOf="@+id/date_picker_btn_create"
@@ -83,6 +84,7 @@
                 android:id="@+id/selected_time_start_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/create_gray_text_color"
                 app:layout_constraintBottom_toBottomOf="@+id/starting_time_btn"
                 app:layout_constraintStart_toEndOf="@+id/starting_time_btn"
                 app:layout_constraintStart_toStartOf="@+id/selected_day_tv"
@@ -104,11 +106,24 @@
                 android:id="@+id/selected_time_end_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/create_gray_text_color"
                 app:layout_constraintBottom_toBottomOf="@+id/ending_time_btn"
                 app:layout_constraintStart_toEndOf="@+id/ending_time_btn"
                 app:layout_constraintStart_toStartOf="@+id/selected_time_start_tv"
                 app:layout_constraintTop_toTopOf="@+id/ending_time_btn"
                 tools:text="16h00" />
+
+            <ImageView
+                android:id="@+id/tv_time_end_error_icon_"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:contentDescription="@string/warning_time_end_symbol"
+                android:src="@drawable/baseline_warning_24"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/selected_time_end_tv"
+                app:layout_constraintEnd_toStartOf="@id/selected_time_end_tv"
+                app:layout_constraintTop_toTopOf="@id/selected_time_end_tv" />
 
             <!-- Meeting room AutocompleteTextView -->
             <com.google.android.material.textfield.TextInputLayout
@@ -129,7 +144,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="none"
                     android:labelFor="@+id/rooms_actv"
-                    android:textColorHint="@color/create_et_hint_color"
+                    android:textColorHint="@color/create_gray_text_color"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -153,7 +168,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/meeting_title_et_hint"
                     android:inputType="textCapSentences"
-                    android:textColorHint="@color/create_et_hint_color"
+                    android:textColorHint="@color/create_gray_text_color"
                     tools:ignore="TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -180,7 +195,7 @@
                     android:maxLines="4"
                     android:minLines="2"
                     android:textColor="@color/black"
-                    android:textColorHint="@color/create_et_hint_color"
+                    android:textColorHint="@color/create_gray_text_color"
                     tools:ignore="TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -203,7 +218,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="textEmailAddress"
                     android:textColor="@color/black"
-                    android:textColorHint="@color/create_et_hint_color"
+                    android:textColorHint="@color/create_gray_text_color"
                     tools:ignore="TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -226,6 +241,7 @@
                 android:id="@+id/participant_chipgroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 app:layout_constraintTop_toBottomOf="@id/participants_layout" />

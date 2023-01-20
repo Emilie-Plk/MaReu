@@ -1,7 +1,6 @@
 package com.emplk.mareutraining.ui.create;
 
 
-import android.graphics.Color;
 import android.util.Patterns;
 
 import androidx.annotation.NonNull;
@@ -32,7 +31,9 @@ public class CreateMeetingViewModel extends ViewModel {
 
     private final SingleLiveEvent<String> displayError = new SingleLiveEvent<>();
 
-    MutableLiveData<Integer> timeEndColor = new MutableLiveData<>();
+    MutableLiveData<String> timeEndColor = new MutableLiveData<>();
+
+    MutableLiveData<Boolean> errorIconVisible = new MutableLiveData<>();
 
     private boolean isValidTime;
 
@@ -101,7 +102,7 @@ public class CreateMeetingViewModel extends ViewModel {
      * @return LocalDate
      */
     public LocalDate formatDate(String date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return LocalDate.parse(date, formatter);
     }
 
@@ -133,6 +134,17 @@ public class CreateMeetingViewModel extends ViewModel {
         return selectedRoom;
     }
 
+    /**
+     * Check if all given info is filled (not empty)
+     * @param meetingTitle String
+     * @param room String
+     * @param date String
+     * @param timeStart String
+     * @param timeEnd String
+     * @param participants List of String
+     * @param meetingObject String
+     * @return boolean
+     */
     public boolean isMeetingInfoComplete(
             @NonNull String meetingTitle,
             @NonNull String room,
@@ -148,18 +160,57 @@ public class CreateMeetingViewModel extends ViewModel {
         return isAllFieldCompleted;
     }
 
-    public boolean isValidTime(String timeStart, String timeEnd) {
+    /**
+     * Helper method to check if chosen time is valid,
+     * if time start is before and not equal to time end
+     * @param timeStart String
+     * @param timeEnd String
+     * @return boolean
+     */
+    private boolean isChosenTimeValid(String timeStart, String timeEnd) {
+        return formatTime(timeStart).isBefore(formatTime(timeEnd));
+    }
+
+
+    /**
+     * On time validation, check if time is valid,
+     * not empty, and set logic for error/button enabling
+     *
+     * @param timeStart String
+     * @param timeEnd String
+     * @return boolean
+     */
+    public boolean isTimeValidValidation(String timeStart, String timeEnd) {
         if (timeStart.isEmpty() || timeEnd.isEmpty()) return false;
-        isValidTime = formatTime(timeStart).isBefore(formatTime(timeEnd));
+        isValidTime = isChosenTimeValid(timeStart, timeEnd);
         checkButtonEnabled();
         if (!isValidTime) {
-            timeEndColor.setValue(Color.RED);
-            displayError.setValue("Merci de choisir une heure de début antérieure à celle de fin");
+            updateForInvalidTime();
             return false;
         }
-        timeEndColor.setValue(Color.GRAY);
+        updateForValidTime();
         return true;
     }
+
+    /**
+     * Update errorIconVisible, timeEndColor and displayError
+     * MutableLiveData's values when invalid time
+     */
+    private void updateForInvalidTime() {
+        timeEndColor.setValue("#b00020");
+        errorIconVisible.setValue(true);
+        displayError.setValue("Merci de choisir une heure de début antérieure à celle de fin");
+    }
+
+    /**
+     * Update errorIconVisible and timeEndColor
+     * MutableLiveData's values when valid time
+     */
+    private void updateForValidTime() {
+        timeEndColor.setValue("#546E7A");
+        errorIconVisible.setValue(false);
+    }
+
 
     /**
      * Check for fields completion and time validation

@@ -32,6 +32,6 @@
 
     <!-- Button colors -->
     <color name="create_meeting_btn_text_color">#0277BD</color>
-    <color name="create_et_hint_color">#546E7A</color>
+    <color name="create_gray_text_color">#546E7A</color>
 
 </resources>

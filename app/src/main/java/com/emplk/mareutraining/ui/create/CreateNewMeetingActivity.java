@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -79,7 +80,6 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
 
         onAddTextChangedListeners();
 
-        // Fetch selected room (string)
         getPickedRoom();
 
         //noinspection ConstantConditions
@@ -132,11 +132,13 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                viewModel.isValidTime(
+                viewModel.isTimeValidValidation(
                         binding.selectedTimeStartTv.getText().toString(),
                         binding.selectedTimeEndTv.getText().toString());
                 viewModel.timeEndColor.observe(CreateNewMeetingActivity.this, color ->
-                        binding.selectedTimeEndTv.setTextColor(color));
+                        binding.selectedTimeEndTv.setTextColor(Color.parseColor(color)));
+                viewModel.errorIconVisible.observe(CreateNewMeetingActivity.this, errorIcon ->
+                        binding.tvTimeEndErrorIcon.setVisibility(errorIcon ? View.VISIBLE : View.GONE));
             }
 
             @Override
@@ -171,6 +173,60 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
         };
     }
 
+    private void getDatePicker() {
+        Locale.setDefault(Locale.FRANCE);
+
+        final Calendar now = Calendar.getInstance();
+        int mYear = now.get(Calendar.YEAR);
+        int mMonth = now.get(Calendar.MONTH);
+        int mDay = now.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog dpd = new DatePickerDialog(this,
+                (view, year, monthOfYear, dayOfMonth) -> {
+                    Calendar cal = Calendar.getInstance();
+                    cal.set(Calendar.MONTH, monthOfYear);
+                    cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    cal.set(Calendar.YEAR, year);
+                    String date = formatDate(dayOfMonth, monthOfYear + 1, year);
+                    binding.selectedDayTv.setText(date);
+                }, mYear, mMonth, mDay);
+        dpd.getDatePicker().setMinDate(now.getTimeInMillis());
+        dpd.show();
+    }
+
+    private String formatDate(int dayOfMonth, int month, int year) {
+        return String.format(Locale.FRANCE, "%02d/%02d/%04d", dayOfMonth, month, year);
+    }
+
+    private void configureTimePickers(
+            @NonNull TimePickerDialog.OnTimeSetListener listener) {
+        Calendar cal = Calendar.getInstance();
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        int minute = cal.get(Calendar.MINUTE);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, listener, hour, minute, true);
+        if (pickedStartHour != null && pickedStartMinute != null) {
+            timePickerDialog.updateTime(pickedStartHour, pickedStartMinute);
+        }
+        timePickerDialog.show();
+    }
+
+    private void configureTimePickerStart() {
+        binding.startingTimeBtn.setOnClickListener(view ->
+            configureTimePickers((timePicker, hourOfDay, mMinute) -> {
+                pickedStartHour = hourOfDay;
+                pickedStartMinute = mMinute;
+                binding.selectedTimeStartTv.setText(String.format(Locale.FRANCE, "%02d:%02d", hourOfDay, mMinute));
+            }));
+    }
+
+    private void configureTimePickerEnd() {
+        binding.endingTimeBtn.setOnClickListener(view -> {
+            configureTimePickers((timePicker, hourOfDay, mMinute) ->
+                    binding.selectedTimeEndTv.setText(String.format(Locale.FRANCE, "%02d:%02d", hourOfDay, mMinute)));
+        });
+    }
+
     private void addParticipantChip() {
         binding.addParticipantFab.setOnClickListener(view1 -> {
             //noinspection ConstantConditions
@@ -192,65 +248,6 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
             } else {
                 binding.participantsLayout.setError(getString(R.string.invalid_email_input));
             }
-        });
-    }
-
-    private void getDatePicker() {
-        Locale.setDefault(Locale.FRANCE);
-
-        final Calendar now = Calendar.getInstance();
-        int mYear = now.get(Calendar.YEAR);
-        int mMonth = now.get(Calendar.MONTH);
-        int mDay = now.get(Calendar.DAY_OF_MONTH);
-
-        DatePickerDialog dpd = new DatePickerDialog(this,
-                (view, year, monthOfYear, dayOfMonth) -> {
-                    Calendar cal = Calendar.getInstance();
-                    cal.set(Calendar.MONTH, monthOfYear);
-                    cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    cal.set(Calendar.YEAR, year);
-
-                    StringBuilder date = new StringBuilder();
-                    date.append((dayOfMonth < 10 ? "0" : "")).append(dayOfMonth)
-                            .append("-").append((monthOfYear + 1) < 10 ? "0" : "")
-                            .append((monthOfYear + 1)).append("-").append(year);
-                    binding.selectedDayTv.setText(date);
-                }, mYear, mMonth, mDay);
-        dpd.getDatePicker().setMinDate(now.getTimeInMillis());
-        dpd.show();
-    }
-
-    private void configureTimePickerStart() {
-        binding.startingTimeBtn.setOnClickListener(view -> {
-            Calendar cal = Calendar.getInstance();
-            int hour = cal.get(Calendar.HOUR_OF_DAY);
-            int minute = cal.get(Calendar.MINUTE);
-
-            TimePickerDialog timePickerDialog = new TimePickerDialog(view.getContext(),
-                    (timePicker, hourOfDay, mMinute) -> {
-                        pickedStartHour = hourOfDay;
-                        pickedStartMinute = mMinute;
-                        binding.selectedTimeStartTv.setText(String.format(Locale.FRANCE, "%02d:%02d", hourOfDay, mMinute));
-                    }, hour, minute, true);
-
-            timePickerDialog.show();
-        });
-    }
-
-    private void configureTimePickerEnd() {
-        binding.endingTimeBtn.setOnClickListener(view -> {
-            Calendar cal = Calendar.getInstance();
-            int hour = cal.get(Calendar.HOUR_OF_DAY);
-            int minute = cal.get(Calendar.MINUTE);
-
-            TimePickerDialog timePickerDialog = new TimePickerDialog(view.getContext(),
-                    (timePicker, hourOfDay, mMinute) ->
-                            binding.selectedTimeEndTv.setText(String.format(Locale.FRANCE, "%02d:%02d", hourOfDay, mMinute)), hour, minute, true);
-            if (pickedStartHour != null && pickedStartMinute != null) {
-                timePickerDialog.updateTime(pickedStartHour, pickedStartMinute);
-            }
-
-            timePickerDialog.show();
         });
     }
 
@@ -285,6 +282,7 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
             TextInputEditText meetingObject
     ) {
         binding.createMeetingBtn.setOnClickListener(view -> {
+            //noinspection ConstantConditions
             viewModel.onCreateMeetingClicked(
                     meetingTitle.getText().toString(),
                     viewModel.getSelectedRoom(selectedRoom),

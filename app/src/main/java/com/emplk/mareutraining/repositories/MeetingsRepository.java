@@ -36,6 +36,15 @@ public class MeetingsRepository {
         }
     }
 
+    /**
+     * @param meetingTitle meeting title
+     * @param room Room
+     * @param date LocalDate
+     * @param timeStart LocalTime
+     * @param timeEnd LocalTime
+     * @param participants List of String participants
+     * @param meetingObject String
+     */
     public void addMeeting(
             @NonNull String meetingTitle,
             @NonNull Room room,
@@ -86,6 +95,11 @@ public class MeetingsRepository {
         });
     }
 
+    /**
+     * Delete a meeting by its id
+     *
+     * @param meetingId meeting id
+     */
     public void deleteMeeting(long meetingId) {
        for (Meeting meeting : allMeetings) {
                 if (meeting.getId() == meetingId) {
