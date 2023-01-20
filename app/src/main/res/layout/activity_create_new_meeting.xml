@@ -2,11 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_create_meeting"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/blueish_white"
     android:focusableInTouchMode="true"
-    android:id="@+id/activity_create_meeting"
     tools:context=".ui.create.CreateNewMeetingActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -28,6 +28,7 @@
 
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/create_nested_scrollview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fadeScrollbars="false"
@@ -53,6 +54,7 @@
                 android:layout_margin="16dp"
                 android:backgroundTint="@color/colorPrimaryVariantTransparency"
                 android:text="@string/date_picker_btn"
+                android:textColor="#01579B"
                 app:icon="@drawable/ic_baseline_calendar_month_24"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -61,6 +63,7 @@
                 android:id="@+id/selected_day_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/create_gray_text_color"
                 app:layout_constraintBottom_toBottomOf="@+id/date_picker_btn_create"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintStart_toEndOf="@+id/date_picker_btn_create"
@@ -74,6 +77,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:text="@string/time_start_btn_create"
+                android:textColor="@color/create_meeting_btn_text_color"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/date_picker_btn_create" />
 
@@ -81,6 +85,7 @@
                 android:id="@+id/selected_time_start_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/create_gray_text_color"
                 app:layout_constraintBottom_toBottomOf="@+id/starting_time_btn"
                 app:layout_constraintStart_toEndOf="@+id/starting_time_btn"
                 app:layout_constraintStart_toStartOf="@+id/selected_day_tv"
@@ -94,6 +99,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:text="@string/time_end_btn_create"
+                android:textColor="@color/create_meeting_btn_text_color"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/starting_time_btn" />
 
@@ -101,11 +107,24 @@
                 android:id="@+id/selected_time_end_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/create_gray_text_color"
                 app:layout_constraintBottom_toBottomOf="@+id/ending_time_btn"
                 app:layout_constraintStart_toEndOf="@+id/ending_time_btn"
                 app:layout_constraintStart_toStartOf="@+id/selected_time_start_tv"
                 app:layout_constraintTop_toTopOf="@+id/ending_time_btn"
                 tools:text="16h00" />
+
+            <ImageView
+                android:id="@+id/tv_time_end_error_icon_"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
+                android:contentDescription="@string/warning_time_end_symbol"
+                android:src="@drawable/baseline_warning_24"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/selected_time_end_tv"
+                app:layout_constraintEnd_toStartOf="@id/selected_time_end_tv"
+                app:layout_constraintTop_toTopOf="@id/selected_time_end_tv" />
 
             <!-- Meeting room AutocompleteTextView -->
             <com.google.android.material.textfield.TextInputLayout
@@ -115,7 +134,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:layout_marginTop="1dp"
-                android:hint="Salle"
+                android:hint="@string/room_actv_layout_hint"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ending_time_btn">
@@ -124,7 +143,10 @@
                     android:id="@+id/rooms_actv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="none" />
+                    android:inputType="none"
+                    android:labelFor="@+id/rooms_actv"
+                    android:textColorHint="@color/create_gray_text_color"
+                    tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -146,7 +168,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/meeting_title_et_hint"
-                    android:inputType="textCapSentences" />
+                    android:inputType="textCapSentences"
+                    android:textColorHint="@color/create_gray_text_color"
+                    tools:ignore="TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -157,7 +181,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:hint="Description"
+                android:hint="@string/description_hint"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/title_inputlayout"
@@ -171,7 +195,9 @@
                     android:inputType="textCapSentences|textMultiLine"
                     android:maxLines="4"
                     android:minLines="2"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/create_gray_text_color"
+                    tools:ignore="TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <!--  Meeting participants input-->
@@ -191,7 +217,10 @@
                     android:id="@+id/participants_input"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"
+                    android:textColor="@color/black"
+                    android:textColorHint="@color/create_gray_text_color"
+                    tools:ignore="TextContrastCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -199,9 +228,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                app:backgroundTint="@color/colorPrimaryVariant"
                 android:contentDescription="@string/add_fab_descr"
                 android:src="@drawable/ic_baseline_add_24"
+                app:backgroundTint="@color/colorPrimaryVariant"
                 app:layout_constraintBottom_toBottomOf="@id/participants_layout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/participants_layout"
@@ -213,6 +242,7 @@
                 android:id="@+id/participant_chipgroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 app:layout_constraintTop_toBottomOf="@id/participants_layout" />
@@ -224,13 +254,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
+                android:contentDescription="@string/create_btn_descr"
+                android:enabled="false"
                 android:paddingStart="28dp"
+                android:paddingTop="16dp"
                 android:paddingEnd="28dp"
                 android:paddingBottom="16dp"
-                android:paddingTop="16dp"
-                android:textSize="16sp"
-                android:contentDescription="@string/create_btn_descr"
                 android:text="@string/create_btn"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/participant_chipgroup" />

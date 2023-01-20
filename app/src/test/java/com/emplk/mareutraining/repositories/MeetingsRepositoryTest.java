@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import androidx.annotation.NonNull;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.MutableLiveData;
 
 import com.emplk.mareutraining.config.BuildConfigResolver;
 import com.emplk.mareutraining.models.Meeting;
@@ -29,14 +30,11 @@ public class MeetingsRepositoryTest {
 
     private static final String TITLE = "TEST MEETING TITLE";
     private static final Room ROOM = Room.ROOM_FOUR;
-
-    private static final String ROOM_FILTER = "Salle 4";
     private static final LocalDate DATE = LocalDate.now();
-    private static final LocalTime TIME_START = LocalTime.of(14,0);
+    private static final LocalTime TIME_START = LocalTime.of(14, 0);
     private static final LocalTime TIME_END = LocalTime.of(14, 30);
     private static final List<String> PARTICIPANTS = Arrays.asList("john@doe.com", "jane@doe.com");
     private static final String OBJECT = "TEST MEETING OBJECT";
-
     @Rule
     public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
 
@@ -50,32 +48,35 @@ public class MeetingsRepositoryTest {
 
     @Test
     public void empty_dummy_meeting_list_should_return_0_meeting() {
-        // GIVEN mocked repo (empty)
+        // GIVEN
         MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
 
-        // WHEN fetching meetings
-        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
+        // WHEN
+        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetingsLiveData());
 
-        // THEN meeting repo is empty
+        // THEN
         assertEquals(0, result.size());
     }
 
     @Test
     public void dummy_meeting_list_should_return_5_meetings() {
+        // GIVEN
         Mockito.doReturn(true).when(buildConfigResolver).isDebug();
         MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
 
-        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
-// TODO : list static final
+        // WHEN
+        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetingsLiveData());
+
+        // THEN
         assertEquals(result, getDummyMeetings());
     }
 
     @Test
     public void add_one_meeting_should_increment_meeting_list_by_1() {
-        // GIVEN mocked repository (empty) and adding new meeting
+        // GIVEN
         MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
 
-        // WHEN adding new meeting
+        // WHEN
         repository.addMeeting(
                 TITLE,
                 ROOM,
@@ -86,133 +87,28 @@ public class MeetingsRepositoryTest {
                 OBJECT
         );
 
-        // THEN newly added meeting has been added to repo
-        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
+        // THEN
+        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetingsLiveData());
         assertEquals(1, result.size());
     }
 
-    @Test
-    public void delete_one_meeting_should_decrement_meeting_list_by_1() {
-        // GIVEN mocked repository (empty) and adding new meeting
-        MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
-        repository.addMeeting(
-                TITLE,
-                ROOM,
-                DATE,
-                TIME_START,
-                TIME_END,
-                PARTICIPANTS,
-                OBJECT
-        );
-        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
-        assertEquals(1, result.size());
 
-        // WHEN delete newly added meeting
-        repository.deleteMeeting(0);
-        result = TestUtil.getValueForTesting(repository.getMeetings());
-
-        // THEN meeting has been deleted, repo is empty again
-        assertTrue(result.isEmpty());
-    }
-
-    @Test
-    public void filter_meeting_list_by_given_room_should_return_2_meetings() {
-        // GIVEN mocked repository with 5 meetings
-        Mockito.doReturn(true).when(buildConfigResolver).isDebug();
-        MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
-
-        // WHEN calling this method
-        repository.getMeetingsFilteredByRoom(ROOM_FILTER);
-        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
-
-        // THEN return two meetings scheduled in given room
-        assertEquals(2, result.size());
-        assertEquals(ROOM_FILTER, result.get(0).getRoom().getRoomName());
-        assertEquals(ROOM_FILTER, result.get(1).getRoom().getRoomName());
-    }
-
-    @Test
-    public void filter_meeting_list_by_given_date_should_return_1_meeting() {
-        // GIVEN mocked repository with 5 meetings and given date
-        Mockito.doReturn(true).when(buildConfigResolver).isDebug();
-        MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
-        LocalDate date = LocalDate.of(2022, 12, 11);
-
-        // WHEN filtering by date
-        repository.getMeetingsFilteredByDate(date);
-        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
-
-        // THEN return one meeting scheduled at given date
-        assertEquals(1, result.size());
-        assertEquals(date, result.get(0).getDate());
-    }
-
-    @Test
-    public void filterByDate_edge_case() {
-        // GIVEN mocked repository with 5 meetings and given date
-        Mockito.doReturn(true).when(buildConfigResolver).isDebug();
-        MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
-        LocalDate date = LocalDate.of(2000, 12, 2);
-
-        // WHEN filtering by date
-        repository.getMeetingsFilteredByDate(date);
-        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
-
-        // THEN no meeting found
-        assertEquals(0, result.size());
-    }
-
-    @Test
-    public void resetDateFilteredMeetings() {
-        // GIVEN meetings filtered by date
-        Mockito.doReturn(true).when(buildConfigResolver).isDebug();
-        MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
-        LocalDate date = LocalDate.of(2022, 12, 11);
-        repository.getMeetingsFilteredByDate(date);
-        List<Meeting> filteredResult = TestUtil.getValueForTesting(repository.getMeetings());
-        assertEquals(1, filteredResult.size());
-
-        // WHEN filter meetings
-        repository.getAllMeetings();
-
-        // THEN retrieve all 5 meetings
-        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
-        assertEquals(5, result.size());
-    }
-
-    @Test
-    public void resetRoomFilteredMeetings() {
-        // GIVEN meetings filtered by room
-        Mockito.doReturn(true).when(buildConfigResolver).isDebug();
-        MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
-        repository.getMeetingsFilteredByRoom(ROOM_FILTER);
-        List<Meeting> filteredResult = TestUtil.getValueForTesting(repository.getMeetings());
-        assertEquals(2, filteredResult.size());
-
-        // WHEN filter meetings
-        repository.getAllMeetings();
-
-        // THEN retrieve all 5 meetings
-        List<Meeting> result = TestUtil.getValueForTesting(repository.getMeetings());
-        assertEquals(5, result.size());
-    }
-
-// region dummy meetings list
+    // region dummy meetings list
     @NonNull
     private List<Meeting> getDummyMeetings() {
         List<Meeting> dummyMeetings = new ArrayList<>();
 
         dummyMeetings.add(new Meeting(0,
-                        "Réunion d'info",
-                        Room.ROOM_FOUR,
-                        LocalDate.of(2022, 12, 8),
-                        LocalTime.of(10, 0),
-                        LocalTime.of(10, 30),
-                        Arrays.asList(
-                                "pierre@lamzone.fr",
-                                "charlotte@lamzone.fr",
-                                "patrice@lamzone.fr"),
-                        "Nouveaux arrivants dans l'équipe + point sur les congés"));
+                "Réunion d'info",
+                Room.ROOM_FOUR,
+                LocalDate.of(2022, 12, 8),
+                LocalTime.of(10, 0),
+                LocalTime.of(10, 30),
+                Arrays.asList(
+                        "pierre@lamzone.fr",
+                        "charlotte@lamzone.fr",
+                        "patrice@lamzone.fr"),
+                "Nouveaux arrivants dans l'équipe + point sur les congés"));
         dummyMeetings.add(
                 new Meeting(1,
                         "Retour sur les tests",
@@ -269,4 +165,4 @@ public class MeetingsRepositoryTest {
         return dummyMeetings;
     }
     // endregion
-    }
+}

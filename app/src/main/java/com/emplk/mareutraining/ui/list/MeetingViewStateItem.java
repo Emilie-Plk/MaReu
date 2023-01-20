@@ -8,7 +8,7 @@ import java.util.Objects;
  * A ViewState item contains all required dynamic info of the View (adapter for MainActivity).
  * It's like a 'model' for the view.
  */
-public class MeetingsViewStateItem {
+public class MeetingViewStateItem {
 
     @NonNull
     private final String meetingTitle;
@@ -26,7 +26,7 @@ public class MeetingsViewStateItem {
 
     private final long meetingId;
 
-    public MeetingsViewStateItem(
+    public MeetingViewStateItem(
             @NonNull String meetingTitle,
             @NonNull String roomName,
             @NonNull String date, @NonNull String timeStart,
@@ -78,7 +78,7 @@ public class MeetingsViewStateItem {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MeetingsViewStateItem that = (MeetingsViewStateItem) o;
+        MeetingViewStateItem that = (MeetingViewStateItem) o;
         return roomColor == that.roomColor && meetingId == that.meetingId && meetingTitle.equals(that.meetingTitle) && roomName.equals(that.roomName) && timeStart.equals(that.timeStart) && participants.equals(that.participants);
     }
 
@@ -90,7 +90,7 @@ public class MeetingsViewStateItem {
     @NonNull
     @Override
     public String toString() {
-        return "MeetingsViewStateItem{" +
+        return "MeetingViewStateItem{" +
                 "meetingTitle='" + meetingTitle + '\'' +
                 ", roomName='" + roomName + '\'' +
                 ", timeStart='" + timeStart + '\'' +

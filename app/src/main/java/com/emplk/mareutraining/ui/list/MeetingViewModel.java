@@ -1,21 +1,20 @@
 package com.emplk.mareutraining.ui.list;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.mareutraining.models.Meeting;
-import com.emplk.mareutraining.models.Room;
 import com.emplk.mareutraining.repositories.MeetingsRepository;
+import com.emplk.mareutraining.utils.SingleLiveEvent;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,95 +22,146 @@ import java.util.stream.Collectors;
  * Business logic for MainActivity
  */
 public class MeetingViewModel extends ViewModel {
-
     @NonNull
     private final MeetingsRepository repository;
 
+    private final MediatorLiveData<List<MeetingViewStateItem>> meetingViewStateItemsMediatorLiveData = new MediatorLiveData<>();
 
-    private final MediatorLiveData<List<Meeting>> meetingListMediator = new MediatorLiveData<>();
-    private final MutableLiveData<String> roomFilter = new MutableLiveData<>();
-    private final MutableLiveData<LocalDate> dateFilter = new MutableLiveData<>();
+    private final MutableLiveData<String> roomFilterMutableLiveData = new MutableLiveData<>();
+
+    private final MutableLiveData<LocalDate> dateFilterMutableLiveData = new MutableLiveData<>();
+
+    private final SingleLiveEvent<String> displayToolbarSubtitle = new SingleLiveEvent<>();
+
+    private final SingleLiveEvent<String> displayToast = new SingleLiveEvent<>();
 
     public MeetingViewModel(@NonNull MeetingsRepository repository) {
         this.repository = repository;
+        LiveData<List<Meeting>> meetingsLiveData = repository.getMeetingsLiveData();
 
-        // source of unfiltered meetings
-        meetingListMediator.addSource(repository.getMeetings(), meetings -> {
-            if (roomFilter.getValue() == null) {
-                meetingListMediator.setValue(meetings);
-            } else {
-                List<Meeting> allMeetings = new ArrayList<>();
-                for (Meeting meeting : meetings) {
-                    if (meeting.getRoom().getRoomName().equals(roomFilter.getValue())) {
-                        allMeetings.add(meeting);
-                    }
-                }
-                meetingListMediator.setValue(allMeetings);
+        meetingViewStateItemsMediatorLiveData.addSource(meetingsLiveData, meetings ->
+                combine(meetings, roomFilterMutableLiveData.getValue(), dateFilterMutableLiveData.getValue())
+        );
+
+        meetingViewStateItemsMediatorLiveData.addSource(roomFilterMutableLiveData, roomFilter ->
+                combine(meetingsLiveData.getValue(), roomFilter, dateFilterMutableLiveData.getValue())
+        );
+
+        meetingViewStateItemsMediatorLiveData.addSource(dateFilterMutableLiveData, dateFilter ->
+                combine(meetingsLiveData.getValue(), roomFilterMutableLiveData.getValue(), dateFilter)
+        );
+    }
+
+    public SingleLiveEvent<String> getDisplayToolbarSubtitle() {
+        return displayToolbarSubtitle;
+    }
+
+    public SingleLiveEvent<String> getDisplayToast() {
+        return displayToast;
+    }
+
+    /**
+     * Used to filter and combine three parameters together
+     * to produce a new list of MeetingViewStateItem
+     * depending on the filters (room or date)
+     *
+     * @param meetings   List of Meeting
+     * @param roomFilter String room filter
+     * @param dateFilter LocalDate date filter
+     */
+    private void combine(@Nullable List<Meeting> meetings, @Nullable String roomFilter, @Nullable LocalDate dateFilter) {
+        if (meetings == null) {
+            return;
+        }
+
+        List<MeetingViewStateItem> filteredMeetings = new ArrayList<>();
+        for (Meeting meeting : meetings) {
+            if ((roomFilter == null || meeting.getRoom().getRoomName().equals(roomFilter))
+                    && dateFilter == null || meeting.getDate().equals(dateFilter)) {
+                //  we should "pre-format" what should be displayed to the View. To do so, we map the Meeting model to a more
+                // "view specific" model, the MeetingViewStateItem.
+                filteredMeetings.add(
+                        new MeetingViewStateItem(
+                                meeting.getMeetingTitle(),
+                                meeting.getRoom().getRoomName(),
+                                formatDate(meeting.getDate()),
+                                formatTime(meeting.getTimeStart()),
+                                formatParticipantList(meeting.getParticipants()),
+                                meeting.getRoom().getRoomColor(),
+                                meeting.getId()
+                        )
+                );
             }
-        });
-
-
-        // meetings filtered by room
-        meetingListMediator.addSource(roomFilter, filterValue -> {
-            if (meetingListMediator.getValue() != null) {
-                List<Meeting> meetings = repository.getMeetings().getValue();
-                List<Meeting> roomFilterMeetings = new ArrayList<>();
-                assert meetings != null;
-                for (Meeting meeting : meetings) {
-                    if (meeting.getRoom().getRoomName().equals(filterValue)) {
-                        roomFilterMeetings.add(meeting);
-                    }
-                }
-                meetingListMediator.setValue(roomFilterMeetings);
-            }
-        });
-
-        // meetings filtered by date
-        meetingListMediator.addSource(dateFilter, filterValue -> {
-            if (meetingListMediator.getValue() != null) {
-                List<Meeting> meetings = repository.getMeetings().getValue();
-                List<Meeting> dateFilterMeetings = new ArrayList<>();
-                assert meetings != null;
-                for (Meeting meeting : meetings) {
-                    if (meeting.getDate().equals(filterValue)) {
-                        dateFilterMeetings.add(meeting);
-                    }
-                }
-                meetingListMediator.setValue(dateFilterMeetings);
-            }
-        });
+        }
+        meetingViewStateItemsMediatorLiveData.setValue(filteredMeetings);
     }
 
-
-    public LiveData<List<MeetingsViewStateItem>> getMeetingViewStateItems() {
-        return Transformations.map(meetingListMediator, meetings -> {
-            List<MeetingsViewStateItem> meetingsViewStateItems = new ArrayList<>();
-            for (Meeting meeting : meetings) {
-                meetingsViewStateItems.add(new MeetingsViewStateItem(
-                        meeting.getMeetingTitle(),
-                        meeting.getRoom().getRoomName(),
-                        formatDate(meeting.getDate()),
-                        formatTime(meeting.getTimeStart()),
-                        formatParticipantList(meeting.getParticipants()),
-                        meeting.getRoom().getRoomColor(),
-                        meeting.getId()));
-            }
-            return meetingsViewStateItems;
-        });
+    /**
+     * @return LiveData List of MeetingViewStateItem
+     */
+    public LiveData<List<MeetingViewStateItem>> getMeetingViewStateItemsLiveData() {
+        return meetingViewStateItemsMediatorLiveData;
     }
 
-
-    public void setRoomFilter(String room) {
-        this.roomFilter.setValue(room);
+    /**
+     * Set roomFilterMutableLiveData with chosen filter room
+     * and display toolbar subtitle
+     * (might trigger setDisplayToast if needed)
+     *
+     * @param room String room
+     */
+    public void onRoomFilter(String room) {
+        roomFilterMutableLiveData.setValue(room);
+        displayToolbarSubtitle.setValue("Réunions filtrées : " + room);
+        setDisplayToast();
     }
 
-    public void setDateFilter(LocalDate date) {
-        this.dateFilter.setValue(date);
+    /**
+     * Set dateFilterMutableLiveData with chosen filter date
+     * and display toolbar subtitle
+     * (might trigger setDisplayToast if needed)
+     *
+     * @param date LocalDate date
+     */
+    public void onDateFilter(LocalDate date) {
+        dateFilterMutableLiveData.setValue(date);
+        displayToolbarSubtitle.setValue("Réunions filtrées : " + formatDate(date));
+        setDisplayToast();
     }
 
-    public void resetFilters() {
-        meetingListMediator.setValue(repository.getMeetings().getValue());
+    /**
+     * Set displayToast (SingleLiveEvent String)
+     * with an "no meeting found" message if no meetingViewStateItems to display
+     * (used for a Toast)
+     */
+    private void setDisplayToast() {
+        if (meetingViewStateItemsMediatorLiveData.getValue() == null || meetingViewStateItemsMediatorLiveData.getValue().isEmpty()) {
+            displayToast.setValue("Aucune réunion à afficher"); // hard coded but no memory leak risk
+        }
     }
+
+    /**
+     * Reset room and date MutableLiveData,
+     * also set displayToolbarSubtitle (SingleLiveEvent String) to null
+     */
+    public void onResetFilters() {
+        roomFilterMutableLiveData.setValue(null);
+        dateFilterMutableLiveData.setValue(null);
+        displayToolbarSubtitle.setValue(null);
+    }
+
+    /**
+     * Call repository to delete one given meeting by its ID,
+     * also set displayToast SingleLiveEvent String to "Meeting deleted"
+     *
+     * @param meetingId long meetingId
+     */
+    public void onDeleteMeetingClicked(long meetingId) {
+        repository.deleteMeeting(meetingId);
+        displayToast.setValue("Réunion supprimée");
+    }
+
+    // region private helper methods
 
     /**
      * Format participant list to String,
@@ -144,13 +194,9 @@ public class MeetingViewModel extends ViewModel {
      * @param date LocalDate
      * @return String formatted date dd/MM/yyyy
      */
-    public String formatDate(LocalDate date) {
+    private String formatDate(LocalDate date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         return date.format(formatter);
     }
-
-    public void onDeleteMeetingClicked(long meetingId) {
-        repository.deleteMeeting(meetingId);
-    }
-
+    // endregion
 }

@@ -4,7 +4,10 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
@@ -26,15 +29,14 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.Objects;
 
 import es.dmoral.toasty.Toasty;
 
 public class CreateNewMeetingActivity extends AppCompatActivity {
 
-    ActivityCreateNewMeetingBinding binding;
+    private ActivityCreateNewMeetingBinding binding;
 
-    CreateMeetingViewModel viewModel;
+    private CreateMeetingViewModel viewModel;
 
     @NonNull
     private String selectedRoom = "";
@@ -67,41 +69,108 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        bindAddMeeting(viewModel, binding.titleTextinput, binding.selectedDayTv,
-                binding.selectedTimeStartTv, binding.selectedTimeEndTv, binding.meetingObjectInput);
-
-
-        // Add participants (chips)
-        addParticipantChip();
-
         // Set Time pickers
         binding.datePickerBtnCreate.setOnClickListener(v -> getDatePicker());
         configureTimePickerStart();
         configureTimePickerEnd();
 
-        // Set ACTV spinner adapter
         setSpinnerAdapter();
 
-        // Fetch selected room (string)
+        addParticipantChip();
+
+        onAddTextChangedListeners();
+
+        getPickedRoom();
+
+        //noinspection ConstantConditions
+        viewModel.isMeetingInfoComplete(
+                binding.titleTextinput.getText().toString(),
+                selectedRoom,
+                binding.selectedDayTv.getText().toString(),
+                binding.selectedTimeStartTv.getText().toString(),
+                binding.selectedTimeEndTv.getText().toString(),
+                participantsEmails,
+                binding.meetingObjectInput.getText().toString()
+        );
+    }
+
+    private void getPickedRoom() {
         binding.roomsActv.setOnItemClickListener((adapterView, v, position, id) ->
                 selectedRoom = adapterView.getItemAtPosition(position).toString());
 
+        bindAddMeeting(viewModel, binding.titleTextinput, binding.selectedDayTv,
+                binding.selectedTimeStartTv, binding.selectedTimeEndTv, binding.meetingObjectInput);
+
         viewModel.getCloseActivity().observe(this, closeActivitySingleLiveEvent -> finish());
 
-    }
+        viewModel.getButtonEnabled().observe(this, isButtonEnabled ->
+                binding.createMeetingBtn.setEnabled(isButtonEnabled));
 
-    private void addParticipantChip() {
-        binding.addParticipantFab.setOnClickListener(view1 -> {
-            //noinspection ConstantConditions
-            if (viewModel.isValidEmail(binding.participantsInput.getText().toString())) {
-                generateParticipantChip(binding.participantsInput);
-                binding.participantsLayout.setError(null);
-                binding.participantsInput.setText("");
-                binding.participantsInput.onEditorAction(EditorInfo.IME_ACTION_DONE);
-            } else {
-                binding.participantsLayout.setError(getString(R.string.invalid_email_input));
+        binding.selectedTimeStartTv.addTextChangedListener(onPickTimeCorrect());
+        binding.selectedTimeEndTv.addTextChangedListener(onPickTimeCorrect());
+
+        viewModel.getDisplayError().observe(this, errorMessage -> {
+            if (errorMessage != null) {
+                Toasty.error(this, errorMessage, Toasty.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void onAddTextChangedListeners() {
+        binding.selectedDayTv.addTextChangedListener(getTextWatcher());
+        binding.selectedTimeStartTv.addTextChangedListener(getTextWatcher());
+        binding.selectedTimeEndTv.addTextChangedListener(getTextWatcher());
+        binding.titleTextinput.addTextChangedListener(getTextWatcher());
+        binding.meetingObjectInput.addTextChangedListener(getTextWatcher());
+    }
+
+    private TextWatcher onPickTimeCorrect() {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                viewModel.isTimeValidValidation(
+                        binding.selectedTimeStartTv.getText().toString(),
+                        binding.selectedTimeEndTv.getText().toString());
+                viewModel.timeEndColor.observe(CreateNewMeetingActivity.this, color ->
+                        binding.selectedTimeEndTv.setTextColor(Color.parseColor(color)));
+                viewModel.errorIconVisible.observe(CreateNewMeetingActivity.this, errorIcon ->
+                        binding.tvTimeEndErrorIcon.setVisibility(errorIcon ? View.VISIBLE : View.GONE));
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        };
+    }
+
+    private TextWatcher getTextWatcher() {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                //noinspection ConstantConditions
+                viewModel.isMeetingInfoComplete(
+                        binding.titleTextinput.getText().toString(),
+                        selectedRoom,
+                        binding.selectedDayTv.getText().toString(),
+                        binding.selectedTimeStartTv.getText().toString(),
+                        binding.selectedTimeEndTv.getText().toString(),
+                        participantsEmails,
+                        binding.meetingObjectInput.getText().toString()
+                );
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        };
     }
 
     private void getDatePicker() {
@@ -118,48 +187,67 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
                     cal.set(Calendar.MONTH, monthOfYear);
                     cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                     cal.set(Calendar.YEAR, year);
-
-                    StringBuilder date = new StringBuilder();
-                    date.append((dayOfMonth < 10 ? "0" : "")).append(dayOfMonth)
-                            .append("-").append((monthOfYear + 1) < 10 ? "0" : "")
-                            .append((monthOfYear + 1)).append("-").append(year);
+                    String date = formatDate(dayOfMonth, monthOfYear + 1, year);
                     binding.selectedDayTv.setText(date);
                 }, mYear, mMonth, mDay);
         dpd.getDatePicker().setMinDate(now.getTimeInMillis());
         dpd.show();
     }
 
+    private String formatDate(int dayOfMonth, int month, int year) {
+        return String.format(Locale.FRANCE, "%02d/%02d/%04d", dayOfMonth, month, year);
+    }
+
+    private void configureTimePickers(
+            @NonNull TimePickerDialog.OnTimeSetListener listener) {
+        Calendar cal = Calendar.getInstance();
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        int minute = cal.get(Calendar.MINUTE);
+
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, listener, hour, minute, true);
+        if (pickedStartHour != null && pickedStartMinute != null) {
+            timePickerDialog.updateTime(pickedStartHour, pickedStartMinute);
+        }
+        timePickerDialog.show();
+    }
+
     private void configureTimePickerStart() {
-        binding.startingTimeBtn.setOnClickListener(view -> {
-            Calendar cal = Calendar.getInstance();
-            int hour = cal.get(Calendar.HOUR_OF_DAY);
-            int minute = cal.get(Calendar.MINUTE);
-
-            TimePickerDialog timePickerDialog = new TimePickerDialog(view.getContext(),
-                    (timePicker, hourOfDay, mMinute) -> {
-                        pickedStartHour = hourOfDay;
-                        pickedStartMinute = mMinute;
-                        binding.selectedTimeStartTv.setText(String.format(Locale.FRANCE, "%02d:%02d", hourOfDay, mMinute));
-                    }, hour, minute, true);
-
-            timePickerDialog.show();
-        });
+        binding.startingTimeBtn.setOnClickListener(view ->
+            configureTimePickers((timePicker, hourOfDay, mMinute) -> {
+                pickedStartHour = hourOfDay;
+                pickedStartMinute = mMinute;
+                binding.selectedTimeStartTv.setText(String.format(Locale.FRANCE, "%02d:%02d", hourOfDay, mMinute));
+            }));
     }
 
     private void configureTimePickerEnd() {
         binding.endingTimeBtn.setOnClickListener(view -> {
-            Calendar cal = Calendar.getInstance();
-            int hour = cal.get(Calendar.HOUR_OF_DAY);
-            int minute = cal.get(Calendar.MINUTE);
+            configureTimePickers((timePicker, hourOfDay, mMinute) ->
+                    binding.selectedTimeEndTv.setText(String.format(Locale.FRANCE, "%02d:%02d", hourOfDay, mMinute)));
+        });
+    }
 
-            TimePickerDialog timePickerDialog = new TimePickerDialog(view.getContext(),
-                    (timePicker, hourOfDay, mMinute) ->
-                            binding.selectedTimeEndTv.setText(String.format(Locale.FRANCE, "%02d:%02d", hourOfDay, mMinute)), hour, minute, true);
-            if (pickedStartHour != null && pickedStartMinute != null) {
-                timePickerDialog.updateTime(pickedStartHour, pickedStartMinute);
+    private void addParticipantChip() {
+        binding.addParticipantFab.setOnClickListener(view1 -> {
+            //noinspection ConstantConditions
+            if (viewModel.isValidEmail(binding.participantsInput.getText().toString())) {
+                generateParticipantChip(binding.participantsInput);
+                binding.participantsLayout.setError(null);
+                binding.participantsInput.setText("");
+                binding.participantsInput.onEditorAction(EditorInfo.IME_ACTION_DONE);
+                //noinspection ConstantConditions
+                viewModel.isMeetingInfoComplete(
+                        binding.titleTextinput.getText().toString(),
+                        selectedRoom,
+                        binding.selectedDayTv.getText().toString(),
+                        binding.selectedTimeStartTv.getText().toString(),
+                        binding.selectedTimeEndTv.getText().toString(),
+                        participantsEmails,
+                        binding.meetingObjectInput.getText().toString()
+                );
+            } else {
+                binding.participantsLayout.setError(getString(R.string.invalid_email_input));
             }
-
-            timePickerDialog.show();
         });
     }
 
@@ -193,29 +281,17 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
             @NonNull
             TextInputEditText meetingObject
     ) {
-
         binding.createMeetingBtn.setOnClickListener(view -> {
             //noinspection ConstantConditions
-            if (viewModel.isMeetingInfoIncomplete(meetingTitle.getText().toString(),
-                    selectedRoom, date.getText().toString(),
-                    timeStart.getText().toString(),
-                    timeEnd.getText().toString(),
+            viewModel.onCreateMeetingClicked(
+                    meetingTitle.getText().toString(),
+                    viewModel.getSelectedRoom(selectedRoom),
+                    viewModel.formatDate(date.getText().toString()),
+                    viewModel.formatTime(timeStart.getText().toString()),
+                    viewModel.formatTime(timeEnd.getText().toString()),
                     participantsEmails,
-                    meetingObject.getText().toString())) {
-                Toasty.error(this, R.string.check_submit_btn_toast, Toasty.LENGTH_SHORT).show();
-            } else if (viewModel.isInvalidTime(timeStart.getText().toString(), timeEnd.getText().toString())) {
-                Toasty.error(this, R.string.check_time_ok_toast, Toasty.LENGTH_SHORT).show();
-            } else {
-                viewModel.onCreateMeetingClicked(
-                        meetingTitle.getText().toString(),
-                        viewModel.getSelectedRoom(selectedRoom),
-                        viewModel.formatDate(date.getText().toString()),
-                        viewModel.formatTime(timeStart.getText().toString()),
-                        viewModel.formatTime(timeEnd.getText().toString()),
-                        participantsEmails,
-                        meetingObject.getText().toString()
-                );
-            }
+                    meetingObject.getText().toString()
+            );
         });
     }
 }

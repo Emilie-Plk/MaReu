@@ -28,7 +28,6 @@ public class RoomFilterDialogFragment extends DialogFragment {
     public static RoomFilterDialogFragment newInstance() {
         return new RoomFilterDialogFragment();
     }
-
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);

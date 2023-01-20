@@ -30,6 +30,12 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
                 ));
     }
 
+    /**
+     * Create an instance of a given ViewModel.
+     * Keep the state of the ViewModel across configuration changes
+     * and avoid unnecessary re-creation of ViewModel instances.
+     * @return ViewModelFactory factory
+     */
     public static ViewModelFactory getInstance() {
         return FactoryHolder.factory;
     }

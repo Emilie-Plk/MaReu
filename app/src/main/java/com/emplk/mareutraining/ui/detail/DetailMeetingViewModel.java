@@ -6,7 +6,6 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.mareutraining.repositories.MeetingsRepository;
-import com.emplk.mareutraining.ui.detail.DetailViewState;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -17,7 +16,6 @@ import java.util.List;
  * Business logic for DetailActivity
  */
 public class DetailMeetingViewModel extends ViewModel {
-
     @NonNull
     private final MeetingsRepository repository;
 
@@ -48,7 +46,7 @@ public class DetailMeetingViewModel extends ViewModel {
     }
 
     /**
-     * Format participants list to a String
+     * Format participants list to a single String
      *
      * @param participantsList List of participants
      * @return String of all participants
