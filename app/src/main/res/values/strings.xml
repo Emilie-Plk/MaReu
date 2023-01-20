@@ -3,14 +3,11 @@
     <string name="title_appbar_main">Réunions</string>
     <string name="add_new_meeting_fab_descr">ajouter une nouvelle réunion</string>
     <string name="room_color_circle_descr">couleur de la salle</string>
-
     <string name="room_title_detail">Lieu</string>
     <string name="date_and_time_detail_title">Date et heure</string>
     <string name="meeting_object_title_detail">Objet de la réunion</string>
     <string name="participants_meeting_detail">Participant·e·s</string>
-
     <string name="new_meeting">Nouvelle réunion</string>
-
     <string name="time_start_btn_create">Heure de début</string>
     <string name="time_end_btn_create">Heure de fin</string>
     <string name="description_txtinput_create">Description</string>
@@ -20,5 +17,27 @@
     <string name="add_fab_descr">ajouter un participant avec son email</string>
     <string name="date_picker_btn">Date</string>
     <string name="participants_err_msg">"Merci d'ajouter au moins deux participitant·e·s"</string>
-
+    <string name="pick_room_menu">Choisissez une salle</string>
+    <string name="room_actv_hint">Salle</string>
+    <string name="delete_meeting_descr">Supprimer la réunion</string>
+    <string name="no_meeting_toast">"Aucune réunion trouvée"</string>
+    <string name="check_submit_btn_toast">"Merci de remplir tous les champs"</string>
+    <string name="check_time_ok_toast">"Merci de choisir une heure de début antérieure à celle de fin"</string>
+    <string name="invalid_email_input">"Adresse e-mail invalide"</string>
+    <string name="room_filter_helper_sort_date">Réunions filtrées par date</string>
+    <string name="room_filter_helper_sort_room">Réunions triées par salle</string>
+    <string name="meeting_deleted_toast">"Réunion supprimée"</string>
+    <string name="filter_meeting_menu_descr">Filtrer les réunions par date ou par salle</string>
+    <string name="filter_meeting_descr">Filtrer les réunions</string>
+    <string name="filter_by_date">Filtrer par date</string>
+    <string name="filter_by_date_descr">Filtrer par date</string>
+    <string name="filter_by_room">Filtrer par salle</string>
+    <string name="filter_by_room_descr">Filtrer par salle</string>
+    <string name="reset_filter">Supprimer les filtres</string>
+    <string name="reset_filter_descr">Supprimer les filtres</string>
+    <string name="filter_meeting_appbar">"Réunions filtrées : "</string>
+    <string name="meeting_title_et_hint">Nom de la réunion</string>
+    <string name="description_hint">Description</string>
+    <string name="room_actv_layout_hint">Salle</string>
+    <string name="warning_time_end_symbol">warning time end symbol</string>
 </resources>

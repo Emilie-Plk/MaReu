@@ -94,7 +94,12 @@ public class Meeting {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Meeting meeting = (Meeting) o;
-        return meetingTitle.equals(meeting.meetingTitle) && date.equals(meeting.date) && room.equals(meeting.room) && timeStart.equals(meeting.timeStart) && timeEnd.equals(meeting.timeEnd) && participants.equals(meeting.participants);
+        return meetingTitle.equals(meeting.meetingTitle) &&
+                date.equals(meeting.date) &&
+                room.equals(meeting.room) &&
+                timeStart.equals(meeting.timeStart) &&
+                timeEnd.equals(meeting.timeEnd) &&
+                participants.equals(meeting.participants);
     }
 
     @Override
@@ -102,6 +107,7 @@ public class Meeting {
         return Objects.hash(meetingTitle, date, room, timeStart, timeEnd, participants);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Meeting{" +

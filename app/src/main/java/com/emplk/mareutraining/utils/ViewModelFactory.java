@@ -6,36 +6,38 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.emplk.mareutraining.config.BuildConfigResolver;
 import com.emplk.mareutraining.repositories.MeetingsRepository;
-import com.emplk.mareutraining.viewmodels.CreateMeetingViewModel;
-import com.emplk.mareutraining.viewmodels.DetailMeetingViewModel;
-import com.emplk.mareutraining.viewmodels.MeetingViewModel;
+import com.emplk.mareutraining.ui.create.CreateMeetingViewModel;
+import com.emplk.mareutraining.ui.detail.DetailMeetingViewModel;
+import com.emplk.mareutraining.ui.list.MeetingViewModel;
 
 public class ViewModelFactory implements ViewModelProvider.Factory {
 
 
-    private static ViewModelFactory factory;
-
     @NonNull
     private final MeetingsRepository meetingRepository;
+
+
 
     private ViewModelFactory(@NonNull MeetingsRepository meetingsRepository) {
         this.meetingRepository = meetingsRepository;
     }
 
 
+    private static final class FactoryHolder {
+        static final ViewModelFactory factory = new ViewModelFactory(
+                new MeetingsRepository(
+                        new BuildConfigResolver()
+                ));
+    }
+
+    /**
+     * Create an instance of a given ViewModel.
+     * Keep the state of the ViewModel across configuration changes
+     * and avoid unnecessary re-creation of ViewModel instances.
+     * @return ViewModelFactory factory
+     */
     public static ViewModelFactory getInstance() {
-        if (factory == null) {
-            synchronized (ViewModelFactory.class) {
-                if (factory == null) {
-                    factory = new ViewModelFactory(
-                            new MeetingsRepository(
-                                    new BuildConfigResolver()
-                            )
-                    );
-                }
-            }
-        }
-        return factory;
+        return FactoryHolder.factory;
     }
 
     @SuppressWarnings("unchecked")
@@ -43,8 +45,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(MeetingViewModel.class)) {
-            return (T) new MeetingViewModel(
-                    meetingRepository);
+            return (T) new MeetingViewModel(meetingRepository);
         } else if (modelClass.isAssignableFrom(DetailMeetingViewModel.class)) {
             return (T) new DetailMeetingViewModel(meetingRepository);
         }

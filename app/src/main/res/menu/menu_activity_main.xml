@@ -3,18 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_filter_main"
+        android:contentDescription="@string/filter_meeting_menu_descr"
         android:icon="@drawable/ic_baseline_filter_list_24"
-        app:showAsAction="ifRoom"
-        android:title="Filtrer les réunions">
+        android:title="@string/filter_meeting_descr"
+        app:showAsAction="ifRoom">
         <menu>
             <item
                 android:id="@+id/sortbydate_menu"
-                android:title="Filtrer par date"
-                />
+                android:contentDescription="@string/filter_by_date_descr"
+                android:icon="@drawable/ic_baseline_calendar_month_24"
+                android:title="@string/filter_by_date" />
             <item
                 android:id="@+id/sortbyroom_menu"
-                android:title="Filtrer par salle"
-                />
+                android:contentDescription="@string/filter_by_room_descr"
+                android:icon="@drawable/ic_baseline_place_24"
+                android:title="@string/filter_by_room" />
+            <item
+                android:id="@+id/sortdelete_menu"
+                android:contentDescription="@string/reset_filter_descr"
+                android:icon="@drawable/ic_baseline_cancel_24"
+                android:title="@string/reset_filter" />
         </menu>
     </item>
 </menu>

@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace 'com.emplk.mareutraining'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.emplk.mareutraining"
         minSdk 21
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -22,12 +22,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         coreLibraryDesugaringEnabled true  // Desugaring for LocalDate
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    testOptions {
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+        animationsDisabled = true
+    }
 
     buildFeatures {
         viewBinding true
@@ -35,14 +40,32 @@ android {
 }
 
 dependencies {
+    implementation fileTree(dir: 'C:\\Users\\miss_\\AppData\\Local\\Android\\Sdk\\platforms\\android-33', include: ['*.aar', 'javac/*.jar'], exclude: [])
 
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.0'
 
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
+    implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
 
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'com.github.GrenderG:Toasty:1.5.2'
+
+    implementation 'androidx.appcompat:appcompat:1.6.0'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+// UNIT TESTS
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    testImplementation 'org.mockito:mockito-core:4.6.1'
+
+    // Helps testing livedata (InstantTaskExecutorRule)
+    testImplementation 'androidx.arch.core:core-testing:2.1.0'
+    // Assertions
+    testImplementation 'org.hamcrest:java-hamcrest:2.0.0.0'
+
+    // INSTRUMENTED TESTS
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.arch.core:core-testing:2.1.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.5.1'
+    androidTestUtil 'androidx.test:orchestrator:1.4.2'
+
 }
