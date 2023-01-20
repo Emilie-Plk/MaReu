@@ -2,7 +2,6 @@ package com.emplk.mareutraining.ui.detail;
 
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
@@ -28,21 +27,21 @@ public class DetailMeetingViewModelTest {
     @Mock
     private BuildConfigResolver buildConfigResolver = Mockito.mock(BuildConfigResolver.class);
 
-    private MeetingsRepository repository;
-
     private DetailMeetingViewModel viewModel;
-
 
     @Before
     public void setUp() {
         Mockito.doReturn(true).when(buildConfigResolver).isDebug();
-        repository = new MeetingsRepository(buildConfigResolver);
+        MeetingsRepository repository = new MeetingsRepository(buildConfigResolver);
         viewModel = new DetailMeetingViewModel(repository);
     }
 
     @Test
-    public void getDetailMeeting() {
+    public void get_detail_meeting() {
+        // WHEN
         DetailViewState result = TestUtil.getValueForTesting(viewModel.getDetailViewStateLiveData(0));
+
+        // THEN
         assertEquals("Réunion d'info", result.getMeetingTitle());
         assertEquals("Salle 4", result.getRoomName());
         assertEquals("pierre@lamzone.fr, charlotte@lamzone.fr, patrice@lamzone.fr", result.getParticipants());

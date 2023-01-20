@@ -3,6 +3,8 @@ package com.emplk.mareutraining.ui.list.create;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
@@ -14,9 +16,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.emplk.mareutraining.ui.list.utils.TestUtils.isToast;
 import static com.emplk.mareutraining.ui.list.utils.TestUtils.withRecyclerView;
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.not;
+
+import static org.hamcrest.CoreMatchers.allOf;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.not;
 
 import android.widget.DatePicker;
 import android.widget.TimePicker;
@@ -99,7 +102,7 @@ public class CreateMeetingTest {
         onView(withId(R.id.date_picker_btn_create)).perform(click());
         onView(withClassName(equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2023, 2, 22));
         onView(withId(android.R.id.button1)).perform(click());
-        onView(withId(R.id.selected_day_tv)).check(matches(withText("22-02-2023")));
+        onView(withId(R.id.selected_day_tv)).check(matches(withText("22/02/2023")));
 
         onView(withId(R.id.starting_time_btn)).perform(click());
         onView(withClassName(equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(13, 0));

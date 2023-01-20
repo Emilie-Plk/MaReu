@@ -28,6 +28,7 @@
 
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/create_nested_scrollview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fadeScrollbars="false"

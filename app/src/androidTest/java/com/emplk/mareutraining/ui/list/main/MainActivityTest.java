@@ -13,6 +13,8 @@ import static com.emplk.mareutraining.ui.list.utils.TestUtils.actionOnItemViewAt
 import static com.emplk.mareutraining.ui.list.utils.TestUtils.isToast;
 import static com.emplk.mareutraining.ui.list.utils.TestUtils.withRecyclerView;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+
 import android.widget.DatePicker;
 
 import androidx.test.espresso.contrib.PickerActions;
@@ -23,10 +25,10 @@ import androidx.test.filters.LargeTest;
 import com.emplk.mareutraining.R;
 import com.emplk.mareutraining.ui.list.MainActivity;
 
-import org.hamcrest.Matchers;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Matchers;
 
 
 @LargeTest
@@ -122,7 +124,7 @@ public class MainActivityTest {
         onView(withId(R.id.menu_filter_main)).check(matches(isDisplayed())).perform(click());
 
         onView(withText(R.string.filter_by_date)).perform(click());
-        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2022, 12, 8));
+        onView(withClassName(equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2022, 12, 8));
         onView(withId(android.R.id.button1)).perform(click());
 
         onView(withRecyclerView(R.id.meetings_rv)
@@ -141,7 +143,7 @@ public class MainActivityTest {
         onView(withId(R.id.menu_filter_main)).check(matches(isDisplayed())).perform(click());
 
         onView(withText(R.string.filter_by_date)).perform(click());
-        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2022, 12, 8));
+        onView(withClassName(equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2022, 12, 8));
         onView(withId(android.R.id.button1)).perform(click());
 
         onView(withId(R.id.meetings_rv)).check(matches(hasChildCount(2)));
