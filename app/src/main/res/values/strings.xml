@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MaReuTraining</string>
+    <string name="app_name">MaRéu</string>
     <string name="title_appbar_main">Réunions</string>
     <string name="add_new_meeting_fab_descr">ajouter une nouvelle réunion</string>
     <string name="room_color_circle_descr">couleur de la salle</string>

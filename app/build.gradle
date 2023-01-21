@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.emplk.mareutraining'
+    namespace 'com.emplk.mareu'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.emplk.mareutraining"
+        applicationId "com.emplk.mareu"
         minSdk 21
         targetSdk 33
         versionCode 1
