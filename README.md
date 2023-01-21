@@ -1,6 +1,3 @@
-<<<<<<< RoomFilter
-
-=======
 # MaRéu 🤝
 
 ## A meeting scheduling app developped by and for Lamzone company and collaborators.
