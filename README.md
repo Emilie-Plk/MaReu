@@ -14,4 +14,3 @@ With this app, you can: <br />
 ![gifdemomareu](https://user-images.githubusercontent.com/96174269/213779937-9eca9854-1be7-4b8e-8c95-2e734d04f5d4.gif)
 
 *This app is for learning purposes for an OpenClassrooms projet.*
->>>>>>> main
