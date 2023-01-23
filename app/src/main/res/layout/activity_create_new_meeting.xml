@@ -255,7 +255,6 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
                 android:contentDescription="@string/create_btn_descr"
-                android:enabled="false"
                 android:paddingStart="28dp"
                 android:paddingTop="16dp"
                 android:paddingEnd="28dp"

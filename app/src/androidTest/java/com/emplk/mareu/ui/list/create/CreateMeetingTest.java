@@ -30,6 +30,7 @@ import androidx.test.filters.LargeTest;
 
 import com.emplk.mareu.R;
 import com.emplk.mareu.ui.list.MainActivity;
+import com.emplk.mareu.utils.NotificationState;
 
 import org.hamcrest.core.IsInstanceOf;
 import org.junit.Rule;
@@ -130,7 +131,7 @@ public class CreateMeetingTest {
     }
 
     @Test
-    public void onMeetingStartAt2pm_meetingEndAtpm_shouldDisplayToastError() {
+    public void onMeetingStartAt2pm_meetingEndAt1pm_shouldDisplayToastError() {
         onView(withId(R.id.add_fab)).perform(click());
 
         onView(withId(R.id.date_picker_btn_create)).perform(click());
@@ -157,7 +158,7 @@ public class CreateMeetingTest {
 
         onView(withId(R.id.create_meeting_btn)).perform(click());
 
-        onView(withText(R.string.check_time_ok_toast)).inRoot(isToast()).check(matches(isDisplayed()));
+        onView(withText(NotificationState.ERROR_INVALID_TIME.getNotificationMessage())).inRoot(isToast()).check(matches(isDisplayed()));
     }
 
     @Test

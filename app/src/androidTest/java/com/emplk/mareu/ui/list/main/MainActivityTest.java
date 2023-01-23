@@ -24,6 +24,7 @@ import androidx.test.filters.LargeTest;
 
 import com.emplk.mareu.R;
 import com.emplk.mareu.ui.list.MainActivity;
+import com.emplk.mareu.utils.NotificationState;
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -91,7 +92,7 @@ public class MainActivityTest {
         onView(withId(R.id.meetings_rv)).perform(actionOnItemViewAtPosition(0,
                 R.id.delete_meeting,
                 click()));
-        onView(withText("Réunion supprimée")).inRoot(isToast()).check(matches(isDisplayed()));
+        onView(withText(NotificationState.INFO_DELETED_MEETING.getNotificationMessage())).inRoot(isToast()).check(matches(isDisplayed()));
     }
 
     @Test
@@ -161,7 +162,7 @@ public class MainActivityTest {
         onView(withText(R.string.filter_by_room)).perform(click());
         onView(withText("Salle 2")).perform(click());
 
-        onView(withText("Aucune réunion à afficher")).inRoot(isToast()).check(matches(isDisplayed()));
+        onView(withText(NotificationState.INFO_NO_MEETING.getNotificationMessage())).inRoot(isToast()).check(matches(isDisplayed()));
         onView(withId(R.id.meetings_rv)).check(matches(hasChildCount(0)));
     }
 }

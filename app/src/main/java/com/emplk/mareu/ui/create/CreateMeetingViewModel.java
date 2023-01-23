@@ -4,11 +4,14 @@ package com.emplk.mareu.ui.create;
 import android.util.Patterns;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.emplk.mareu.models.Room;
 import com.emplk.mareu.repositories.MeetingsRepository;
+import com.emplk.mareu.utils.ColorValue;
+import com.emplk.mareu.utils.NotificationState;
 import com.emplk.mareu.utils.SingleLiveEvent;
 
 import java.time.LocalDate;
@@ -27,21 +30,36 @@ public class CreateMeetingViewModel extends ViewModel {
 
     private final SingleLiveEvent<Void> closeActivity = new SingleLiveEvent<>();
 
-    private final SingleLiveEvent<Boolean> buttonEnabled = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> errorState = new SingleLiveEvent<>();
 
-    private final SingleLiveEvent<String> displayError = new SingleLiveEvent<>();
+    private final MutableLiveData<String> timeEndColor = new MutableLiveData<>();
 
-    MutableLiveData<String> timeEndColor = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isErrorIconVisible = new MutableLiveData<>(false);
 
-    MutableLiveData<Boolean> errorIconVisible = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isTimeEndFieldValid = new MutableLiveData<>(false);
 
-    private boolean isValidTime;
+    private final MutableLiveData<Boolean> isEachFieldCompleted = new MutableLiveData<>(false);
 
-    private boolean isAllFieldCompleted;
-
+    private final MediatorLiveData<Boolean> isValidAndCompleted = new MediatorLiveData<>();
 
     public CreateMeetingViewModel(@NonNull MeetingsRepository repository) {
         this.repository = repository;
+
+        isValidAndCompleted.addSource(isEachFieldCompleted, isCompleted -> combine());
+
+        isValidAndCompleted.addSource(isTimeEndFieldValid, isValid -> combine());
+    }
+
+
+    /**
+     * Combines the values of the isEachFieldCompleted & isTimeEndFieldValid properties
+     * to determine whether all fields are valid and completed.
+     * If all fields are valid and completed, sets the value of
+     * isValidAndCompleted (MediatorLiveData) property to true, otherwise sets it to false.
+     */
+    private void combine() {
+        assert isEachFieldCompleted.getValue() != null && isTimeEndFieldValid.getValue() != null;
+        isValidAndCompleted.setValue(isEachFieldCompleted.getValue() && isTimeEndFieldValid.getValue());
     }
 
     public void onCreateMeetingClicked(
@@ -67,23 +85,24 @@ public class CreateMeetingViewModel extends ViewModel {
         closeActivity.call();
     }
 
-    /**
-     * Called to enabled submit button
-     *
-     * @return SingleLiveEvent of type Boolean
-     */
-    public SingleLiveEvent<Boolean> getButtonEnabled() {
-        return buttonEnabled;
+    public SingleLiveEvent<String> getErrorState() {
+        return errorState;
     }
 
-    /**
-     * Called to display error message
-     * for adding participants
-     *
-     * @return SingleLiveEvent of type String
-     */
-    public SingleLiveEvent<String> getDisplayError() {
-        return displayError;
+    public MediatorLiveData<Boolean> getIsValidAndCompleted() {
+        return isValidAndCompleted;
+    }
+
+    public MutableLiveData<String> getTimeEndColor() {
+        return timeEndColor;
+    }
+
+    public MutableLiveData<Boolean> getIsErrorIconVisible() {
+        return isErrorIconVisible;
+    }
+
+    public MutableLiveData<Boolean> getIsEachFieldCompleted() {
+        return isEachFieldCompleted;
     }
 
     /**
@@ -136,16 +155,17 @@ public class CreateMeetingViewModel extends ViewModel {
 
     /**
      * Check if all given info is filled (not empty)
-     * @param meetingTitle String
-     * @param room String
-     * @param date String
-     * @param timeStart String
-     * @param timeEnd String
-     * @param participants List of String
+     * to set isEachFieldCompleted MutableLiveData (boolean) value
+     *
+     * @param meetingTitle  String
+     * @param room          String
+     * @param date          String
+     * @param timeStart     String
+     * @param timeEnd       String
+     * @param participants  List of String
      * @param meetingObject String
-     * @return boolean
      */
-    public boolean isMeetingInfoComplete(
+    public void isMeetingInfoComplete(
             @NonNull String meetingTitle,
             @NonNull String room,
             @NonNull String date,
@@ -154,37 +174,35 @@ public class CreateMeetingViewModel extends ViewModel {
             @NonNull List<String> participants,
             @NonNull String meetingObject
     ) {
-        isAllFieldCompleted = Stream.of(meetingTitle, room, date, timeStart, timeEnd, meetingObject)
-                .noneMatch(s -> s.isEmpty()) && !participants.isEmpty();
-        checkButtonEnabled();
-        return isAllFieldCompleted;
+        isEachFieldCompleted.setValue(Stream.of(meetingTitle, room, date, timeStart, timeEnd, meetingObject)
+                .noneMatch(String::isEmpty) && !participants.isEmpty());
     }
 
     /**
      * Helper method to check if chosen time is valid,
      * if time start is before and not equal to time end
+     *
      * @param timeStart String
-     * @param timeEnd String
+     * @param timeEnd   String
      * @return boolean
      */
     private boolean isChosenTimeValid(String timeStart, String timeEnd) {
         return formatTime(timeStart).isBefore(formatTime(timeEnd));
     }
 
-
     /**
      * On time validation, check if time is valid,
      * not empty, and set logic for error/button enabling
      *
      * @param timeStart String
-     * @param timeEnd String
+     * @param timeEnd   String
      * @return boolean
      */
     public boolean isTimeValidValidation(String timeStart, String timeEnd) {
         if (timeStart.isEmpty() || timeEnd.isEmpty()) return false;
-        isValidTime = isChosenTimeValid(timeStart, timeEnd);
-        checkButtonEnabled();
-        if (!isValidTime) {
+        isTimeEndFieldValid.setValue(isChosenTimeValid(timeStart, timeEnd));
+        assert isTimeEndFieldValid.getValue() != null;
+        if (isTimeEndFieldValid.getValue()) {
             updateForInvalidTime();
             return false;
         }
@@ -197,9 +215,9 @@ public class CreateMeetingViewModel extends ViewModel {
      * MutableLiveData's values when invalid time
      */
     private void updateForInvalidTime() {
-        timeEndColor.setValue("#b00020");
-        errorIconVisible.setValue(true);
-        displayError.setValue("Merci de choisir une heure de début antérieure à celle de fin");
+        timeEndColor.setValue(ColorValue.ERROR_COLOR.getColorString());
+        isErrorIconVisible.setValue(true);
+        errorState.setValue(NotificationState.ERROR_INVALID_TIME.getNotificationMessage());
     }
 
     /**
@@ -207,17 +225,8 @@ public class CreateMeetingViewModel extends ViewModel {
      * MutableLiveData's values when valid time
      */
     private void updateForValidTime() {
-        timeEndColor.setValue("#546E7A");
-        errorIconVisible.setValue(false);
-    }
-
-
-    /**
-     * Check for fields completion and time validation
-     * (SingleLiveEvent for submit button)
-     */
-    public void checkButtonEnabled() {
-        buttonEnabled.setValue(isAllFieldCompleted && isValidTime);
+        timeEndColor.setValue(ColorValue.VALID_GREY_COLOR.getColorString());
+        isErrorIconVisible.setValue(false);
     }
 
     /**

@@ -31,6 +31,14 @@ public class CreateMeetingViewModelTest {
     private final String timeStart = "14:00";
     private String timeEnd = "08:00";
 
+    private final String MEETING_TITLE = "MEETING TITLE";
+    private final String ROOM = "Salle 1";
+    private final String DATE = "14/01/2023";
+    private final String TIME_START = "14:30";
+    private final String TIME_END = "15:30";
+    private final List<String> PARTICIPANTS = Arrays.asList("john@doe.com", "jane@doe.com");
+    private final String MEETING_OBJECT = "MEETING OBJECT";
+
     @Rule
     public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
 
@@ -133,18 +141,22 @@ public class CreateMeetingViewModelTest {
     }
 
     @Test
-    public void is_all_info_completed() {
-        // GIVEN
-        String meetingTitle = "MEETING TITLE";
-        String room = "Salle 1";
-        String date = "14/01/2023";
-        String timeStart = "14:30";
-        String timeEnd = "15:30";
-        List<String> participants = Arrays.asList("john@doe.com", "jane@doe.com");
-        String meetingObject = "MEETING OBJECT";
+    public void check_when_all_info_complete() {
+        // WHEN
+        viewModel.isMeetingInfoComplete(MEETING_TITLE, ROOM, DATE, TIME_START, TIME_END, PARTICIPANTS, MEETING_OBJECT);
+        boolean isEachFieldCompleted = TestUtil.getValueForTesting(viewModel.getIsEachFieldCompleted());
 
         // THEN
-        assertTrue(viewModel.isMeetingInfoComplete(meetingTitle, room, date, timeStart, timeEnd, participants, meetingObject));
-        assertFalse(viewModel.isMeetingInfoComplete("", room, date, timeStart, timeEnd, participants, meetingObject));
+        assertTrue(isEachFieldCompleted);
+    }
+
+    @Test
+    public void check_when_info_incomplete() {
+        // WHEN
+        viewModel.isMeetingInfoComplete(MEETING_TITLE, "", DATE, TIME_START, TIME_END, PARTICIPANTS, MEETING_OBJECT);
+        boolean isEachFieldCompleted = TestUtil.getValueForTesting(viewModel.getIsEachFieldCompleted());
+
+        // THEN
+        assertFalse(isEachFieldCompleted);
     }
 }

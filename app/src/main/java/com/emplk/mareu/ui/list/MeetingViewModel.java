@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.emplk.mareu.models.Meeting;
 import com.emplk.mareu.repositories.MeetingsRepository;
+import com.emplk.mareu.utils.NotificationState;
 import com.emplk.mareu.utils.SingleLiveEvent;
 
 import java.time.LocalDate;
@@ -112,7 +113,7 @@ public class MeetingViewModel extends ViewModel {
      */
     public void onRoomFilter(String room) {
         roomFilterMutableLiveData.setValue(room);
-        displayToolbarSubtitle.setValue("Réunions filtrées : " + room);
+        displayToolbarSubtitle.setValue(NotificationState.FILTERED_SUBTITLE.getNotificationMessage() + room);  // hard coded but no memory leak risk
         setDisplayToast();
     }
 
@@ -125,7 +126,7 @@ public class MeetingViewModel extends ViewModel {
      */
     public void onDateFilter(LocalDate date) {
         dateFilterMutableLiveData.setValue(date);
-        displayToolbarSubtitle.setValue("Réunions filtrées : " + formatDate(date));
+        displayToolbarSubtitle.setValue(NotificationState.FILTERED_SUBTITLE.getNotificationMessage() + formatDate(date));
         setDisplayToast();
     }
 
@@ -135,8 +136,9 @@ public class MeetingViewModel extends ViewModel {
      * (used for a Toast)
      */
     private void setDisplayToast() {
-        if (meetingViewStateItemsMediatorLiveData.getValue() == null || meetingViewStateItemsMediatorLiveData.getValue().isEmpty()) {
-            displayToast.setValue("Aucune réunion à afficher"); // hard coded but no memory leak risk
+        if (meetingViewStateItemsMediatorLiveData.getValue() == null ||
+                meetingViewStateItemsMediatorLiveData.getValue().isEmpty()) {
+            displayToast.setValue(NotificationState.INFO_NO_MEETING.getNotificationMessage());
         }
     }
 
@@ -158,7 +160,7 @@ public class MeetingViewModel extends ViewModel {
      */
     public void onDeleteMeetingClicked(long meetingId) {
         repository.deleteMeeting(meetingId);
-        displayToast.setValue("Réunion supprimée");
+        displayToast.setValue(NotificationState.INFO_DELETED_MEETING.getNotificationMessage());
     }
 
     // region private helper methods

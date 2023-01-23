@@ -81,17 +81,6 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
         onAddTextChangedListeners();
 
         getPickedRoom();
-
-        //noinspection ConstantConditions
-        viewModel.isMeetingInfoComplete(
-                binding.titleTextinput.getText().toString(),
-                selectedRoom,
-                binding.selectedDayTv.getText().toString(),
-                binding.selectedTimeStartTv.getText().toString(),
-                binding.selectedTimeEndTv.getText().toString(),
-                participantsEmails,
-                binding.meetingObjectInput.getText().toString()
-        );
     }
 
     private void getPickedRoom() {
@@ -103,13 +92,12 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
 
         viewModel.getCloseActivity().observe(this, closeActivitySingleLiveEvent -> finish());
 
-        viewModel.getButtonEnabled().observe(this, isButtonEnabled ->
-                binding.createMeetingBtn.setEnabled(isButtonEnabled));
+        viewModel.getIsValidAndCompleted().observe(this, aBoolean -> binding.createMeetingBtn.setEnabled(aBoolean));
 
         binding.selectedTimeStartTv.addTextChangedListener(onPickTimeCorrect());
         binding.selectedTimeEndTv.addTextChangedListener(onPickTimeCorrect());
 
-        viewModel.getDisplayError().observe(this, errorMessage -> {
+        viewModel.getErrorState().observe(this, errorMessage -> {
             if (errorMessage != null) {
                 Toasty.error(this, errorMessage, Toasty.LENGTH_SHORT).show();
             }
@@ -135,9 +123,11 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
                 viewModel.isTimeValidValidation(
                         binding.selectedTimeStartTv.getText().toString(),
                         binding.selectedTimeEndTv.getText().toString());
-                viewModel.timeEndColor.observe(CreateNewMeetingActivity.this, color ->
+
+                viewModel.getTimeEndColor().observe(CreateNewMeetingActivity.this, color ->
                         binding.selectedTimeEndTv.setTextColor(Color.parseColor(color)));
-                viewModel.errorIconVisible.observe(CreateNewMeetingActivity.this, errorIcon ->
+
+                viewModel.getIsErrorIconVisible().observe(CreateNewMeetingActivity.this, errorIcon ->
                         binding.tvTimeEndErrorIcon.setVisibility(errorIcon ? View.VISIBLE : View.GONE));
             }
 
@@ -155,16 +145,7 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //noinspection ConstantConditions
-                viewModel.isMeetingInfoComplete(
-                        binding.titleTextinput.getText().toString(),
-                        selectedRoom,
-                        binding.selectedDayTv.getText().toString(),
-                        binding.selectedTimeStartTv.getText().toString(),
-                        binding.selectedTimeEndTv.getText().toString(),
-                        participantsEmails,
-                        binding.meetingObjectInput.getText().toString()
-                );
+                checkForFieldCompletion();
             }
 
             @Override
@@ -213,11 +194,11 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
 
     private void configureTimePickerStart() {
         binding.startingTimeBtn.setOnClickListener(view ->
-            configureTimePickers((timePicker, hourOfDay, mMinute) -> {
-                pickedStartHour = hourOfDay;
-                pickedStartMinute = mMinute;
-                binding.selectedTimeStartTv.setText(String.format(Locale.FRANCE, "%02d:%02d", hourOfDay, mMinute));
-            }));
+                configureTimePickers((timePicker, hourOfDay, mMinute) -> {
+                    pickedStartHour = hourOfDay;
+                    pickedStartMinute = mMinute;
+                    binding.selectedTimeStartTv.setText(String.format(Locale.FRANCE, "%02d:%02d", hourOfDay, mMinute));
+                }));
     }
 
     private void configureTimePickerEnd() {
@@ -235,34 +216,39 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
                 binding.participantsLayout.setError(null);
                 binding.participantsInput.setText("");
                 binding.participantsInput.onEditorAction(EditorInfo.IME_ACTION_DONE);
-                //noinspection ConstantConditions
-                viewModel.isMeetingInfoComplete(
-                        binding.titleTextinput.getText().toString(),
-                        selectedRoom,
-                        binding.selectedDayTv.getText().toString(),
-                        binding.selectedTimeStartTv.getText().toString(),
-                        binding.selectedTimeEndTv.getText().toString(),
-                        participantsEmails,
-                        binding.meetingObjectInput.getText().toString()
-                );
+                checkForFieldCompletion();
             } else {
                 binding.participantsLayout.setError(getString(R.string.invalid_email_input));
+                checkForFieldCompletion();
             }
         });
     }
 
     private void generateParticipantChip(@NonNull TextInputEditText textInputEditText) {
         Chip participantChip = new Chip(this);
-        //noinspection ConstantConditions
         participantChip.setText(textInputEditText.getText().toString());
         participantChip.setChipIconResource(R.drawable.ic_baseline_person_24);
         participantChip.setCloseIconVisible(true);
         participantChip.setOnCloseIconClickListener(v -> {
             binding.participantChipgroup.removeView(participantChip);
             participantsEmails.remove(participantChip.getText().toString());
+            checkForFieldCompletion();
         });
         binding.participantChipgroup.addView(participantChip);
         participantsEmails.add(participantChip.getText().toString());
+    }
+
+    private void checkForFieldCompletion() {
+        //noinspection ConstantConditions
+        viewModel.isMeetingInfoComplete(
+                binding.titleTextinput.getText().toString(),
+                selectedRoom,
+                binding.selectedDayTv.getText().toString(),
+                binding.selectedTimeStartTv.getText().toString(),
+                binding.selectedTimeEndTv.getText().toString(),
+                participantsEmails,
+                binding.meetingObjectInput.getText().toString()
+        );
     }
 
     private void setSpinnerAdapter() {
