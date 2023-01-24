@@ -66,6 +66,11 @@ public class MeetingListAdapter extends ListAdapter<MeetingViewStateItem, Meetin
         }
     }
 
+
+    /**
+     * Utility class that can calculate the difference between two lists
+     * and update only the necessary items or its content
+     */
     private static class ListMeetingItemCallback extends DiffUtil.ItemCallback<MeetingViewStateItem> {
 
         @Override

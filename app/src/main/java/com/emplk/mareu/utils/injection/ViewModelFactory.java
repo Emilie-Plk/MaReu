@@ -1,4 +1,4 @@
-package com.emplk.mareu.utils;
+package com.emplk.mareu.utils.injection;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
@@ -17,7 +17,6 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     private final MeetingsRepository meetingRepository;
 
 
-
     private ViewModelFactory(@NonNull MeetingsRepository meetingsRepository) {
         this.meetingRepository = meetingsRepository;
     }
@@ -34,6 +33,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
      * Create an instance of a given ViewModel.
      * Keep the state of the ViewModel across configuration changes
      * and avoid unnecessary re-creation of ViewModel instances.
+     *
      * @return ViewModelFactory factory
      */
     public static ViewModelFactory getInstance() {
@@ -48,8 +48,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new MeetingViewModel(meetingRepository);
         } else if (modelClass.isAssignableFrom(DetailMeetingViewModel.class)) {
             return (T) new DetailMeetingViewModel(meetingRepository);
-        }
-        else if (modelClass.isAssignableFrom(CreateMeetingViewModel.class)) {
+        } else if (modelClass.isAssignableFrom(CreateMeetingViewModel.class)) {
             return (T) new CreateMeetingViewModel(meetingRepository);
         }
         throw new IllegalArgumentException("Unknown model class!");

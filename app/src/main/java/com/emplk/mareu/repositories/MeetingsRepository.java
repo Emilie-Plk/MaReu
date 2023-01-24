@@ -37,12 +37,12 @@ public class MeetingsRepository {
     }
 
     /**
-     * @param meetingTitle meeting title
-     * @param room Room
-     * @param date LocalDate
-     * @param timeStart LocalTime
-     * @param timeEnd LocalTime
-     * @param participants List of String participants
+     * @param meetingTitle  meeting title
+     * @param room          Room
+     * @param date          LocalDate
+     * @param timeStart     LocalTime
+     * @param timeEnd       LocalTime
+     * @param participants  List of String participants
      * @param meetingObject String
      */
     public void addMeeting(
@@ -101,15 +101,16 @@ public class MeetingsRepository {
      * @param meetingId meeting id
      */
     public void deleteMeeting(long meetingId) {
-       for (Meeting meeting : allMeetings) {
-                if (meeting.getId() == meetingId) {
-                    allMeetings.remove(meeting);
-                    break;
-                }
+        for (Meeting meeting : allMeetings) {
+            if (meeting.getId() == meetingId) {
+                allMeetings.remove(meeting);
+                break;
             }
-        meetingsMutableLiveData.setValue(allMeetings);
         }
+        meetingsMutableLiveData.setValue(allMeetings);
+    }
 
+    // region dummy meetings
 
     /**
      * Generate dummy meetings for the demo
@@ -171,5 +172,5 @@ public class MeetingsRepository {
                         "pauline@lamzone.fr"),
                 "Debrief hebdo dev");
     }
-
+//endregion
 }

@@ -28,12 +28,13 @@ public class RoomFilterDialogFragment extends DialogFragment {
     public static RoomFilterDialogFragment newInstance() {
         return new RoomFilterDialogFragment();
     }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof  OnRoomSelectedListener) {
+        if (context instanceof OnRoomSelectedListener) {
             listener = (OnRoomSelectedListener) context;
-        } else  {
+        } else {
             throw new ClassCastException(context + " must implement OnRoomSelectedListener");
         }
     }

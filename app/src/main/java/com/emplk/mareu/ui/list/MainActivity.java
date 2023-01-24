@@ -18,7 +18,7 @@ import com.emplk.mareu.ui.create.CreateNewMeetingActivity;
 import com.emplk.mareu.ui.detail.DetailActivity;
 import com.emplk.mareu.ui.list.room_filter.OnRoomSelectedListener;
 import com.emplk.mareu.ui.list.room_filter.RoomFilterDialogFragment;
-import com.emplk.mareu.utils.ViewModelFactory;
+import com.emplk.mareu.utils.injection.ViewModelFactory;
 
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
 
     private ActivityMainBinding binding;
 
-    private MeetingListAdapter adapter;
     private MeetingViewModel viewModel;
 
     @Override
@@ -44,11 +43,11 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
         initRecyclerView();
         setCreateFab();
 
-        viewModel.getDisplayToolbarSubtitle().observe(this, subtitle -> {
+        viewModel.getFilterToolbarSubtitle().observe(this, subtitle -> {
             binding.toolbarMain.setSubtitle(subtitle);
         });
 
-        viewModel.getDisplayToast().observe(this, toast ->
+        viewModel.getMessageErrorToast().observe(this, toast ->
                 Toasty.info(this, toast, Toasty.LENGTH_SHORT).show());
     }
 
@@ -67,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
     }
 
     private void initRecyclerView() {
-        adapter = new MeetingListAdapter(new OnMeetingClickedListener() {
+        MeetingListAdapter adapter = new MeetingListAdapter(new OnMeetingClickedListener() {
             @Override
             public void onMeetingClicked(long meetingId) {
                 startActivity(DetailActivity.navigate(MainActivity.this, meetingId));
@@ -79,13 +78,10 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
             }
         });
 
-        viewModel.getMeetingViewStateItemsLiveData().observe(this, meetingsViewStateItems -> adapter.submitList(meetingsViewStateItems));
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
         binding.meetingsRv.addItemDecoration(dividerItemDecoration);
         binding.meetingsRv.setAdapter(adapter);
-        viewModel.getMeetingViewStateItemsLiveData().observe(this, meetingsViewStateItems ->
-                adapter.submitList(meetingsViewStateItems)
-        );
+        viewModel.getMeetingViewStateItemsLiveData().observe(this, adapter::submitList);
     }
 
     private void setCreateFab() {
@@ -127,7 +123,6 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
     }
 
     private void openDateFilterCalendar() {
-
         final Calendar now = Calendar.getInstance();
         int year = now.get(Calendar.YEAR);
         int month = now.get(Calendar.MONTH);

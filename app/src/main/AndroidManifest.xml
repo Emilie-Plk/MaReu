@@ -18,7 +18,7 @@
             android:theme="@style/Theme.MaReu.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.list.MainActivity"  />
+                android:value=".ui.list.MainActivity" />
         </activity>
         <activity
             android:name=".ui.create.CreateNewMeetingActivity"

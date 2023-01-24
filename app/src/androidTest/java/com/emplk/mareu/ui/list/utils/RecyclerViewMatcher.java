@@ -48,8 +48,7 @@ public class RecyclerViewMatcher {
                     if (recyclerView != null && recyclerView.getId() == recyclerViewId) {
                         //noinspection ConstantConditions
                         childView = recyclerView.findViewHolderForAdapterPosition(position).itemView;
-                    }
-                    else {
+                    } else {
                         return false;
                     }
                 }

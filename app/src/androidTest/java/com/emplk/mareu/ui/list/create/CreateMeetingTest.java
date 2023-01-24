@@ -14,7 +14,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.emplk.mareu.ui.list.utils.TestUtils.isToast;
 import static com.emplk.mareu.ui.list.utils.TestUtils.withRecyclerView;
-
 import static org.hamcrest.CoreMatchers.allOf;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.not;

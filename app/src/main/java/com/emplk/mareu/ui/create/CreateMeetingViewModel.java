@@ -201,7 +201,7 @@ public class CreateMeetingViewModel extends ViewModel {
     public boolean isTimeValidValidation(String timeStart, String timeEnd) {
         if (timeStart.isEmpty() || timeEnd.isEmpty()) return false;
         isTimeEndFieldValid.setValue(isChosenTimeValid(timeStart, timeEnd));
-       assert isTimeEndFieldValid.getValue() != null;
+        assert isTimeEndFieldValid.getValue() != null;
         if (isTimeEndFieldValid.getValue()) {
             updateForValidTime();
             return true;

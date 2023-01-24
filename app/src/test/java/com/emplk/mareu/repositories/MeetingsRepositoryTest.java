@@ -1,7 +1,6 @@
 package com.emplk.mareu.repositories;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import androidx.annotation.NonNull;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
@@ -11,13 +10,11 @@ import com.emplk.mareu.models.Meeting;
 import com.emplk.mareu.models.Room;
 import com.emplk.mareu.utils.TestUtil;
 
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-
 
 import java.time.LocalDate;
 import java.time.LocalTime;

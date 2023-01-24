@@ -12,7 +12,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.emplk.mareu.ui.list.utils.TestUtils.actionOnItemViewAtPosition;
 import static com.emplk.mareu.ui.list.utils.TestUtils.isToast;
 import static com.emplk.mareu.ui.list.utils.TestUtils.withRecyclerView;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 
 import android.widget.DatePicker;

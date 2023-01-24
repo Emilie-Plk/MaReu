@@ -21,7 +21,7 @@ import org.hamcrest.TypeSafeMatcher;
 public class TestUtils {
     public static <VH extends RecyclerView.ViewHolder> ViewAction actionOnItemViewAtPosition(int position,
                                                                                              @IdRes
-                                                                                                     int viewId,
+                                                                                             int viewId,
                                                                                              ViewAction viewAction) {
         return new ActionOnItemViewAtPositionViewAction(position, viewId, viewAction);
     }
@@ -44,7 +44,7 @@ public class TestUtils {
         }
 
         public Matcher getConstraints() {
-            return Matchers.allOf(new Matcher[] {
+            return Matchers.allOf(new Matcher[]{
                     ViewMatchers.isAssignableFrom(RecyclerView.class), ViewMatchers.isDisplayed()
             });
         }
@@ -88,7 +88,7 @@ public class TestUtils {
         }
 
         public Matcher<View> getConstraints() {
-            return Matchers.allOf(new Matcher[] {
+            return Matchers.allOf(new Matcher[]{
                     ViewMatchers.isAssignableFrom(RecyclerView.class), ViewMatchers.isDisplayed()
             });
         }
@@ -132,6 +132,7 @@ public class TestUtils {
         }
 
     }
+
     public static Matcher<Root> isToast() {
         return new ToastMatcher();
     }

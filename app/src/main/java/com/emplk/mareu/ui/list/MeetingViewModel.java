@@ -32,9 +32,9 @@ public class MeetingViewModel extends ViewModel {
 
     private final MutableLiveData<LocalDate> dateFilterMutableLiveData = new MutableLiveData<>();
 
-    private final SingleLiveEvent<String> displayToolbarSubtitle = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> filterToolbarSubtitle = new SingleLiveEvent<>();
 
-    private final SingleLiveEvent<String> displayToast = new SingleLiveEvent<>();
+    private final SingleLiveEvent<String> messageErrorToast = new SingleLiveEvent<>();
 
     public MeetingViewModel(@NonNull MeetingsRepository repository) {
         this.repository = repository;
@@ -53,12 +53,18 @@ public class MeetingViewModel extends ViewModel {
         );
     }
 
-    public SingleLiveEvent<String> getDisplayToolbarSubtitle() {
-        return displayToolbarSubtitle;
+    /**
+     * @return filterToolbarSubtitle (SingleLiveEvent of type String)
+     */
+    public SingleLiveEvent<String> getFilterToolbarSubtitle() {
+        return filterToolbarSubtitle;
     }
 
-    public SingleLiveEvent<String> getDisplayToast() {
-        return displayToast;
+    /**
+     * @return messageErrorToast (SingleLiveEvent of type String)
+     */
+    public SingleLiveEvent<String> getMessageErrorToast() {
+        return messageErrorToast;
     }
 
     /**
@@ -113,7 +119,7 @@ public class MeetingViewModel extends ViewModel {
      */
     public void onRoomFilter(String room) {
         roomFilterMutableLiveData.setValue(room);
-        displayToolbarSubtitle.setValue(NotificationState.FILTERED_SUBTITLE.getNotificationMessage() + room);  // hard coded but no memory leak risk
+        filterToolbarSubtitle.setValue(NotificationState.FILTERED_SUBTITLE.getNotificationMessage() + room);  // hard coded but no memory leak risk
         setDisplayToast();
     }
 
@@ -126,7 +132,7 @@ public class MeetingViewModel extends ViewModel {
      */
     public void onDateFilter(LocalDate date) {
         dateFilterMutableLiveData.setValue(date);
-        displayToolbarSubtitle.setValue(NotificationState.FILTERED_SUBTITLE.getNotificationMessage() + formatDate(date));
+        filterToolbarSubtitle.setValue(NotificationState.FILTERED_SUBTITLE.getNotificationMessage() + formatDate(date));
         setDisplayToast();
     }
 
@@ -138,7 +144,7 @@ public class MeetingViewModel extends ViewModel {
     private void setDisplayToast() {
         if (meetingViewStateItemsMediatorLiveData.getValue() == null ||
                 meetingViewStateItemsMediatorLiveData.getValue().isEmpty()) {
-            displayToast.setValue(NotificationState.INFO_NO_MEETING.getNotificationMessage());
+            messageErrorToast.setValue(NotificationState.INFO_NO_MEETING.getNotificationMessage());
         }
     }
 
@@ -149,7 +155,7 @@ public class MeetingViewModel extends ViewModel {
     public void onResetFilters() {
         roomFilterMutableLiveData.setValue(null);
         dateFilterMutableLiveData.setValue(null);
-        displayToolbarSubtitle.setValue(null);
+        filterToolbarSubtitle.setValue(null);
     }
 
     /**
@@ -160,7 +166,7 @@ public class MeetingViewModel extends ViewModel {
      */
     public void onDeleteMeetingClicked(long meetingId) {
         repository.deleteMeeting(meetingId);
-        displayToast.setValue(NotificationState.INFO_DELETED_MEETING.getNotificationMessage());
+        messageErrorToast.setValue(NotificationState.INFO_DELETED_MEETING.getNotificationMessage());
     }
 
     // region private helper methods

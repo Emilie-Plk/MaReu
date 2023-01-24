@@ -10,6 +10,7 @@ public enum NotificationState {
 
 
     private final String notificationMessage;
+
     NotificationState(String notificationMessage) {
         this.notificationMessage = notificationMessage;
     }

@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
 
-import com.emplk.mareu.R;
 import com.emplk.mareu.models.Meeting;
 import com.emplk.mareu.models.Room;
 import com.emplk.mareu.repositories.MeetingsRepository;

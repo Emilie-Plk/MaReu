@@ -22,7 +22,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.emplk.mareu.R;
 import com.emplk.mareu.databinding.ActivityCreateNewMeetingBinding;
 import com.emplk.mareu.models.Room;
-import com.emplk.mareu.utils.ViewModelFactory;
+import com.emplk.mareu.utils.injection.ViewModelFactory;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.textfield.TextInputEditText;
 
@@ -69,18 +69,47 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        // Set Time pickers
+        // Set Date & Time pickers
         binding.datePickerBtnCreate.setOnClickListener(v -> getDatePicker());
         configureTimePickerStart();
         configureTimePickerEnd();
+        binding.selectedTimeStartTv.addTextChangedListener(onPickTimeCorrect());
+        binding.selectedTimeEndTv.addTextChangedListener(onPickTimeCorrect());
 
+        // Set room selection
         setSpinnerAdapter();
+        getPickedRoom();
 
+        // Set chip for participants
         addParticipantChip();
 
-        onAddTextChangedListeners();
+        setupObservers();
 
-        getPickedRoom();
+        onAddTextChangedListeners();
+    }
+
+    /**
+     * Observers for the CreateMeetingActivity
+     */
+    private void setupObservers() {
+        // observer for submit button enabling
+        viewModel.getIsValidAndCompleted().observe(this, aBoolean ->
+                binding.createMeetingBtn.setEnabled(aBoolean));
+
+        // observer for case of invalid ending time picked
+        viewModel.getErrorState().observe(this, errorMessage ->
+                Toasty.error(this, errorMessage, Toasty.LENGTH_SHORT).show());
+
+        // observer for selected ending time TV (error state)
+        viewModel.getTimeEndColor().observe(this, color ->
+                binding.selectedTimeEndTv.setTextColor(Color.parseColor(color)));
+
+        // observer for selected ending time TV's icon (error state)
+        viewModel.getIsErrorIconVisible().observe(this, errorIcon ->
+                binding.tvTimeEndErrorIcon.setVisibility(errorIcon ? View.VISIBLE : View.GONE));
+
+        // observer for closing activity when onCreateMeetingClicked() is called
+        viewModel.getCloseActivity().observe(this, closeActivitySingleLiveEvent -> finish());
     }
 
     private void getPickedRoom() {
@@ -89,19 +118,6 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
 
         bindAddMeeting(viewModel, binding.titleTextinput, binding.selectedDayTv,
                 binding.selectedTimeStartTv, binding.selectedTimeEndTv, binding.meetingObjectInput);
-
-        viewModel.getCloseActivity().observe(this, closeActivitySingleLiveEvent -> finish());
-
-        viewModel.getIsValidAndCompleted().observe(this, aBoolean -> binding.createMeetingBtn.setEnabled(aBoolean));
-
-        binding.selectedTimeStartTv.addTextChangedListener(onPickTimeCorrect());
-        binding.selectedTimeEndTv.addTextChangedListener(onPickTimeCorrect());
-
-        viewModel.getErrorState().observe(this, errorMessage -> {
-            if (errorMessage != null) {
-                Toasty.error(this, errorMessage, Toasty.LENGTH_SHORT).show();
-            }
-        });
     }
 
     private void onAddTextChangedListeners() {
@@ -115,41 +131,36 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
     private TextWatcher onPickTimeCorrect() {
         return new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
                 viewModel.isTimeValidValidation(
                         binding.selectedTimeStartTv.getText().toString(),
                         binding.selectedTimeEndTv.getText().toString());
-
-                viewModel.getTimeEndColor().observe(CreateNewMeetingActivity.this, color ->
-                        binding.selectedTimeEndTv.setTextColor(Color.parseColor(color)));
-
-                viewModel.getIsErrorIconVisible().observe(CreateNewMeetingActivity.this, errorIcon ->
-                        binding.tvTimeEndErrorIcon.setVisibility(errorIcon ? View.VISIBLE : View.GONE));
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
+            public void afterTextChanged(Editable s) {
             }
         };
+
     }
 
     private TextWatcher getTextWatcher() {
         return new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
                 checkForFieldCompletion();
             }
 
             @Override
-            public void afterTextChanged(Editable editable) {
+            public void afterTextChanged(Editable s) {
             }
         };
     }
@@ -209,7 +220,7 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
     }
 
     private void addParticipantChip() {
-        binding.addParticipantFab.setOnClickListener(view1 -> {
+        binding.addParticipantFab.setOnClickListener(v -> {
             //noinspection ConstantConditions
             if (viewModel.isValidEmail(binding.participantsInput.getText().toString())) {
                 generateParticipantChip(binding.participantsInput);

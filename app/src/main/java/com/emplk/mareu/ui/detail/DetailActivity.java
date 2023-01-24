@@ -10,7 +10,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.emplk.mareu.databinding.ActivityDetailBinding;
-import com.emplk.mareu.utils.ViewModelFactory;
+import com.emplk.mareu.utils.injection.ViewModelFactory;
 
 public class DetailActivity extends AppCompatActivity {
 

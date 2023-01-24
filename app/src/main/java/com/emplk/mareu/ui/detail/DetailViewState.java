@@ -35,7 +35,9 @@ public class DetailViewState {
     }
 
     @NonNull
-    public String getDate() { return date; }
+    public String getDate() {
+        return date;
+    }
 
     @NonNull
     public String getTimeStart() {
@@ -43,7 +45,9 @@ public class DetailViewState {
     }
 
     @NonNull
-    public String getTimeEnd() { return timeEnd; }
+    public String getTimeEnd() {
+        return timeEnd;
+    }
 
     @NonNull
     public String getParticipants() {

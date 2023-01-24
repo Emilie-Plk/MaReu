@@ -53,7 +53,9 @@ public class MeetingViewStateItem {
     }
 
     @NonNull
-    public String getDate() { return date; }
+    public String getDate() {
+        return date;
+    }
 
     @NonNull
     public String getTimeStart() {
