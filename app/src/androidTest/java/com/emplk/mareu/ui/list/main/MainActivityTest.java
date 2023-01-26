@@ -2,7 +2,9 @@ package com.emplk.mareu.ui.list.main;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.doubleClick;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.RecyclerViewActions.scrollToPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -43,6 +45,8 @@ public class MainActivityTest {
     @Rule
     public ActivityScenarioRule<MainActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
+
+
 
     @Test
     public void isRecyclerViewVisible_onAppLaunch() {
@@ -124,7 +128,7 @@ public class MainActivityTest {
 
         onView(withText(R.string.filter_by_date)).perform(click());
         onView(withClassName(equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2022, 12, 8));
-        onView(withId(android.R.id.button1)).perform(click());
+        onView(withId(android.R.id.button1)).perform(doubleClick());
 
         onView(withRecyclerView(R.id.meetings_rv)
                 .atPositionOnView(0, R.id.meeting_date_tv))
@@ -160,6 +164,7 @@ public class MainActivityTest {
 
         onView(withText(R.string.filter_by_room)).perform(click());
         onView(withText("Salle 2")).perform(click());
+        onView(withId(R.id.meetings_rv)).perform(scrollToPosition(0));
 
         onView(withText(NotificationState.INFO_NO_MEETING.getNotificationMessage())).inRoot(isToast()).check(matches(isDisplayed()));
         onView(withId(R.id.meetings_rv)).check(matches(hasChildCount(0)));
