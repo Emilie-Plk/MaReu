@@ -32,7 +32,7 @@ public class MeetingViewModel extends ViewModel {
 
     private final MutableLiveData<LocalDate> dateFilterMutableLiveData = new MutableLiveData<>();
 
-    private final SingleLiveEvent<String> filterToolbarSubtitle = new SingleLiveEvent<>();
+    private final MutableLiveData<String> filterToolbarSubtitle = new MutableLiveData<>();
 
     private final SingleLiveEvent<String> messageErrorToast = new SingleLiveEvent<>();
 
@@ -54,9 +54,9 @@ public class MeetingViewModel extends ViewModel {
     }
 
     /**
-     * @return filterToolbarSubtitle (SingleLiveEvent of type String)
+     * @return filterToolbarSubtitle (MutableLiveData of type String)
      */
-    public SingleLiveEvent<String> getFilterToolbarSubtitle() {
+    public MutableLiveData<String> getFilterToolbarSubtitle() {
         return filterToolbarSubtitle;
     }
 
