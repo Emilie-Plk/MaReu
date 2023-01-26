@@ -84,7 +84,7 @@ public class MeetingViewModel extends ViewModel {
         List<MeetingViewStateItem> filteredMeetings = new ArrayList<>();
         for (Meeting meeting : meetings) {
             if ((roomFilter == null || meeting.getRoom().getRoomName().equals(roomFilter))
-                    && dateFilter == null || meeting.getDate().equals(dateFilter)) {
+                    && (dateFilter == null || meeting.getDate().equals(dateFilter))) {
                 //  we should "pre-format" what should be displayed to the View. To do so, we map the Meeting model to a more
                 // "view specific" model, the MeetingViewStateItem.
                 filteredMeetings.add(
@@ -118,6 +118,7 @@ public class MeetingViewModel extends ViewModel {
      * @param room String room
      */
     public void onRoomFilter(String room) {
+        dateFilterMutableLiveData.setValue(null);
         roomFilterMutableLiveData.setValue(room);
         filterToolbarSubtitle.setValue(NotificationState.FILTERED_SUBTITLE.getNotificationMessage() + room);  // hard coded but no memory leak risk
         setDisplayToast();
@@ -131,6 +132,7 @@ public class MeetingViewModel extends ViewModel {
      * @param date LocalDate date
      */
     public void onDateFilter(LocalDate date) {
+        roomFilterMutableLiveData.setValue(null);
         dateFilterMutableLiveData.setValue(date);
         filterToolbarSubtitle.setValue(NotificationState.FILTERED_SUBTITLE.getNotificationMessage() + formatDate(date));
         setDisplayToast();
