@@ -3,13 +3,16 @@ package com.emplk.mareu.ui.list.create;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.action.ViewActions.swipeUp;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.RecyclerViewActions.scrollTo;
 import static androidx.test.espresso.matcher.ViewMatchers.hasChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
+import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withParent;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -23,6 +26,7 @@ import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 import androidx.test.espresso.contrib.PickerActions;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
@@ -77,6 +81,9 @@ public class CreateMeetingTest {
 
         onView(withId(R.id.participants_input)).perform(replaceText(PARTICIPANT_MAIL));
         onView(withId(R.id.add_participant_fab)).perform(click());
+
+        onView(withId(R.id.create_nested_scrollview))
+                .perform(swipeUp());
 
         onView(withId(R.id.create_meeting_btn)).perform(click());
 
@@ -134,10 +141,6 @@ public class CreateMeetingTest {
     public void onMeetingStartAt2pm_meetingEndAt1pm_shouldDisplayToastError() {
         onView(withId(R.id.add_fab)).perform(click());
 
-        onView(withId(R.id.date_picker_btn_create)).perform(click());
-        onView(withClassName(equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(2023, 2, 22));
-        onView(withId(android.R.id.button1)).perform(click());
-
         onView(withId(R.id.starting_time_btn)).perform(click());
         onView(withClassName(equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(14, 0));
         onView(withId(android.R.id.button1)).perform(click());
@@ -145,18 +148,6 @@ public class CreateMeetingTest {
         onView(withId(R.id.ending_time_btn)).perform(click());
         onView(withClassName(equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(13, 0));
         onView(withId(android.R.id.button1)).perform(click());
-
-        onView(withId(R.id.rooms_actv)).perform(click());
-        onView(withText(ROOM)).inRoot(RootMatchers.isPlatformPopup()).perform(click());
-
-        onView(withId(R.id.title_textinput)).perform(replaceText(MEETING_TITLE));
-
-        onView(withId(R.id.meeting_object_input)).perform(replaceText(MEETING_OBJECT));
-
-        onView(withId(R.id.participants_input)).perform(replaceText(PARTICIPANT_MAIL));
-        onView(withId(R.id.add_participant_fab)).perform(click());
-
-        onView(withId(R.id.create_meeting_btn)).perform(click());
 
         onView(withText(NotificationState.ERROR_INVALID_TIME.getNotificationMessage())).inRoot(isToast()).check(matches(isDisplayed()));
     }

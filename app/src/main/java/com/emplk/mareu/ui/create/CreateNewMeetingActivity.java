@@ -182,6 +182,7 @@ public class CreateNewMeetingActivity extends AppCompatActivity {
                     String date = formatDate(dayOfMonth, monthOfYear + 1, year);
                     binding.selectedDayTv.setText(date);
                 }, mYear, mMonth, mDay);
+        dpd.getDatePicker().setFirstDayOfWeek(Calendar.MONDAY);
         dpd.getDatePicker().setMinDate(now.getTimeInMillis());
         dpd.show();
     }

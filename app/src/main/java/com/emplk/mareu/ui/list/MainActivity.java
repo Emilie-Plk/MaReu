@@ -133,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements OnRoomSelectedLis
                     LocalDate selectedDate = LocalDate.of(selectedYear, selectedMonthOfYear + 1, selectedDayOfMonth);
                     viewModel.onDateFilter(selectedDate);
                 }, year, month, day);
+        dpd.getDatePicker().setFirstDayOfWeek(Calendar.MONDAY);
         dpd.show();
     }
 

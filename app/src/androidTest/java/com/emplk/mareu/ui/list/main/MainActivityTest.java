@@ -110,6 +110,7 @@ public class MainActivityTest {
 
         onView(withText(R.string.filter_by_room)).perform(click());
         onView(withText(ROOM_FOUR)).perform(click());
+        onView(withId(R.id.meetings_rv)).perform(scrollToPosition(0));
 
         onView(withRecyclerView(R.id.meetings_rv)
                 .atPositionOnView(0, R.id.room_number))
